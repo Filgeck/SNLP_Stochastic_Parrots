@@ -9,9 +9,11 @@ import sys
 import tempfile
 import shutil
 import re
+import random
 from pathlib import Path
 import git
 from datasets import load_dataset
+# Removed the problematic import here
 
 # Function to load SWE-Bench dataset from Huggingface
 def load_swebench(variant="lite"):
@@ -41,14 +43,104 @@ def load_swebench(variant="lite"):
         
         # Convert the Huggingface dataset to the expected format
         test_cases = []
-        for item in dataset['test']:  # Assuming 'test' is the split we want
-            test_cases.append(item)
+        for item in dataset['test']:  # Using 'test' split by default
+            # Process the item to add the expected fields
+            processed_item = process_swebench_item(item)
+            test_cases.append(processed_item)
             
         print(f"Successfully loaded {len(test_cases)} test cases from {dataset_id}")
         return test_cases
     except Exception as e:
         print(f"Error loading dataset from Huggingface: {e}")
         raise Exception(f"Failed to load dataset from Huggingface: {e}")
+
+def process_swebench_item(item):
+    """
+    Process a SWE-Bench dataset item to add expected fields
+    
+    Parameters:
+    item (dict): The raw dataset item
+    
+    Returns:
+    dict: The processed item with additional fields
+    """
+    # Create a copy to avoid modifying the original
+    processed = item.copy()
+    
+    # Map fields to expected format
+    processed['project'] = item.get('repo', 'Unknown')
+    processed['issue_url'] = f"https://github.com/{item.get('repo', 'unknown')}/issues/{item.get('instance_id', '').split('-')[-1]}"
+    processed['issue_description'] = item.get('problem_statement', 'No description provided')
+    
+    # Extract files from patch and test_patch
+    processed['files'] = extract_files_from_patches(item.get('patch', ''), item.get('test_patch', ''))
+    
+    return processed
+
+def extract_files_from_patches(patch, test_patch):
+    """
+    Extract file contents from git patch format
+    
+    Parameters:
+    patch (str): The main code patch
+    test_patch (str): The test patch
+    
+    Returns:
+    dict: Dictionary mapping file paths to content
+    """
+    files = {}
+    
+    # Process both patches
+    for current_patch in [patch, test_patch]:
+        if not current_patch:
+            continue
+            
+        # Split the patch into different file changes
+        file_changes = current_patch.split('diff --git ')[1:]
+        
+        for change in file_changes:
+            # Extract the file path
+            file_path = None
+            for line in change.split('\n'):
+                if line.startswith('+++'):
+                    # The +++ line contains the file path after edit
+                    file_path = line[4:].strip().split('\t')[0]
+                    if file_path.startswith('b/'):
+                        file_path = file_path[2:]  # Remove the b/ prefix
+                    break
+                    
+            if not file_path:
+                continue
+                
+            # Now attempt to recreate the file content
+            # This is a simplified approach - in a real implementation,
+            # you might want to actually apply the patch to the base file
+            # But for demonstration, we'll extract chunks marked with '+' (additions)
+            
+            # For simplicity, we'll just collect the context and the changes
+            content_lines = []
+            in_content = False
+            
+            for line in change.split('\n'):
+                if line.startswith('@@'):
+                    in_content = True
+                    continue
+                    
+                if in_content:
+                    if line.startswith('+'):
+                        # Addition - include without the + sign
+                        content_lines.append(line[1:])
+                    elif not line.startswith('-'):
+                        # Context line - include as is
+                        if line.startswith(' '):
+                            content_lines.append(line[1:])
+                        else:
+                            content_lines.append(line)
+            
+            if content_lines:
+                files[file_path] = '\n'.join(content_lines)
+    
+    return files
 
 # Function to query Llama 3.2 via Ollama
 def query_llama(prompt, model="llama3.2", max_tokens=4096):
@@ -80,59 +172,125 @@ def query_llama(prompt, model="llama3.2", max_tokens=4096):
     else:
         raise Exception(f"Failed to query Ollama: {response.status_code}")
 
-# Function to query Gemini Pro 2.5 via OpenRouter API
-def query_gemini_openrouter(prompt, api_key, site_url="https://example.com", site_name="Benchmark Test", max_tokens=4096):
+# Function to query Gemini directly via Google API
+def query_gemini_direct(prompt, api_key, model_name="gemini-2.5-pro-exp-03-25", max_tokens=65536, max_retries=3):
     """
-    Query Gemini Pro 2.5 Experimental model via OpenRouter API
+    Query Gemini model directly via Google's API
     
     Parameters:
     prompt (str): The prompt to send to the model
-    api_key (str): OpenRouter API key
-    site_url (str): Site URL for rankings on openrouter.ai
-    site_name (str): Site name for rankings on openrouter.ai
+    api_key (str): Google API key
+    model_name (str): The specific Gemini model to use
     max_tokens (int): Maximum number of tokens in the response
+    max_retries (int): Maximum number of retries for rate limiting
     
     Returns:
     str: The model's response
     """
-    url = "https://openrouter.ai/api/v1/chat/completions"
+    # First, ensure the google-generativeai package is installed
+    try:
+        import google.generativeai as genai
+    except ImportError:
+        print("Installing google-generativeai package...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "google-generativeai"])
+        # Import again after installation
+        import google.generativeai as genai
+
+    # Initialize the Gemini client
+    genai.configure(api_key=api_key)
     
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": site_url,
-        "X-Title": site_name,
+    # Configure generation parameters
+    generation_config = {
+        "max_output_tokens": max_tokens,
+        "temperature": 0.2,  # Lower temperature for code generation tasks
+        "top_p": 0.95,
+        "top_k": 40,
     }
     
-    data = {
-        "model": "google/gemini-2.5-pro-exp-03-25:free",
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": prompt
-                    }
+    # Implement exponential backoff for rate limiting
+    for attempt in range(max_retries):
+        try:
+            # Generate content
+            model = genai.GenerativeModel(model_name=model_name)
+            response = model.generate_content(
+                prompt,
+                generation_config=generation_config,
+                safety_settings=[
+                    {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+                    {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+                    {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+                    {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}
                 ]
-            }
-        ],
-        "max_tokens": max_tokens
-    }
+            )
+            
+            # Handle empty responses
+            if not hasattr(response, 'candidates') or not response.candidates:
+                print("Warning: Empty response received from Gemini API")
+                return "The model returned an empty response. Please try again with a different prompt."
+            
+            # Extract the text from all candidates to ensure we get the full response
+            full_text = ""
+            for candidate in response.candidates:
+                if hasattr(candidate, 'content') and candidate.content:
+                    if hasattr(candidate.content, 'parts'):
+                        for part in candidate.content.parts:
+                            if hasattr(part, 'text'):
+                                full_text += part.text
+            
+            # If we got text, return it
+            if full_text:
+                return full_text
+                
+            # If we couldn't extract text in the usual way, try the response.text property
+            # but handle the case where it might raise an exception
+            try:
+                return response.text
+            except Exception as text_error:
+                print(f"Warning: Could not extract text from response: {text_error}")
+                # Try to extract any text we can find in the response object
+                if hasattr(response, '__dict__'):
+                    return f"Error extracting response text. Raw response: {str(response.__dict__)}"
+                return "Error extracting response text. Please try again."
+            
+        except Exception as e:
+            error_str = str(e)
+            
+            # Check if it's a rate limiting error
+            if "429" in error_str or "rate limit" in error_str.lower() or "quota" in error_str.lower():
+                # Calculate retry delay with exponential backoff
+                retry_after = (2 ** attempt) + random.uniform(0, 1)
+                
+                # Try to extract a specific retry time if available
+                retry_match = re.search(r'retry\s+in\s+(\d+)', error_str, re.IGNORECASE)
+                if retry_match:
+                    try:
+                        retry_after = int(retry_match.group(1))
+                    except:
+                        pass  # Use the calculated value if conversion fails
+                
+                print(f"Rate limit exceeded, retrying in {retry_after} seconds (attempt {attempt+1}/{max_retries})")
+                time.sleep(retry_after)
+                continue
+            else:
+                # For other errors, print the error and try again with a different approach
+                print(f"Error calling Gemini API: {e}")
+                
+                # If we've tried enough times with the current approach, try a different one
+                if attempt < max_retries - 1:
+                    # Try with a simpler configuration on the next attempt
+                    if attempt == max_retries - 2:
+                        print("Trying with simpler configuration...")
+                        generation_config = {
+                            "max_output_tokens": max_tokens,
+                            "temperature": 0.0,
+                        }
+                    time.sleep(2)  # Brief pause before retry
+                    continue
+                else:
+                    raise
     
-    response = requests.post(url, headers=headers, json=data)
-    if response.status_code == 200:
-        response_data = response.json()
-        # Extract the text from the response
-        if "choices" in response_data and len(response_data["choices"]) > 0:
-            message = response_data["choices"][0].get("message", {})
-            if isinstance(message, dict) and "content" in message:
-                return message["content"]
-        
-        # Fallback in case the response structure is different
-        return str(response_data)
-    else:
-        raise Exception(f"Failed to query OpenRouter: {response.status_code}, {response.text}")
+    # If we've exhausted all retries
+    raise Exception(f"Failed to query Gemini API after {max_retries} attempts due to rate limiting")
 
 # Function to extract code blocks from model response
 def extract_code_from_response(response):
@@ -191,8 +349,29 @@ The following files are relevant to the issue:
 """
     
     # Add relevant files with content
-    for filepath, content in test_case.get('files', {}).items():
-        prompt += f"\nFile: {filepath}\n```\n{content}\n```\n"
+    files = test_case.get('files', {})
+    if files:
+        for filepath, content in files.items():
+            prompt += f"\nFile: {filepath}\n```\n{content}\n```\n"
+    else:
+        # Fallback for cases where file extraction didn't work properly
+        # Include the raw patches
+        prompt += "\nThe following patches show the changes that need to be made:\n"
+        if 'patch' in test_case:
+            prompt += f"\nMain code patch:\n```diff\n{test_case.get('patch', '')}\n```\n"
+        if 'test_patch' in test_case:
+            prompt += f"\nTest code patch:\n```diff\n{test_case.get('test_patch', '')}\n```\n"
+    
+    # Add some context about tests if available
+    if 'FAIL_TO_PASS' in test_case:
+        fail_to_pass = test_case.get('FAIL_TO_PASS', '[]')
+        if isinstance(fail_to_pass, str):
+            try:
+                fail_to_pass = json.loads(fail_to_pass)
+            except:
+                pass
+        if fail_to_pass:
+            prompt += f"\nThe following tests should pass after your fix: {fail_to_pass}\n"
     
     prompt += """
 Please provide a comprehensive solution to fix this issue. Format your answer as follows:
@@ -417,20 +596,22 @@ def compute_embeddings(texts, model_name="all-MiniLM-L6-v2"):
 
 # Main function to run the benchmark
 def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/benchmark_results.parquet", 
-                 limit=None, save_embeddings=False, openrouter_api_key=None,
-                 site_url="https://example.com", site_name="Benchmark Test"):
+                 limit=None, save_embeddings=False, api_key=None,
+                 gemini_model="gemini-2.5-pro-exp-03-25",
+                 max_retries=5, delay_between_calls=2):
     """
-    Run the SWE-Bench benchmark on Llama 3.2 or Gemini Pro 2.5 Experimental
+    Run the SWE-Bench benchmark on Llama 3.2 or Gemini models
     
     Parameters:
     variant (str): SWE-Bench variant to use ('lite', 'verified', or 'multimodal')
-    model (str): The model name ('llama3.2' for Ollama or 'gemini-pro-2.5' for OpenRouter)
+    model (str): The model name ('llama3.2' for Ollama or 'gemini' for Google API)
     output_file (str): Path to save results
     limit (int, optional): Limit the number of test cases to process
     save_embeddings (bool): Whether to compute and save embeddings
-    openrouter_api_key (str, optional): OpenRouter API key (required for Gemini Pro 2.5)
-    site_url (str): Site URL for rankings on openrouter.ai (used with OpenRouter)
-    site_name (str): Site name for rankings on openrouter.ai (used with OpenRouter)
+    api_key (str, optional): API key (required for Gemini)
+    gemini_model (str): Specific Gemini model to use
+    max_retries (int): Maximum number of retries for rate-limited API calls
+    delay_between_calls (int): Delay in seconds between API calls to avoid rate limiting
     """
     # Check if the selected model is available
     if model == "llama3.2":
@@ -452,19 +633,21 @@ def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/ben
                 print(f"Warning: Model '{model}' not found in Ollama. You may need to pull it first with 'ollama pull {model}'")
         except Exception as e:
             print(f"Warning: Could not check available models: {e}")
-    elif model == "gemini-pro-2.5":
-        # Check if OpenRouter API key is provided
-        if not openrouter_api_key:
-            print("Error: OpenRouter API key is required for Gemini Pro 2.5 model.")
+    elif model == "gemini":
+        # Check if Gemini API key is provided
+        if not api_key:
+            print("Error: Google API key is required for Gemini model.")
             sys.exit(1)
     else:
-        print(f"Error: Unsupported model {model}. Currently supported models are 'llama3.2' and 'gemini-pro-2.5'.")
+        print(f"Error: Unsupported model {model}. Currently supported models are 'llama3.2' and 'gemini'.")
         sys.exit(1)
     
     # Install required packages
     required_packages = ["pandas", "pyarrow", "gitpython", "tqdm", "requests", "datasets"]
     if model == "llama3.2":
         required_packages.append("ollama")
+    elif model == "gemini":
+        required_packages.append("google-generativeai")
     if save_embeddings:
         required_packages.extend(["sentence-transformers", "scikit-learn"])
     
@@ -488,8 +671,6 @@ def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/ben
     for i, test_case in enumerate(tqdm(test_cases)):
         test_id = test_case.get('id', f"test_{i}")
         
-        time.sleep(0.2)
-
         print(f"\nProcessing test case {i+1}/{len(test_cases)}: {test_id}")
         
         # Create prompt
@@ -503,8 +684,10 @@ def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/ben
             start_time = time.time()
             if model == "llama3.2":
                 response = query_llama(prompt, model)
-            elif model == "gemini-pro-2.5":
-                response = query_gemini_openrouter(prompt, openrouter_api_key, site_url, site_name)
+            elif model == "gemini":
+                response = query_gemini_direct(prompt, api_key, gemini_model, max_retries=max_retries)
+                # Add a delay after each call to avoid rate limiting
+                time.sleep(delay_between_calls)
             end_time = time.time()
             
             # Evaluate response
@@ -630,23 +813,25 @@ def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/ben
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description="Run SWE-Bench benchmark on Llama 3.2 via Ollama or Gemini Pro 2.5 via OpenRouter")
+    parser = argparse.ArgumentParser(description="Run SWE-Bench benchmark on Llama 3.2 via Ollama or Gemini via Google API")
     parser.add_argument("--variant", type=str, default="lite", choices=["lite", "verified", "multimodal"],
                         help="SWE-Bench variant to use")
-    parser.add_argument("--model", type=str, default="llama3.2", choices=["llama3.2", "gemini-pro-2.5"],
-                        help="Model to use (llama3.2 for Ollama, gemini-pro-2.5 for OpenRouter)")
+    parser.add_argument("--model", type=str, default="llama3.2", choices=["llama3.2", "gemini"],
+                        help="Model to use (llama3.2 for Ollama, gemini for Google API)")
     parser.add_argument("--output", type=str, default="new_project/benchmark_results.parquet",
                         help="Output file path (default: new_project/benchmark_results.parquet)")
     parser.add_argument("--limit", type=int, default=None,
                         help="Limit the number of test cases to process")
     parser.add_argument("--save-embeddings", action="store_true",
                         help="Calculate and save embeddings of prompts and responses")
-    parser.add_argument("--openrouter-api-key", type=str, default=None,
-                        help="OpenRouter API key (required for Gemini Pro 2.5)")
-    parser.add_argument("--site-url", type=str, default="https://example.com",
-                        help="Site URL for rankings on openrouter.ai (used with OpenRouter)")
-    parser.add_argument("--site-name", type=str, default="Benchmark Test",
-                        help="Site name for rankings on openrouter.ai (used with OpenRouter)")
+    parser.add_argument("--api-key", type=str, default=None,
+                        help="API key (required for Gemini)")
+    parser.add_argument("--gemini-model", type=str, default="gemini-2.5-pro-exp-03-25",
+                        help="Specific Gemini model to use")
+    parser.add_argument("--max-retries", type=int, default=5,
+                        help="Maximum number of retries for rate-limited API calls")
+    parser.add_argument("--delay-between-calls", type=int, default=2,
+                        help="Delay in seconds between API calls to avoid rate limiting")
     
     args = parser.parse_args()
     
@@ -656,7 +841,8 @@ if __name__ == "__main__":
         output_file=args.output, 
         limit=args.limit,
         save_embeddings=args.save_embeddings,
-        openrouter_api_key=args.openrouter_api_key,
-        site_url=args.site_url,
-        site_name=args.site_name
+        api_key=args.api_key,
+        gemini_model=args.gemini_model,
+        max_retries=args.max_retries,
+        delay_between_calls=args.delay_between_calls
     )
