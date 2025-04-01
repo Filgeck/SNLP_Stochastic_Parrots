@@ -80,6 +80,60 @@ def query_llama(prompt, model="llama3.2", max_tokens=4096):
     else:
         raise Exception(f"Failed to query Ollama: {response.status_code}")
 
+# Function to query Gemini Pro 2.5 via OpenRouter API
+def query_gemini_openrouter(prompt, api_key, site_url="https://example.com", site_name="Benchmark Test", max_tokens=4096):
+    """
+    Query Gemini Pro 2.5 Experimental model via OpenRouter API
+    
+    Parameters:
+    prompt (str): The prompt to send to the model
+    api_key (str): OpenRouter API key
+    site_url (str): Site URL for rankings on openrouter.ai
+    site_name (str): Site name for rankings on openrouter.ai
+    max_tokens (int): Maximum number of tokens in the response
+    
+    Returns:
+    str: The model's response
+    """
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": site_url,
+        "X-Title": site_name,
+    }
+    
+    data = {
+        "model": "google/gemini-2.5-pro-exp-03-25:free",
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": prompt
+                    }
+                ]
+            }
+        ],
+        "max_tokens": max_tokens
+    }
+    
+    response = requests.post(url, headers=headers, json=data)
+    if response.status_code == 200:
+        response_data = response.json()
+        # Extract the text from the response
+        if "choices" in response_data and len(response_data["choices"]) > 0:
+            message = response_data["choices"][0].get("message", {})
+            if isinstance(message, dict) and "content" in message:
+                return message["content"]
+        
+        # Fallback in case the response structure is different
+        return str(response_data)
+    else:
+        raise Exception(f"Failed to query OpenRouter: {response.status_code}, {response.text}")
+
 # Function to extract code blocks from model response
 def extract_code_from_response(response):
     """
@@ -363,38 +417,54 @@ def compute_embeddings(texts, model_name="all-MiniLM-L6-v2"):
 
 # Main function to run the benchmark
 def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/benchmark_results.parquet", 
-                 limit=None, save_embeddings=False):
+                 limit=None, save_embeddings=False, openrouter_api_key=None,
+                 site_url="https://example.com", site_name="Benchmark Test"):
     """
-    Run the SWE-Bench benchmark on Llama 3.2
+    Run the SWE-Bench benchmark on Llama 3.2 or Gemini Pro 2.5 Experimental
     
     Parameters:
     variant (str): SWE-Bench variant to use ('lite', 'verified', or 'multimodal')
-    model (str): The model name in Ollama
+    model (str): The model name ('llama3.2' for Ollama or 'gemini-pro-2.5' for OpenRouter)
     output_file (str): Path to save results
     limit (int, optional): Limit the number of test cases to process
     save_embeddings (bool): Whether to compute and save embeddings
+    openrouter_api_key (str, optional): OpenRouter API key (required for Gemini Pro 2.5)
+    site_url (str): Site URL for rankings on openrouter.ai (used with OpenRouter)
+    site_name (str): Site name for rankings on openrouter.ai (used with OpenRouter)
     """
-    # Check if Ollama is running
-    try:
-        requests.get("http://localhost:11434/api/version")
-    except requests.exceptions.ConnectionError:
-        print("Error: Ollama is not running. Please start Ollama first.")
+    # Check if the selected model is available
+    if model == "llama3.2":
+        # Check if Ollama is running
+        try:
+            requests.get("http://localhost:11434/api/version")
+        except requests.exceptions.ConnectionError:
+            print("Error: Ollama is not running. Please start Ollama first.")
+            sys.exit(1)
+        
+        # Check if the model is available in Ollama
+        try:
+            response = requests.post(
+                "http://localhost:11434/api/tags",
+                json={}
+            )
+            available_models = [model_info["name"] for model_info in response.json()["models"]]
+            if model not in available_models:
+                print(f"Warning: Model '{model}' not found in Ollama. You may need to pull it first with 'ollama pull {model}'")
+        except Exception as e:
+            print(f"Warning: Could not check available models: {e}")
+    elif model == "gemini-pro-2.5":
+        # Check if OpenRouter API key is provided
+        if not openrouter_api_key:
+            print("Error: OpenRouter API key is required for Gemini Pro 2.5 model.")
+            sys.exit(1)
+    else:
+        print(f"Error: Unsupported model {model}. Currently supported models are 'llama3.2' and 'gemini-pro-2.5'.")
         sys.exit(1)
     
-    # Check if the model is available in Ollama
-    try:
-        response = requests.post(
-            "http://localhost:11434/api/tags",
-            json={}
-        )
-        available_models = [model_info["name"] for model_info in response.json()["models"]]
-        if model not in available_models:
-            print(f"Warning: Model '{model}' not found in Ollama. You may need to pull it first with 'ollama pull {model}'")
-    except Exception as e:
-        print(f"Warning: Could not check available models: {e}")
-    
     # Install required packages
-    required_packages = ["pandas", "pyarrow", "gitpython", "tqdm", "requests", "datasets", "ollama"]
+    required_packages = ["pandas", "pyarrow", "gitpython", "tqdm", "requests", "datasets"]
+    if model == "llama3.2":
+        required_packages.append("ollama")
     if save_embeddings:
         required_packages.extend(["sentence-transformers", "scikit-learn"])
     
@@ -414,10 +484,12 @@ def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/ben
     
     results = []
     
-    print(f"Running benchmark on {len(test_cases)} test cases...")
+    print(f"Running benchmark on {len(test_cases)} test cases using {model}...")
     for i, test_case in enumerate(tqdm(test_cases)):
         test_id = test_case.get('id', f"test_{i}")
         
+        time.sleep(0.2)
+
         print(f"\nProcessing test case {i+1}/{len(test_cases)}: {test_id}")
         
         # Create prompt
@@ -427,9 +499,12 @@ def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/ben
         work_dir = setup_test_environment(test_case)
         
         try:
-            # Query model
+            # Query model based on the selected model
             start_time = time.time()
-            response = query_llama(prompt, model)
+            if model == "llama3.2":
+                response = query_llama(prompt, model)
+            elif model == "gemini-pro-2.5":
+                response = query_gemini_openrouter(prompt, openrouter_api_key, site_url, site_name)
             end_time = time.time()
             
             # Evaluate response
@@ -555,17 +630,23 @@ def run_benchmark(variant="lite", model="llama3.2", output_file="new_project/ben
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description="Run SWE-Bench benchmark on Llama 3.2 via Ollama")
+    parser = argparse.ArgumentParser(description="Run SWE-Bench benchmark on Llama 3.2 via Ollama or Gemini Pro 2.5 via OpenRouter")
     parser.add_argument("--variant", type=str, default="lite", choices=["lite", "verified", "multimodal"],
                         help="SWE-Bench variant to use")
-    parser.add_argument("--model", type=str, default="llama3.2", 
-                        help="Model name in Ollama (default: llama3.2)")
+    parser.add_argument("--model", type=str, default="llama3.2", choices=["llama3.2", "gemini-pro-2.5"],
+                        help="Model to use (llama3.2 for Ollama, gemini-pro-2.5 for OpenRouter)")
     parser.add_argument("--output", type=str, default="new_project/benchmark_results.parquet",
                         help="Output file path (default: new_project/benchmark_results.parquet)")
     parser.add_argument("--limit", type=int, default=None,
                         help="Limit the number of test cases to process")
     parser.add_argument("--save-embeddings", action="store_true",
                         help="Calculate and save embeddings of prompts and responses")
+    parser.add_argument("--openrouter-api-key", type=str, default=None,
+                        help="OpenRouter API key (required for Gemini Pro 2.5)")
+    parser.add_argument("--site-url", type=str, default="https://example.com",
+                        help="Site URL for rankings on openrouter.ai (used with OpenRouter)")
+    parser.add_argument("--site-name", type=str, default="Benchmark Test",
+                        help="Site name for rankings on openrouter.ai (used with OpenRouter)")
     
     args = parser.parse_args()
     
@@ -574,5 +655,8 @@ if __name__ == "__main__":
         model=args.model, 
         output_file=args.output, 
         limit=args.limit,
-        save_embeddings=args.save_embeddings
+        save_embeddings=args.save_embeddings,
+        openrouter_api_key=args.openrouter_api_key,
+        site_url=args.site_url,
+        site_name=args.site_name
     )
