@@ -14,20 +14,38 @@ class Agent(ABC):
         """Process inputs and produce output according to agent's role."""
         pass
 
-    def _extract_patch(self, response_text: str) -> str:
-        """Extracts the patch content from the agent response, supporting both <patch> tags and ```patch blocks."""
-        # try to match <patch>...</patch>
+    def _extract_tag(self, response_text: str, tag_name: str) -> str:
+        """Extract content from the agent response, supporting custom tags both in <example> tags and ```example blocks."""
+        # try to match <tag_name> </tag_name>
         match = re.search(
-            r"<patch>\s*\n?(.*?)\n?\s*</patch>",
+            rf"<{tag_name}>\s*\n?(.*?)\n?\s*</{tag_name}>",
             response_text,
             re.DOTALL | re.IGNORECASE,
         )
         if match:
             return match.group(1).strip()
 
-        # else try to match ```patch ... ```
+        # else try to match ```tag_name ```
         match = re.search(
-            r"```patch\s*\n?(.*?)\n?```",
+            rf"```{tag_name}\s*\n?(.*?)\n?```",
+            response_text,
+            re.DOTALL | re.IGNORECASE,
+        )
+        if match:
+            return match.group(1).strip()
+        
+        # else try to match unclosed <tag_name>
+        match = re.search(
+            rf"<{tag_name}>\s*\n?(.*?)(?:\n?<\w+>|$)",
+            response_text,
+            re.DOTALL | re.IGNORECASE,
+        )
+        if match:
+            return match.group(1).strip()
+
+        # else try to match unclosed ```tag_name
+        match = re.search(
+            rf"```{tag_name}\s*\n?(.*?)(?:```|$)",
             response_text,
             re.DOTALL | re.IGNORECASE,
         )
@@ -36,6 +54,10 @@ class Agent(ABC):
 
         # as fallback return the whole response stripped
         return response_text.strip()
+
+    def _extract_patch(self, response_text: str) -> str:
+        """Extracts the patch content from the agent response, supporting both <patch> tags and ```patch blocks."""
+        return self._extract_tag(response_text, "patch")
 
 
 class AgentBasic(Agent):
