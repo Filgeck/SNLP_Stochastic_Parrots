@@ -22,15 +22,15 @@ class ModelClient:
             raise ValueError(f"Model {self.model_name} not supported")
 
     def _query_with_retries(self, func: callable, *args, **kwargs) -> str | None:
-        for retry_num in range(self.max_retries):
+        for num_retries in range(self.max_retries):
             try:
                 return func(*args, **kwargs)
             except Exception as error:
-                print(f"This was attempt {retry_num + 1} of {self.max_retries}")
-                if retry_num < self.max_retries - 1:
+                print(f"Failed attempt {num_retries + 1} of {self.max_retries}")
+                if num_retries < self.max_retries - 1:
                     print(f"Retrying due to error: {error}")
                 else:
-                    print(f"Max retries reached. Error: {error}")
+                    print(f"Max retries reached. Error:\n{error}\n")
                     return None
 
     def _query_local_ollama(self, prompt: str) -> str | None:
@@ -60,7 +60,7 @@ class ModelClient:
             "temperature": 0.7,
             "top_p": 0.9,
             "top_k": 40,
-            "max_output_tokens": 8192,
+            "max_output_tokens": 16384,
         }
 
         safety_settings = [
@@ -76,26 +76,12 @@ class ModelClient:
             safety_settings=safety_settings,
         )
 
-        response: GenerateContentResponse = model.generate_content(
-            prompt,
-            stream=True,
-        )
-
-        # process streamed response
-        response_content = ""
-        for chunk in response:
-            if hasattr(chunk, "text"):
-                response_content += chunk.text
-            else:
-                # use part if text attribute doesn't exist
-                for part in chunk.parts:
-                    if hasattr(part, "text"):
-                        response_content += part.text
-
-            if len(response_content) > 50000:
-                print(
-                    f"Error: Response from model {self.model_name} exceeded 50,000 characters. Likely model is repeating itself."
-                )
-                return None
+        try:
+            response: GenerateContentResponse = model.generate_content(
+                prompt,
+            )
+            response_content = response.text
+        except Exception as error:
+            raise error  # re-raise exception to trigger retry in _query_with_retries
 
         return response_content
