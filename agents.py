@@ -63,7 +63,7 @@ class Agent(ABC):
 
     def _extract_patch_with_retries(self, response_text: str) -> str:
         """Extract patch, re-querying to model if patch extraction fails."""
-        return self._extract_tag_with_retries(self, response_text, "patch")
+        return self._extract_tag_with_retries(response_text, "patch")
 
 
 class AgentBasic(Agent):
