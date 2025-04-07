@@ -81,8 +81,45 @@ class AgentFileSelector(Agent):
         self.model_client = model_client
         self.agent_name = "agent_file_selector"
 
-    def forward(self, problem: str, files: List[str]) -> str:
-        """AgentFileSelector select which files to pass on based on if they are relevant to the current problem/errors."""
+    def forward(
+        self,
+        text: str,
+        method: Literal["batch", "individual"],
+        custom_issue: str = None,
+    ) -> List[str]:
+        """AgentFileSelector selects which files to pass on based on if they are relevant to the current issue/errors."""
+
+        issue_text = custom_issue or self._extract_tag(custom_issue, "issue")
+        files_text = self._extract_tag(text, "code")
+
+        if method == "batch":  # pass all files to the model
+            prompt = f"""Your task is to select the files that are relevant to 
+            solving the issue, this will be passed on to another model which 
+            will use these as context to solve the issue:
+            \n<issue>\n{issue_text}\n</issue>
+            \n<files>\n{files_text}\n</files>
+            \nPlease ensure your response is a list of selected files with path 
+            (exactly as they appear above). Return your list of selected files in 
+            either <selected> </selected> tags or in a ```selected ``` block. 
+            Here is an example:
+            \n<selected>\n
+            astropy/time/formats.py\n
+            astropy/coordinates/distances.py\n
+            docs/conf.py\n
+            </selected>"""
+        elif method == "individual":  # pass each file to the model
+            pass
+
+
+class AgentFileRetriever(Agent):
+    def __init__(self, model_client: ModelClient):
+        self.model_client = model_client
+        self.agent_name = "agent_file_retriever"
+
+    def forward(
+        self, issue: str, base_commit: str, environment_setup_commmit: str
+    ) -> str:
+        """AgentFileRetriever fetches files from the given codebase based on the relevancy of the issue/errors."""
         raise NotImplementedError
 
 
@@ -91,6 +128,6 @@ class AgentExampleRetriever(Agent):
         self.model_client = model_client
         self.agent_name = "agent_example_retriever"
 
-    def forward(self, problem: str, num_retrieve: int, num_select: int) -> str:
-        """AgentExampleRetriever fetches examples via RAG of stack exchange solutions to questions that are similar to the current problem/errors."""
+    def forward(self, issue: str, num_retrieve: int, num_select: int) -> str:
+        """AgentExampleRetriever fetches examples via RAG of stack exchange solutions to questions that are similar to the current issue/errors."""
         raise NotImplementedError
