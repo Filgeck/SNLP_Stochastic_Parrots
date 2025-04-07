@@ -1,7 +1,7 @@
 from model_client import ModelClient
 from abc import ABC, abstractmethod
 import re
-from typing import List
+from typing import List, Literal
 
 
 class Agent(ABC):
@@ -33,31 +33,37 @@ class Agent(ABC):
         )
         if match:
             return match.group(1).strip()
-        
-        # else try to match unclosed <tag_name>
-        match = re.search(
-            rf"<{tag_name}>\s*\n?(.*?)(?:\n?<\w+>|$)",
-            response_text,
-            re.DOTALL | re.IGNORECASE,
+
+        # else return None for retry as it means:
+        # - unclosed <tag_name> (incomplete response)
+        # - unclosed ```tag_name (incomplete response)
+        # - no tag or block (bad response)
+        return None
+
+    def _extract_tag_with_retries(self, response_text: str, tag_name: str) -> str:
+        """Extract tag, re-querying to model if tag extraction fails."""
+        tag_content = self._extract_tag(
+            self.model_client.query(response_text), tag_name
         )
-        if match:
-            return match.group(1).strip()
+        num_retries = 0
+        max_retries = self.model_client.max_retries
+        while tag_content is None and num_retries < max_retries:
+            print(
+                f"Failed attempt {num_retries + 1} of {max_retries}.\nRetrying due to empty '{tag_name}' tag/block."
+            )
+            tag_content = self._extract_tag(
+                self.model_client.query(response_text), tag_name
+            )
+            num_retries += 1
+        if tag_content is None:
+            raise RuntimeError(
+                f"Max retries reached. Unable to extract '{tag_name}' tag/block from model's response."
+            )
+        return tag_content
 
-        # else try to match unclosed ```tag_name
-        match = re.search(
-            rf"```{tag_name}\s*\n?(.*?)(?:```|$)",
-            response_text,
-            re.DOTALL | re.IGNORECASE,
-        )
-        if match:
-            return match.group(1).strip()
-
-        # as fallback return the whole response stripped
-        return response_text.strip()
-
-    def _extract_patch(self, response_text: str) -> str:
-        """Extracts the patch content from the agent response, supporting both <patch> tags and ```patch blocks."""
-        return self._extract_tag(response_text, "patch")
+    def _extract_patch_with_retries(self, response_text: str) -> str:
+        """Extract patch, re-querying to model if patch extraction fails."""
+        return self._extract_tag_with_retries(self, response_text, "patch")
 
 
 class AgentBasic(Agent):
@@ -67,7 +73,7 @@ class AgentBasic(Agent):
 
     def forward(self, prompt):
         """AgentBasic passes the prompt directly."""
-        return self._extract_patch(self.model_client.query(prompt))
+        return self._extract_patch_with_retries(prompt)
 
 
 class AgentFileSelector(Agent):
