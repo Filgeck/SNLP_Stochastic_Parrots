@@ -1,4 +1,4 @@
-from model_client import Retries, ModelClient
+from clients import Retries, ModelClient
 from abc import abstractmethod
 import re
 from typing import List, Literal

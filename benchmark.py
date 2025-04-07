@@ -3,7 +3,7 @@ from pathlib import Path
 from tqdm.auto import tqdm
 from datasets import load_dataset
 from agents import Agent, AgentBasic
-from model_client import ModelClient
+from clients import ModelClient
 
 SWE_BENCH_BM25_40K_DATASET = "princeton-nlp/SWE-bench_bm25_40K"
 SWE_BENCH_LITE_DATASET = "princeton-nlp/SWE-bench_Lite"

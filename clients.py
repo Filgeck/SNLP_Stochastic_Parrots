@@ -3,6 +3,7 @@ from ollama import ChatResponse
 import os
 import google.generativeai as genai
 from google.generativeai.types import GenerateContentResponse, GenerationConfigType
+from datasets import load_dataset
 
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -92,3 +93,36 @@ class ModelClient(Retries):
             raise error  # re-raise exception to trigger retry in _query_with_retries
 
         return response_content
+
+
+class RagClient(Retries):
+    def __init__(self, model_name: str, max_retries: int = 3):
+        super().__init__(max_retries=max_retries)
+        self.model_name = model_name
+        self.dataset = load_dataset("bigscience-data/roots_code_stackexchange")
+
+    def query(self, issue: str, num_retrieve: int = 10, num_return: int = 3):
+        """Find the most similar problems to the given issue using precomputed embeddings, then use a model to pick the top few to return."""
+
+        # rag to find 10 most similar to issue,
+
+        # then use model to pick best 3:
+
+        model = ModelClient(model_name="gemini-2.5-pro-exp-03-25")
+        model.query("whatever")
+
+        # then return in following structure
+
+        # <examples>
+        # [start of example_1]
+        # content blah blah
+        # [end of example_1]
+        # [start of example_2]
+        # content blah blah
+        # [end of example_2]
+        # [start of example_3]
+        # content blah blah
+        # [end of example_3]
+        # </examples>
+
+        pass
