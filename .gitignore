@@ -6,3 +6,5 @@ embeddings/*.parquet
 embeddings/**/*.parquet
 ~old_project/quarterly_transcripts/data/earning_calls/**/*.txt
 ~old_project/quarterly_transcripts/data/price_history/**/*.csv
+
+embeddings/cache/
