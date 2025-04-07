@@ -34,9 +34,9 @@ class ModelClient(Retries):
         self.model_name = model_name
 
     def query(self, prompt: str) -> str | None:
-        if self.model_name in {"llama3.2", "deepseek-coder-v2", "gemini-1.5-pro"}:
+        if self.model_name in {"llama3.2:3b", "deepseek-r1:8b"}:
             return self._func_with_retries(self._query_local_ollama, prompt)
-        elif self.model_name == "gemini-2.5-pro-exp-03-25":
+        elif self.model_name in {"gemini-2.5-pro-exp-03-25",  "gemini-1.5-pro"}:
             return self._func_with_retries(self._query_gemini, prompt)
         else:
             raise ValueError(f"Model {self.model_name} not supported")
