@@ -1,11 +1,12 @@
-from model_client import ModelClient
-from abc import ABC, abstractmethod
+from model_client import Retries, ModelClient
+from abc import abstractmethod
 import re
 from typing import List, Literal
 
 
-class Agent(ABC):
-    def __init__(self, model_client: ModelClient):
+class Agent(Retries):
+    def __init__(self, model_client: ModelClient, max_retries: int = 3):
+        super().__init__(max_retries=max_retries)
         self.model_client = model_client
         self.agent_name = "agent"
 
@@ -14,12 +15,12 @@ class Agent(ABC):
         """Process inputs and produce output according to agent's role."""
         pass
 
-    def _extract_tag(self, response_text: str, tag_name: str) -> str:
-        """Extract content from the agent response, supporting custom tags both in <example> tags and ```example blocks."""
+    def _extract_tag(self, prompt: str, tag_name: str) -> str:
+        """Extract content from the models response, supporting custom tags both in <example> tags and ```example blocks."""
         # try to match <tag_name> </tag_name>
         match = re.search(
             rf"<{tag_name}>\s*\n?(.*?)\n?\s*</{tag_name}>",
-            response_text,
+            prompt,
             re.DOTALL | re.IGNORECASE,
         )
         if match:
@@ -28,7 +29,7 @@ class Agent(ABC):
         # else try to match ```tag_name ```
         match = re.search(
             rf"```{tag_name}\s*\n?(.*?)\n?```",
-            response_text,
+            prompt,
             re.DOTALL | re.IGNORECASE,
         )
         if match:
@@ -40,80 +41,220 @@ class Agent(ABC):
         # - no tag or block (bad response)
         return None
 
-    def _extract_tag_with_retries(self, response_text: str, tag_name: str) -> str:
-        """Extract tag, re-querying to model if tag extraction fails."""
-        tag_content = self._extract_tag(
-            self.model_client.query(response_text), tag_name
-        )
-        num_retries = 0
-        max_retries = self.model_client.max_retries
-        while tag_content is None and num_retries < max_retries:
-            print(
-                f"Failed attempt {num_retries + 1} of {max_retries}.\nRetrying due to empty '{tag_name}' tag/block."
-            )
-            tag_content = self._extract_tag(
-                self.model_client.query(response_text), tag_name
-            )
-            num_retries += 1
-        if tag_content is None:
-            raise RuntimeError(
-                f"Max retries reached. Unable to extract '{tag_name}' tag/block from model's response."
-            )
-        return tag_content
+    def _query_and_extract(self, prompt: str, tag_name: str) -> str:
+        """Prompt model, extract tag from models respone, re-querying model if tag extraction fails."""
 
-    def _extract_patch_with_retries(self, response_text: str) -> str:
-        """Extract patch, re-querying to model if patch extraction fails."""
-        return self._extract_tag_with_retries(response_text, "patch")
+        def helper(prompt_arg: str, tag_name_arg: str) -> str:
+            response = self.model_client.query(prompt_arg)
+            extracted = self._extract_tag(response, tag_name_arg)
+            if extracted is None:
+                raise ValueError(
+                    f"Failed to extract '{tag_name_arg}' tag/block from response"
+                )
+            return extracted
+
+        return self._func_with_retries(helper, prompt, tag_name)
 
 
 class AgentBasic(Agent):
-    def __init__(self, model_client: ModelClient):
-        self.model_client = model_client
+    def __init__(self, model_client: ModelClient, max_retries: int = 3):
+        super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_basic"
 
     def forward(self, prompt):
         """AgentBasic passes the prompt directly."""
-        return self._extract_patch_with_retries(prompt)
+        return self._query_and_extract(prompt, "patch")
 
 
 class AgentFileSelector(Agent):
-    def __init__(self, model_client: ModelClient):
-        self.model_client = model_client
+    def __init__(
+        self,
+        model_client: ModelClient,
+        replace_in_text: bool,
+        strip_line_num: bool,
+        max_retries: int = 3,
+    ):
+        super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_file_selector"
+        self.replace_in_text = replace_in_text
+        self.strip_line_num = strip_line_num
 
     def forward(
         self,
         text: str,
         method: Literal["batch", "individual"],
         custom_issue: str = None,
-    ) -> List[str]:
+    ) -> List[str] | str:
         """AgentFileSelector selects which files to pass on based on if they are relevant to the current issue/errors."""
 
-        issue_text = custom_issue or self._extract_tag(custom_issue, "issue")
+        issue_text = custom_issue or self._extract_tag(text, "issue")
         files_text = self._extract_tag(text, "code")
 
         if method == "batch":  # pass all files to the model
-            prompt = f"""Your task is to select the files that are relevant to 
-            solving the issue, this will be passed on to another model which 
-            will use these as context to solve the issue:
+            selected_file_paths = self._func_with_retries(
+                self._select_by_batch, issue_text, files_text
+            )
+        elif method == "individual":  # pass each file to the model one by one
+            selected_file_paths = self._func_with_retries(
+                self._select_by_individual, issue_text, files_text
+            )
+        else:
+            raise ValueError(
+                f"Invalid method: {method}. Expected 'batch' or 'individual'."
+            )
+
+        if self.replace_in_text:
+            return self._replace_in_text(text, files_text, selected_file_paths)
+        return selected_file_paths
+
+    def _select_by_batch(self, issue_text: str, files_text: str) -> List[str]:
+        """Select files by passing all files to the model."""
+
+        prompt = f"""Your task is to select the files that are relevant to 
+        solving the issue, this will be passed on to another model which 
+        will use these as context to solve the issue:
+        \n<issue>\n{issue_text}\n</issue>
+        \n<files>\n{files_text}\n</files>
+        \nFeel free to reason about which files to select. At the end provide 
+        a list of selected files with paths (exactly as they appear above). 
+        Return your list of selected files in either <selected> </selected> 
+        tags or in a ```selected ``` block.
+        \nHere is an example:
+        \n<selected>\n
+        astropy/time/formats.py\n
+        astropy/coordinates/distances.py\n
+        docs/conf.py\n
+        </selected>"""
+
+        selected = self._query_and_extract(prompt, "selected")
+
+        # check selected files exist in issue_text
+        files_dict = self._get_files(files_text)
+        for file_path in selected.splitlines():
+            if file_path not in files_dict:
+                raise ValueError(
+                    f"Selected file '{file_path}' does not exist in the provided files."
+                )
+
+        return selected.splitlines()
+
+    def _select_by_individual(self, issue_text: str, files_text: str) -> List[str]:
+        """Select files by passing each file to the model one by one."""
+
+        selected_file_paths = []
+        files_dict = self._get_files(files_text)
+
+        for file_path, file_content in files_dict.items():
+            prompt = f"""You will bed given files one by one. Your task is to 
+            determine if the following file is relevant to solving the issue, 
+            this will be passed on to another model which will use this as 
+            context to solve the issue:
             \n<issue>\n{issue_text}\n</issue>
-            \n<files>\n{files_text}\n</files>
-            \nPlease ensure your response is a list of selected files with path 
-            (exactly as they appear above). Return your list of selected files in 
-            either <selected> </selected> tags or in a ```selected ``` block. 
-            Here is an example:
+            \nHere is {file_path}:
+            \n<file>\n{file_content}\n</file>
+            \nFeel free to reason about whether to select the file or not. At 
+            the end provide either a `Yes` or `No` answer in either <selected> 
+            </selected> tags or in a ```selected ``` block.
+            \nHere is an example:
             \n<selected>\n
-            astropy/time/formats.py\n
-            astropy/coordinates/distances.py\n
-            docs/conf.py\n
+            Yes
             </selected>"""
-        elif method == "individual":  # pass each file to the model
-            pass
+
+            selected = self._query_and_extract(prompt, "selected")
+
+            if selected.lower() == "yes":
+                selected_file_paths.append(file_path)
+            elif selected.lower() != "no":
+                raise ValueError(
+                    f"Invalid response from model: {selected}. Expected 'Yes' or 'No'."
+                )
+
+        return selected_file_paths
+
+    def _get_files(self, files_text: str) -> dict:
+        # Regex to find all file blocks
+        # \[start of (.*?)\]  -> Capture [start of example/test.py]
+        # (.*?)               -> Capture the file content (non-greedy)
+        # \[end of \1\]       -> Match [end of example/test.py]
+        pattern = r"\[start of (.*?)\]\s*\n(.*?)\n\[end of \1\]"
+        matches = re.findall(pattern, files_text, re.DOTALL)
+
+        files_dict = {}
+        for match in matches:
+            file_path = match[0].strip()
+            original_file_content = match[1]
+
+            if self.strip_line_num:
+                lines = original_file_content.splitlines()
+                cleaned_lines = []
+                for line in lines:
+                    # remove leading digits and the first optional space
+                    cleaned_line = re.sub(r"^\d+\s?", "", line)
+                    cleaned_lines.append(cleaned_line)
+                processed_content = "\n".join(cleaned_lines)
+            else:
+                processed_content = original_file_content
+
+            files_dict[file_path] = processed_content
+
+        return files_dict
+
+    def _replace_in_text(
+        self, text: str, files_text: str, selected_file_paths: List[str]
+    ) -> str:
+        """Reconstructs the text within <code> tags to only include files specified in selected_files_paths."""
+        # similar to regex in self._get_files()
+        # Group 1: The entire block
+        # Group 2: The file path within the start marker
+        file_block_pattern = r"(\[start of (.*?)\]\s*?\n.*?\n\[end of \2\])"
+        all_file_blocks = re.findall(file_block_pattern, files_text, re.DOTALL)
+
+        # only keep blocks whose paths are in selected_files_paths
+        selected_blocks_text = []
+        selected_files_set = set(selected_file_paths)
+
+        for full_block, file_path in all_file_blocks:
+            if file_path.strip() in selected_files_set:
+                selected_blocks_text.append(full_block)
+
+        reconstructed_code_content = "\n".join(selected_blocks_text)
+
+        # regex for <code> </code> block in the full_text
+        # Group 1: Content before <code>
+        # Group 2: Content inside <code> (to replace)
+        # Group 3: Content after </code>
+        code_section_pattern = r"(.*?<code>\s*\n?)(.*?)(\n?\s*</code>.*)"
+        match = re.search(code_section_pattern, text, re.DOTALL | re.IGNORECASE)
+
+        if not match:
+            raise ValueError(
+                "Could not find the <code> block in the original text for replacement."
+            )
+
+        prefix = match.group(1)
+        suffix = match.group(3)
+
+        if reconstructed_code_content:
+            final_text = (
+                f"{prefix.rstrip()}\\n{reconstructed_code_content}\\n{suffix.lstrip()}"
+            )
+            # clean up possible extra \n around the replaced <code>
+            final_text = final_text.replace(
+                prefix.rstrip() + "\n\n", prefix.rstrip() + "\n"
+            )
+            final_text = final_text.replace(
+                "\n\n" + suffix.lstrip(), "\n" + suffix.lstrip()
+            )
+        else:
+            # case where no files are selected (empty <code> block)
+            final_text = f"{prefix.rstrip()}\\n{suffix.lstrip()}"
+
+        return final_text
 
 
 class AgentFileRetriever(Agent):
-    def __init__(self, model_client: ModelClient):
-        self.model_client = model_client
+    def __init__(self, model_client: ModelClient, max_retries: int = 3):
+        super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_file_retriever"
 
     def forward(
@@ -124,8 +265,8 @@ class AgentFileRetriever(Agent):
 
 
 class AgentExampleRetriever(Agent):
-    def __init__(self, model_client: ModelClient):
-        self.model_client = model_client
+    def __init__(self, model_client: ModelClient, max_retries: int = 3):
+        super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_example_retriever"
 
     def forward(self, issue: str, num_retrieve: int, num_select: int) -> str:

@@ -8,30 +8,37 @@ from google.generativeai.types import GenerateContentResponse, GenerationConfigT
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
-class ModelClient:
-    def __init__(self, model_name: str, max_retries: int = 3):
-        self.model_name = model_name
+class Retries:
+    def __init__(self, max_retries: int = 3):
         self.max_retries = max_retries
 
-    def query(self, prompt: str) -> str | None:
-        if self.model_name in {"llama3.2", "deepseek-coder-v2", "gemini-1.5-pro"}:
-            return self._query_with_retries(self._query_local_ollama, prompt)
-        elif self.model_name == "gemini-2.5-pro-exp-03-25":
-            return self._query_with_retries(self._query_gemini, prompt)
-        else:
-            raise ValueError(f"Model {self.model_name} not supported")
-
-    def _query_with_retries(self, func: callable, *args, **kwargs) -> str | None:
+    def _func_with_retries(self, func: callable, *args, **kwargs) -> str | None:
         for num_retries in range(self.max_retries):
             try:
                 return func(*args, **kwargs)
             except Exception as error:
-                print(f"Failed attempt {num_retries + 1} of {self.max_retries}")
+                print(
+                    f"Failed attempt {num_retries + 1} of {self.max_retries} running {func}"
+                )
                 if num_retries < self.max_retries - 1:
                     print(f"Retrying due to error: {error}")
                 else:
                     print(f"Max retries reached. Error:\n{error}\n")
                     return None
+
+
+class ModelClient(Retries):
+    def __init__(self, model_name: str, max_retries: int = 3):
+        super().__init__(max_retries=max_retries)
+        self.model_name = model_name
+
+    def query(self, prompt: str) -> str | None:
+        if self.model_name in {"llama3.2", "deepseek-coder-v2", "gemini-1.5-pro"}:
+            return self._func_with_retries(self._query_local_ollama, prompt)
+        elif self.model_name == "gemini-2.5-pro-exp-03-25":
+            return self._func_with_retries(self._query_gemini, prompt)
+        else:
+            raise ValueError(f"Model {self.model_name} not supported")
 
     def _query_local_ollama(self, prompt: str) -> str | None:
         client = ollama.Client()
