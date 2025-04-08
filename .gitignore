@@ -8,3 +8,4 @@ embeddings/**/*.parquet
 ~old_project/quarterly_transcripts/data/price_history/**/*.csv
 
 embeddings/cache/
+.envrc
