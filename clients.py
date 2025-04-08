@@ -93,13 +93,10 @@ class ModelClient(Retries):
             safety_settings=safety_settings,
         )
 
-        try:
-            response: GenerateContentResponse = model.generate_content(
-                prompt,
-            )
-            response_content = response.text
-        except Exception as error:
-            raise error  # re-raise exception to trigger retry in _query_with_retries
+        response: GenerateContentResponse = model.generate_content(
+            prompt,
+        )
+        response_content = response.text
 
         return response_content
 
@@ -118,5 +115,4 @@ class RagClient(Retries):
 
         # then return in list
 
-        pass
-        return []
+        raise NotImplementedError("RagClient query method not implemented yet")
