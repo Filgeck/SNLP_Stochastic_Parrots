@@ -3,8 +3,10 @@ from ollama import ChatResponse
 import os
 import google.generativeai as genai
 from google.generativeai.types import GenerateContentResponse, GenerationConfigType
+from google.generativeai.types.safety_types import HarmCategory, HarmBlockThreshold
 from datasets import load_dataset
-from typing import List
+from typing import List, Callable, Any
+import traceback
 
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -14,7 +16,7 @@ class Retries:
     def __init__(self, max_retries: int = 3):
         self.max_retries = max_retries
 
-    def _func_with_retries(self, func: callable, *args, **kwargs) -> str | None:
+    def _func_with_retries[R](self, func: Callable[..., R], *args, **kwargs) -> R:
         for num_retries in range(self.max_retries):
             try:
                 return func(*args, **kwargs)
@@ -23,9 +25,11 @@ class Retries:
                     f"Failed attempt {num_retries + 1} of {self.max_retries} running {func}"
                 )
                 if num_retries < self.max_retries - 1:
-                    print(f"Retrying due to error: {error}")
+                    print("Retrying due to error:")
+                    print(traceback.format_exc())
                 else:
-                    print(f"Max retries reached. Error: {error}\n")
+                    print("Max retries reached. Error:")
+                    print(traceback.format_exc())
         raise RuntimeError(f"Function {func} failed after maximum retries")
 
 
@@ -34,7 +38,7 @@ class ModelClient(Retries):
         super().__init__(max_retries=max_retries)
         self.model_name = model_name
 
-    def query(self, prompt: str) -> str | None:
+    def query(self, prompt: str) -> str:
         if self.model_name in {"llama3.2", "deepseek-r1:8b"}:
             return self._func_with_retries(self._query_local_ollama, prompt)
         elif self.model_name in {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}:
@@ -42,10 +46,10 @@ class ModelClient(Retries):
         else:
             raise ValueError(f"Model {self.model_name} not supported")
 
-    def _query_local_ollama(self, prompt: str) -> str | None:
+    def _query_local_ollama(self, prompt: str) -> str:
         client = ollama.Client()
 
-        response: ChatResponse = client.chat(
+        response = client.chat(
             model=self.model_name,
             messages=[{"role": "user", "content": prompt}],
             stream=True,
@@ -53,31 +57,35 @@ class ModelClient(Retries):
 
         response_content = ""
         for chunk in response:
-            response_content += chunk.message.content
+            content = chunk.message.content
+            if content is None:
+                raise ValueError(
+                    f"Error: Received None content from model {self.model_name}"
+                )
+            response_content += content
             if len(response_content) > 50000:
-                print(
+                raise ValueError(
                     f"Error: Response from model {self.model_name} exceeded 50,000 characters. Likely model is repeating itself"
                 )
-                return None
 
         return response_content
 
-    def _query_gemini(self, prompt: str) -> str | None:
+    def _query_gemini(self, prompt: str) -> str:
         genai.configure(api_key=GOOGLE_API_KEY)
 
-        generation_config: GenerationConfigType = {
-            "temperature": 0.7,
-            "top_p": 0.9,
-            "top_k": 40,
-            "max_output_tokens": 16384,
-        }
+        generation_config = genai.GenerationConfig(
+            temperature=0.7,
+            top_p=0.9,
+            top_k=40,
+            max_output_tokens=16384,
+        )
 
-        safety_settings = [
-            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
-        ]
+        safety_settings = {
+            HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+        }
 
         model = genai.GenerativeModel(
             model_name=self.model_name,
@@ -111,3 +119,4 @@ class RagClient(Retries):
         # then return in list
 
         pass
+        return []

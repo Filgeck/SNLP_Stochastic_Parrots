@@ -16,7 +16,7 @@ class Agent(Retries):
         """Process inputs and produce output according to agent's role."""
         pass
 
-    def _extract_tag(self, prompt: str, tag_name: str) -> str:
+    def _extract_tag(self, prompt: str, tag_name: str) -> str | None:
         """Extract content from the models response, supporting custom tags both in <example> tags and ```example blocks."""
         # try to match <tag_name> </tag_name>
         match = re.search(
@@ -42,7 +42,7 @@ class Agent(Retries):
         # - no tag or block (bad response)
         return None
 
-    def _query_and_extract(self, prompt: str, tag_name: str) -> str:
+    def _query_and_extract(self, prompt: str, tag_name: str) -> str | None:
         """Prompt model, extract tag from models respone, re-querying model if tag extraction fails."""
 
         def helper(prompt_arg: str, tag_name_arg: str) -> str:
@@ -97,7 +97,7 @@ class AgentFileSelector(Agent):
         self,
         text: str,
         method: Literal["batch", "individual"],
-        custom_issue: str = None,
+        custom_issue: str | None = None,
     ) -> Tuple[List[str], str]:
         """AgentFileSelector selects which files to pass on based on if they are relevant to the current issue/errors."""
 
@@ -333,7 +333,7 @@ class AgentProgrammer(Agent):
     def forward(
         self,
         prompt: str,
-    ) -> str:
+    ) -> str | None:
         """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
 
         # TODO: Implement
@@ -358,6 +358,7 @@ class AgentProgrammer(Agent):
 
         return self._func_with_retries(helper, prompt)
 
+    @staticmethod
     def _generate_patch(file1: str, file2: str):
         """Generate a patch between two files using the diff command."""
 

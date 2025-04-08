@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
+from typing import Callable
 from tqdm.auto import tqdm
-from datasets import load_dataset
+from datasets import load_dataset, DatasetDict
 from agents import Agent, AgentBasic
 from clients import ModelClient
 
@@ -19,7 +20,7 @@ class AgentBenchmark:
         self.benchmark_name = f"{agent.agent_name}_{agent.model_client.model_name}"
 
     def run_benchmark_custom_retrieval(
-        self, benchmark_dataset: str, retrieval_func: callable
+        self, benchmark_dataset: str, retrieval_func: Callable
     ) -> None:
         """Run benchmark for a given agent and swe-bench dataset, with a custom retrieval method."""
         pass
@@ -29,7 +30,11 @@ class AgentBenchmark:
     ) -> None:
         """Run benchmark for a given agent and swe-bench dataset, with a precomputed retrieval dataset."""
         benchmark = load_dataset(benchmark_dataset)
+        # benchmark & retrieval must be a DatasetDict since split is None and
+        # streaming is False
+        assert isinstance(benchmark, DatasetDict)
         retrieval = load_dataset(retrieval_dataset)
+        assert isinstance(retrieval, DatasetDict)
         processed_ids = self._find_processed_ids()
 
         # map each benchmark instance to the retrieved (precomputed RAG) documents
@@ -54,7 +59,7 @@ class AgentBenchmark:
                     print("Skipping already processed instance:", instance_id)
                     continue
 
-                prompt = retrieval_map.get(instance_id)
+                prompt = retrieval_map[instance_id]
                 prompt += """\n\nFeel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
                 output = self.agent.forward(prompt)
 
@@ -82,7 +87,7 @@ class AgentBenchmark:
             for line in sorted_lines:
                 file.write(json.dumps(line) + "\n")
 
-    def _find_processed_ids(self) -> set | None:
+    def _find_processed_ids(self) -> set:
         """For this given benchmark, return the instance_ids that have already been evaluated."""
         processed_ids = set()
         try:
@@ -95,8 +100,7 @@ class AgentBenchmark:
             else:
                 return set()
         except Exception as e:
-            print(f"Error reading {self.preds_file}:\n{e}")
-            return set()
+            raise RuntimeError(f"Error reading {self.preds_file}:\n{e}")
         return processed_ids
 
 
