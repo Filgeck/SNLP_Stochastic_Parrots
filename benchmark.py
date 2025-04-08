@@ -67,6 +67,21 @@ class AgentBenchmark:
                 file_out.write(json.dumps(prediction) + "\n")
                 file_out.flush()
 
+        self._sort_jsonl_alphanumeric_asc(
+            self.preds_file,
+        )
+
+    def _sort_jsonl_alphanumeric_asc(self, jsonl_file: Path) -> None:
+        """Sort a JSONL file by the 'instance_id' field in ascending order."""
+        with open(jsonl_file, "r") as file:
+            lines = [json.loads(line) for line in file]
+
+        sorted_lines = sorted(lines, key=lambda x: x["instance_id"])
+
+        with open(jsonl_file, "w") as file:
+            for line in sorted_lines:
+                file.write(json.dumps(line) + "\n")
+
     def _find_processed_ids(self) -> set | None:
         """For this given benchmark, return the instance_ids that have already been evaluated."""
         processed_ids = set()
@@ -86,9 +101,15 @@ class AgentBenchmark:
 
 
 if __name__ == "__main__":
-    model = ModelClient(model_name="gemini-2.5-pro-exp-03-25")
-    agent = AgentBasic(model)
-    benchmark = AgentBenchmark(model_name="gemini-2.5-pro-exp-03-25", agent=agent)
-    benchmark.run_benchmark_precomputed_retrieval(
-        SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-    )
+    MODELS_TO_BENCHMARK = [
+        "deepseek-r1:8b",
+        "llama3.2",
+        "gemini-2.5-pro-exp-03-25",
+    ]
+    for model_name in MODELS_TO_BENCHMARK:
+        model = ModelClient(model_name=model_name)
+        agent = AgentBasic(model, max_retries=10)
+        benchmark = AgentBenchmark(model_name=model_name, agent=agent)
+        benchmark.run_benchmark_precomputed_retrieval(
+            SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+        )
