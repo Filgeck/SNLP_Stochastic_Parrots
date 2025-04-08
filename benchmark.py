@@ -14,7 +14,7 @@ class AgentBenchmark:
         self.model_name = model_name
         self.agent = agent
         self.preds_file = Path(
-            f"predictions/{agent.agent_name}/{model_name}/all_pred.jsonl"
+            f"predictions/{agent.agent_name.replace(':', '-')}/{model_name}/all_pred.jsonl"
         )
         self.benchmark_name = f"{agent.agent_name}_{agent.model_client.model_name}"
 
