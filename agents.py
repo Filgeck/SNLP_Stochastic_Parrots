@@ -47,7 +47,9 @@ class Agent(Retries):
         Remove leading digits and the first optional space\n
         code_block: str - input code block (within <code>...</code> brackets, excluding tags)
         """
-        return "\n".join([re.sub(r"^\d+\s?", "", line) for line in code_block.splitlines()])
+        return "\n".join(
+            [re.sub(r"^\d+\s?", "", line) for line in code_block.splitlines()]
+        )
 
     def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
         # Regex to find all file blocks
@@ -133,9 +135,13 @@ class AgentFileSelector(Agent):
             raise ValueError("Could not extract <code> tag from input text.")
 
         if method == "batch":  # pass all files to the model
-            selected_file_paths = self._func_with_retries(self._select_by_batch, issue_text, files_text)
+            selected_file_paths = self._func_with_retries(
+                self._select_by_batch, issue_text, files_text
+            )
         elif method == "individual":  # pass each file to the model one by one
-            selected_file_paths = self._func_with_retries(self._select_by_individual, issue_text, files_text)
+            selected_file_paths = self._func_with_retries(
+                self._select_by_individual, issue_text, files_text
+            )
         else:
             raise ValueError(
                 f"Invalid method: {method}. Expected 'batch' or 'individual'."
@@ -209,7 +215,9 @@ class AgentFileSelector(Agent):
 
         return selected_file_paths
 
-    def _format_output(self, text: str, files_text: str, selected_file_paths: List[str]) -> str:
+    def _format_output(
+        self, text: str, files_text: str, selected_file_paths: List[str]
+    ) -> str:
         """Reconstructs the text within <code> tags to only include files specified in selected_files_paths."""
         # similar to regex in self._get_files()
         # Group 1: The entire block
