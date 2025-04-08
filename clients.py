@@ -99,6 +99,9 @@ class ModelClient(Retries):
         response_content = response.text
 
         return response_content
+    
+    def _query_claude(self, prompt: str) -> str:
+        raise NotImplementedError
 
 
 class RagClient(Retries):
