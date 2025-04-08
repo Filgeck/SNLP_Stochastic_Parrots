@@ -2,6 +2,7 @@ from clients import Retries, ModelClient
 from abc import abstractmethod
 import re
 from typing import List, Literal
+import subprocess
 
 
 class Agent(Retries):
@@ -64,9 +65,7 @@ class AgentBasic(Agent):
     def forward(self, prompt):
         """AgentBasic passes the prompt directly."""
 
-        instruction = (
-            """Feel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
-        )
+        instruction = """Feel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
         prompt = f"{prompt}\n{instruction}"
 
         def helper(prompt_arg):
@@ -287,3 +286,46 @@ class AgentExampleRetriever(Agent):
     def forward(self, issue: str, num_retrieve: int, num_select: int) -> str:
         """AgentExampleRetriever fetches examples via RAG of stack exchange solutions to questions that are similar to the current issue/errors."""
         raise NotImplementedError
+
+
+class AgentProgrammer(Agent):
+    def __init__(self, model_client: ModelClient, max_retries: int = 3):
+        super().__init__(model_client=model_client, max_retries=max_retries)
+        self.agent_name = "agent_programmer"
+
+    def forward(self, prompt: str) -> str:
+        """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
+
+        # TODO: Implement
+
+        cache_dir = "agent_cache"
+
+        # could use AgentFileSelector with replace_in_text=False, strip_line_num=True,
+
+        def helper():
+            pass
+
+        return self._func_with_retries(helper, prompt)
+
+    def _generate_patch(file1: str, file2: str):
+        """Generate a patch between two files using the diff command."""
+
+        # diff command to generate a patch
+        result = subprocess.run(
+            ["diff", "-u", file1, file2],
+            capture_output=True,
+            text=True,
+        )
+
+        # ensure diff applied to original code results in the new code:
+        diff_result = subprocess.run(
+            ["git", "apply", "--check", "-"],
+            input=result.stdout,
+            capture_output=True,
+            text=True,
+        )
+
+        if diff_result.returncode != 0:
+            raise RuntimeError(f"Diff check failed: {diff_result.stderr}")
+
+        return result.stdout

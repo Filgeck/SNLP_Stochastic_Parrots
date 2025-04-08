@@ -104,6 +104,8 @@ class RagClient(Retries):
     def query(self, issue: str, num_retrieve: int = 10, num_return: int = 3):
         """Find the most similar problems to the given issue using precomputed embeddings, then use a model to pick the top few to return."""
 
+        # TODO: Implement
+
         # rag to find 10 most similar to issue,
 
         # then use model to pick best 3:
