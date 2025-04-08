@@ -1,7 +1,7 @@
 from clients import Retries, ModelClient
 from abc import abstractmethod
 import re
-from typing import List, Literal
+from typing import List, Literal, Tuple
 import subprocess
 
 
@@ -84,13 +84,13 @@ class AgentFileSelector(Agent):
     def __init__(
         self,
         model_client: ModelClient,
-        replace_in_text: bool,
+        return_full_text: bool,
         strip_line_num: bool,
         max_retries: int = 3,
     ):
         super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_file_selector"
-        self.replace_in_text = replace_in_text
+        self.return_full_text = return_full_text
         self.strip_line_num = strip_line_num
 
     def forward(
@@ -98,28 +98,35 @@ class AgentFileSelector(Agent):
         text: str,
         method: Literal["batch", "individual"],
         custom_issue: str = None,
-    ) -> List[str] | str:
+    ) -> Tuple[List[str], str]:
         """AgentFileSelector selects which files to pass on based on if they are relevant to the current issue/errors."""
 
         issue_text = custom_issue or self._extract_tag(text, "issue")
         files_text = self._extract_tag(text, "code")
 
+        if issue_text is None:
+            raise ValueError("Could not extract <issue> tag from input text.")
+        if files_text is None:
+            raise ValueError("Could not extract <code> tag from input text.")
+
         if method == "batch":  # pass all files to the model
             selected_file_paths = self._func_with_retries(
-                self._select_by_batch, issue_text, files_text
+                self._func_with_retries(self._select_by_batch, issue_text, files_text)
             )
         elif method == "individual":  # pass each file to the model one by one
             selected_file_paths = self._func_with_retries(
-                self._select_by_individual, issue_text, files_text
+                self._func_with_retries(
+                    self._select_by_individual, issue_text, files_text
+                )
             )
         else:
             raise ValueError(
                 f"Invalid method: {method}. Expected 'batch' or 'individual'."
             )
 
-        if self.replace_in_text:
-            return self._replace_in_text(text, files_text, selected_file_paths)
-        return selected_file_paths
+        return selected_file_paths, self._format_output(
+            text, files_text, selected_file_paths
+        )
 
     def _select_by_batch(self, issue_text: str, files_text: str) -> List[str]:
         """Select files by passing all files to the model."""
@@ -213,7 +220,7 @@ class AgentFileSelector(Agent):
 
         return files_dict
 
-    def _replace_in_text(
+    def _format_output(
         self, text: str, files_text: str, selected_file_paths: List[str]
     ) -> str:
         """Reconstructs the text within <code> tags to only include files specified in selected_files_paths."""
@@ -232,6 +239,12 @@ class AgentFileSelector(Agent):
                 selected_blocks_text.append(full_block)
 
         reconstructed_code_content = "\n".join(selected_blocks_text)
+
+        if not self.return_full_text:
+            if reconstructed_code_content:
+                return f"<code>\n{reconstructed_code_content}\n</code>"
+            else:
+                return "<code>\n</code>"
 
         # regex for <code> </code> block in the full_text
         # Group 1: Content before <code>
@@ -293,14 +306,18 @@ class AgentProgrammer(Agent):
         super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_programmer"
 
-    def forward(self, prompt: str) -> str:
+    def forward(
+        self,
+        prompt: str,
+        method: Literal["batch", "individual"],
+    ) -> str:
         """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
 
         # TODO: Implement
 
         cache_dir = "agent_cache"
 
-        # could use AgentFileSelector with replace_in_text=False, strip_line_num=True,
+        # could use AgentFileSelector with return_full_text=False, strip_line_num=True,
 
         def helper():
             pass
