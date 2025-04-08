@@ -1,4 +1,4 @@
-from clients import Retries, ModelClient
+from clients import Retries, ModelClient, RagClient
 from abc import abstractmethod
 import re
 from typing import List, Literal, Tuple
@@ -292,12 +292,36 @@ class AgentFileRetriever(Agent):
 
 
 class AgentExampleRetriever(Agent):
-    def __init__(self, model_client: ModelClient, max_retries: int = 3):
+    def __init__(
+        self, model_client: ModelClient, rag_client: RagClient, max_retries: int = 3
+    ):
         super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_example_retriever"
 
     def forward(self, issue: str, num_retrieve: int, num_select: int) -> str:
         """AgentExampleRetriever fetches examples via RAG of stack exchange solutions to questions that are similar to the current issue/errors."""
+
+        rag_client = RagClient()
+        rag_client.query(issue, num_retrieve=num_retrieve)
+
+        # TODO: Implement
+
+        # prompt llm to pick best 3 out of 10
+
+        # then return str:
+
+        # <examples>
+        # [start of example_1]
+        # content blah blah
+        # [end of example_1]
+        # [start of example_2]
+        # content blah blah
+        # [end of example_2]
+        # [start of example_3]
+        # content blah blah
+        # [end of example_3]
+        # </examples>
+
         raise NotImplementedError
 
 
@@ -309,11 +333,21 @@ class AgentProgrammer(Agent):
     def forward(
         self,
         prompt: str,
-        method: Literal["batch", "individual"],
     ) -> str:
         """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
 
         # TODO: Implement
+
+        # Steps:
+        # 0. Get file_paths of all files in <code> </code>, use same method as def _get_files above
+        # 1. remove all text after </code> from 'prompt',
+        # 2. Add an instruction to the end of 'prompt' that asks the LLM to fix the bug and return the FULL fixed files in a specific format, FULL is important
+        # 3. response = model_client.query(prompt)
+        # 5. Extract fully fixed files from 'response', I sugget you use similar method to above agent with _query_and_extract(), <example>[][][]</example>
+        # 6. in agent_cache create old_file.whatever and new_file.whatever (not those names, use actual names from 'file_paths')
+        # 7. _generate_patch(), but replace file paths with actual file paths
+        # 8. delete/cleanup agent_cache before next run
+        # 9. return patch
 
         cache_dir = "agent_cache"
 
