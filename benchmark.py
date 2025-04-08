@@ -8,24 +8,31 @@ from clients import ModelClient
 
 SWE_BENCH_BM25_40K_DATASET = "princeton-nlp/SWE-bench_bm25_40K"
 SWE_BENCH_LITE_DATASET = "princeton-nlp/SWE-bench_Lite"
+SWE_BENCH_RUN_EVAL_PATH = Path("swebench/harness/run_evaluation.py")
+PREDICTIONS_DIR_PATH = Path("predictions")
 
 
 class AgentBenchmark:
-    def __init__(self, model_name: str, agent: Agent):
+    def __init__(self, agent: Agent):
+        output_path = Path(
+            f"{PREDICTIONS_DIR_PATH}/{agent.agent_name}/{agent.model_client.model_name}".replace(
+                ":", "-"
+            )
+        )
+
         self.model_name = model_name
         self.agent = agent
-        self.preds_file = Path(
-            f"predictions/{agent.agent_name}/{model_name}/all_pred.jsonl".replace(":", "-")
-        )
-        self.benchmark_name = f"{agent.agent_name}_{agent.model_client.model_name}"
+        self.preds_file_path = output_path / "all_pred.jsonl"
+        self.logs_dir_path = output_path / "logs"
+        self.run_id = f"{agent.agent_name}_{agent.model_client.model_name}"
 
-    def run_benchmark_custom_retrieval(
+    def generate_preds_custom_retrieval(
         self, benchmark_dataset: str, retrieval_func: Callable
     ) -> None:
         """Run benchmark for a given agent and swe-bench dataset, with a custom retrieval method."""
         pass
 
-    def run_benchmark_precomputed_retrieval(
+    def generate_preds_precomputed_retrieval(
         self, benchmark_dataset: str, retrieval_dataset: str
     ) -> None:
         """Run benchmark for a given agent and swe-bench dataset, with a precomputed retrieval dataset."""
@@ -46,16 +53,16 @@ class AgentBenchmark:
             )
         }
 
-        self.preds_file.parent.mkdir(parents=True, exist_ok=True)
-        self.preds_file.touch(exist_ok=True)
-        with open(self.preds_file, "a") as file_out:
+        self.preds_file_path.parent.mkdir(parents=True, exist_ok=True)
+        self.preds_file_path.touch(exist_ok=True)
+        with open(self.preds_file_path, "a") as file_out:
             for instance in tqdm(
                 benchmark["test"],
                 desc=f"Running {benchmark_dataset} benchmark",
             ):
                 instance_id = instance["instance_id"]
 
-                if (instance_id, self.benchmark_name) in processed_ids:
+                if (instance_id, self.run_id) in processed_ids:
                     print("Skipping already processed instance:", instance_id)
                     continue
 
@@ -66,15 +73,23 @@ class AgentBenchmark:
                 prediction = {
                     "instance_id": instance_id,
                     "model_patch": output,
-                    "model_name_or_path": self.benchmark_name,
+                    "model_name_or_path": self.run_id,
                 }
 
                 file_out.write(json.dumps(prediction) + "\n")
                 file_out.flush()
 
         self._sort_jsonl_alphanumeric_asc(
-            self.preds_file,
+            self.preds_file_path,
         )
+
+    def run_benchmark(
+        self,
+        max_workers: int,
+    ) -> None:
+        # self.preds_file_path
+        # self.run_id
+        pass
 
     def _sort_jsonl_alphanumeric_asc(self, jsonl_file: Path) -> None:
         """Sort a JSONL file by the 'instance_id' field in ascending order."""
@@ -91,8 +106,8 @@ class AgentBenchmark:
         """For this given benchmark, return the instance_ids that have already been evaluated."""
         processed_ids = set()
         try:
-            if self.preds_file.exists():
-                with open(self.preds_file, "r") as file:
+            if self.preds_file_path.exists():
+                with open(self.preds_file_path, "r") as file:
                     existing_preds = [json.loads(line) for line in file]
                 processed_ids = {
                     (p["instance_id"], p["model_name_or_path"]) for p in existing_preds
@@ -100,7 +115,7 @@ class AgentBenchmark:
             else:
                 return set()
         except Exception as e:
-            raise RuntimeError(f"Error reading {self.preds_file}:\n{e}")
+            raise RuntimeError(f"Error reading {self.preds_file_path}:\n{e}")
         return processed_ids
 
 
@@ -113,7 +128,7 @@ if __name__ == "__main__":
     for model_name in MODELS_TO_BENCHMARK:
         model = ModelClient(model_name=model_name)
         agent = AgentBasic(model, max_retries=10)
-        benchmark = AgentBenchmark(model_name=model_name, agent=agent)
-        benchmark.run_benchmark_precomputed_retrieval(
+        benchmark = AgentBenchmark(agent)
+        benchmark.generate_preds_precomputed_retrieval(
             SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
         )
