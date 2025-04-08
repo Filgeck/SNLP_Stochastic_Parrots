@@ -42,6 +42,29 @@ class Agent(Retries):
         # - no tag or block (bad response)
         return None
 
+    def _strip_lines(self, code_block: str) -> str:
+        """
+        Remove leading digits and the first optional space\n
+        code_block: str - input code block (within <code>...</code> brackets, excluding tags)
+        """
+        return "\n".join([re.sub(r"^\d+\s?", "", line) for line in code_block.splitlines()])
+
+    def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
+        # Regex to find all file blocks
+        # \[start of (.*?)\]  -> Capture [start of example/test.py]
+        # (.*?)               -> Capture the file content (non-greedy)
+        # \[end of \1\]       -> Match [end of example/test.py]
+        pattern = r"\[start of (.*?)\]\s*\n(.*?)\n\[end of \1\]"
+        matches = re.findall(pattern, files_text, re.DOTALL)
+
+        files_dict = {}
+        for match in matches:
+            file_path = match[0].strip()
+            file_content = self._strip_lines(match[1]) if strip_line_num else match[1]
+            files_dict[file_path] = file_content
+
+        return files_dict
+
     def _query_and_extract(self, prompt: str, tag_name: str) -> str:
         """Prompt model, extract tag from models respone, re-querying model if tag extraction fails."""
 
@@ -150,7 +173,7 @@ class AgentFileSelector(Agent):
         selected = self._query_and_extract(prompt, "selected")
 
         # check selected files exist in issue_text
-        files_dict = self._get_files(files_text)
+        files_dict = self._get_files(files_text, self.strip_line_num)
         for file_path in selected.splitlines():
             if file_path not in files_dict:
                 raise ValueError(
@@ -163,7 +186,7 @@ class AgentFileSelector(Agent):
         """Select files by passing each file to the model one by one."""
 
         selected_file_paths = []
-        files_dict = self._get_files(files_text)
+        files_dict = self._get_files(files_text, self.strip_line_num)
 
         for file_path, file_content in files_dict.items():
             prompt = f"""You will bed given files one by one. Your task is to 
@@ -192,37 +215,7 @@ class AgentFileSelector(Agent):
 
         return selected_file_paths
 
-    def _get_files(self, files_text: str) -> dict:
-        # Regex to find all file blocks
-        # \[start of (.*?)\]  -> Capture [start of example/test.py]
-        # (.*?)               -> Capture the file content (non-greedy)
-        # \[end of \1\]       -> Match [end of example/test.py]
-        pattern = r"\[start of (.*?)\]\s*\n(.*?)\n\[end of \1\]"
-        matches = re.findall(pattern, files_text, re.DOTALL)
-
-        files_dict = {}
-        for match in matches:
-            file_path = match[0].strip()
-            original_file_content = match[1]
-
-            if self.strip_line_num:
-                lines = original_file_content.splitlines()
-                cleaned_lines = []
-                for line in lines:
-                    # remove leading digits and the first optional space
-                    cleaned_line = re.sub(r"^\d+\s?", "", line)
-                    cleaned_lines.append(cleaned_line)
-                processed_content = "\n".join(cleaned_lines)
-            else:
-                processed_content = original_file_content
-
-            files_dict[file_path] = processed_content
-
-        return files_dict
-
-    def _format_output(
-        self, text: str, files_text: str, selected_file_paths: List[str]
-    ) -> str:
+    def _format_output(self, text: str, files_text: str, selected_file_paths: List[str]) -> str:
         """Reconstructs the text within <code> tags to only include files specified in selected_files_paths."""
         # similar to regex in self._get_files()
         # Group 1: The entire block
