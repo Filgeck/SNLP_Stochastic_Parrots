@@ -1,11 +1,10 @@
 import ollama
-from ollama import ChatResponse
 import os
 import google.generativeai as genai
-from google.generativeai.types import GenerateContentResponse, GenerationConfigType
+from google.generativeai.types import GenerateContentResponse
 from google.generativeai.types.safety_types import HarmCategory, HarmBlockThreshold
 from datasets import load_dataset
-from typing import List, Callable, Any
+from typing import List, Callable
 import traceback
 
 
