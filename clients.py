@@ -24,8 +24,8 @@ class Retries:
                 if num_retries < self.max_retries - 1:
                     print(f"Retrying due to error: {error}")
                 else:
-                    print(f"Max retries reached. Error:\n{error}\n")
-                    return None
+                    print(f"Max retries reached. Error: {error}\n")
+        raise RuntimeError(f"Function {func} failed after maximum retries")
 
 
 class ModelClient(Retries):
@@ -34,7 +34,7 @@ class ModelClient(Retries):
         self.model_name = model_name
 
     def query(self, prompt: str) -> str | None:
-        if self.model_name in {"llama3.2:3b", "deepseek-r1:8b"}:
+        if self.model_name in {"llama3.2", "deepseek-r1:8b"}:
             return self._func_with_retries(self._query_local_ollama, prompt)
         elif self.model_name in {"gemini-2.5-pro-exp-03-25",  "gemini-1.5-pro"}:
             return self._func_with_retries(self._query_gemini, prompt)
@@ -52,7 +52,7 @@ class ModelClient(Retries):
 
         response_content = ""
         for chunk in response:
-            response_content += chunk.content
+            response_content += chunk.message.content
             if len(response_content) > 50000:
                 print(
                     f"Error: Response from model {self.model_name} exceeded 50,000 characters. Likely model is repeating itself"
