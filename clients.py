@@ -1,3 +1,4 @@
+import anthropic
 import ollama
 import os
 import google.generativeai as genai
@@ -6,10 +7,15 @@ from google.generativeai.types.safety_types import HarmCategory, HarmBlockThresh
 from datasets import load_dataset
 from typing import List, Callable
 import traceback
+import dotenv
+
+# Load environment variables from .envrc file
+# put your API keys here
+dotenv.load_dotenv(".envrc")
 
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 
 class Retries:
@@ -43,6 +49,8 @@ class ModelClient(Retries):
             return self._func_with_retries(self._query_local_ollama, prompt)
         elif self.model_name in {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}:
             return self._func_with_retries(self._query_gemini, prompt)
+        elif self.model_name in {"claude-3-7-sonnet-20250219"}:
+            return self._func_with_retries(self._query_claude, prompt)
         else:
             raise ValueError(f"Model {self.model_name} not supported")
 
@@ -101,7 +109,30 @@ class ModelClient(Retries):
         return response_content
     
     def _query_claude(self, prompt: str) -> str:
-        raise NotImplementedError
+        client = anthropic.Anthropic()
+
+        message = client.messages.create(
+            model=self.model_name,
+            max_tokens=16384,
+            temperature=1,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": prompt
+                        }
+                    ]
+                }
+            ]
+        )
+
+        response_contents = []
+        for chunk in message.content:
+            assert chunk.type == "text"
+            response_contents.append(chunk.text)
+        return "".join(response_contents)
 
 
 class RagClient(Retries):

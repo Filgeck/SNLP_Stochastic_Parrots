@@ -124,14 +124,18 @@ class AgentBenchmark:
 
 if __name__ == "__main__":
     MODELS_TO_BENCHMARK = [
-        "deepseek-r1:8b",
-        "llama3.2",
-        "gemini-2.5-pro-exp-03-25",
+        "claude-3-7-sonnet-20250219",
+        # "deepseek-r1:8b",
+        # "llama3.2",
+        # "gemini-2.5-pro-exp-03-25",
     ]
-    for model_name in MODELS_TO_BENCHMARK:
-        model = ModelClient(model_name=model_name)
-        agent = AgentBasic(model, max_retries=10)
-        benchmark = AgentBenchmark(agent)
-        benchmark.generate_preds_precomputed_retrieval(
-            SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-        )
+    try:
+        for model_name in MODELS_TO_BENCHMARK:
+            model = ModelClient(model_name=model_name)
+            agent = AgentBasic(model, max_retries=10)
+            benchmark = AgentBenchmark(agent)
+            benchmark.generate_preds_precomputed_retrieval(
+                SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+            )
+    except KeyboardInterrupt:
+        print("Benchmarking interrupted by user.")
