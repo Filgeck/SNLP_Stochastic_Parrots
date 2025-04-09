@@ -5,10 +5,13 @@ from tqdm.auto import tqdm
 from datasets import load_dataset, DatasetDict
 from agents import Agent, AgentBasic
 from clients import ModelClient
+import traceback
+import subprocess
+import sys
 
 SWE_BENCH_BM25_40K_DATASET = "princeton-nlp/SWE-bench_bm25_40K"
 SWE_BENCH_LITE_DATASET = "princeton-nlp/SWE-bench_Lite"
-SWE_BENCH_RUN_EVAL_PATH = Path("swebench/harness/run_evaluation.py")
+SWE_BENCH_RUN_EVAL_PATH = Path("swebench/swebench/harness/run_evaluation.py")
 PREDICTIONS_DIR_PATH = Path("predictions")
 
 
@@ -89,10 +92,67 @@ class AgentBenchmark:
         # self.preds_file_path
         # self.run_id
 
+        if (
+            not self.preds_file_path.exists()
+            or self.preds_file_path.stat().st_size == 0
+        ):
+            raise FileNotFoundError(
+                f"Predictions file {self.preds_file_path} does not exist or is empty."
+            )
+
+        if not SWE_BENCH_RUN_EVAL_PATH.exists():
+            raise FileNotFoundError(
+                "SWE-bench run script not found. Please ensure the path is correct and you run this script from the repo root."
+            )
+
         # check logs directory exists, if not create
         self.report_dir_path.mkdir(parents=True, exist_ok=True)
 
-        pass
+        command = [
+            sys.executable,
+            str(SWE_BENCH_RUN_EVAL_PATH.resolve()),
+            "--predictions_path",
+            str(self.preds_file_path.resolve()),
+            "--max_workers",
+            str(max_workers),
+            "--report_dir",
+            str(self.report_dir_path.resolve()),
+            "--run_id",
+            self.run_id,
+        ]
+
+        print("\nExecuting swe-bench command:\n", " ".join(command))
+
+        try:
+            process = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding="utf-8",
+            )
+
+            while True:
+                output = process.stdout.readline() if process.stdout else ""
+                if output == "" and process.poll() is not None:
+                    break
+                if output:
+                    print(output.strip())
+            rc = process.poll()
+            if rc == 0:
+                print(
+                    f"SWE-bench evaluation completed successfully for run_id '{self.run_id}'."
+                )
+                print(f"Logs and report stored under: {self.report_dir_path}")
+            else:
+                print(
+                    f"ERROR: SWE-bench evaluation failed with exit code {rc} for run_id"
+                )
+        except Exception as error:
+            print(
+                f"ERROR: An unexpected error occurred while running the evaluation script: {error}"
+            )
+            traceback.print_exc()
 
     def _sort_jsonl_alphanumeric_asc(self, jsonl_file: Path) -> None:
         """Sort a JSONL file by the 'instance_id' field in ascending order."""
@@ -137,5 +197,6 @@ if __name__ == "__main__":
             benchmark.generate_preds_precomputed_retrieval(
                 SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
             )
+            benchmark.run_benchmark(max_workers=16)
     except KeyboardInterrupt:
         print("Benchmarking interrupted by user.")
