@@ -313,15 +313,27 @@ class AgentExampleRetriever(Agent):
 
 
 class AgentProgrammer(Agent):
-    def __init__(self, model_client: ModelClient, max_retries: int = 3):
+    def __init__(self, model_client: ModelClient, max_retries: int = 3,
+                 diff_retry: bool=True, patch_retry: bool=False):
+        """
+        **Parameters**\n
+        max_retries: int\n
+        - applies to all retryable functions\n
+        - if diff_retry and patch_retry are True, results in query time complexity: O(max_retries^3)\n
+        diff_retry: bool - (default: True) retry if generated file names are different from original file names\n
+        patch_retry: bool (default: False) retry if patch check fails
+        """
         super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_programmer"
+        self.diff_retry = diff_retry
+        self.patch_retry = patch_retry
 
     def forward(
         self,
         prompt: str,
-    ) -> str | None:
-        """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
+        custom_issue: str | None=None
+    ) -> str:
+        """AgentProgrammer fully regenerates files which had bugs in them, then generates a patch via a diff between the old and new file"""
 
         # TODO: Implement
 
@@ -336,16 +348,37 @@ class AgentProgrammer(Agent):
         # 8. delete/cleanup agent_cache before next run
         # 9. return patch
 
+        # What I actually did -vk
+        # 1. 
+
+        # Possible Suggestions to self:
+        # a) Retry only a portion of buggy output code, structure prompt accordingly
+        # b) Do the same with patches - i.e. failed patch => target *that* file specifically
+        # c) Generate one file at a time - could couple up w/ (a) or (b)
+
         cache_dir = "agent_cache"
+        diff_dir = "diff"
+        issue_text = custom_issue or self._extract_tag(prompt, "issue")
+        files_text = self._extract_tag(prompt, "code")
+        files_dict = self._get_files(files_text, True)
 
-        # could use AgentFileSelector with return_full_text=False, strip_line_num=True,
+        if self.patch_retry:
+            patch_dict = self._func_with_retries(self._get_patch_dict, issue_text, files_text, files_dict)
+        else:
+            patch_dict = self._get_patch_dict(issue_text, files_text, files_dict)
 
-        def helper():
-            pass
+        patch_text = "\n\n".join([
+            "\n".join([
+                f"diff --git a/{file_path} b/{file_path}",
+                f"--- a/{file_path}",
+                f"+++ b/{file_path}",
+                patch,
+            ])
+            for file_path, patch in patch_dict.items()
+        ])
 
-        return self._func_with_retries(helper, prompt)
+        return patch_text
 
-    @staticmethod
     def _generate_patch(file1: str, file2: str):
         """Generate a patch between two files using the diff command."""
 
@@ -368,3 +401,76 @@ class AgentProgrammer(Agent):
             raise RuntimeError(f"Diff check failed: {diff_result.stderr}")
 
         return result.stdout
+
+    def _generate_new_code(self, issue_text: str, files_text: str) -> str:
+        prompt = f"""Your task is to 
+        change the code in the files provided in order to resolve the issue below:
+        \n<issue>\n{issue_text}\n</issue>
+        \n<files>\n{files_text}\n</files>
+        \nFeel free to reason about which changes to make to the code. At the end, 
+        provide the FULL changed code as a response, making sure you include both the 
+        changed and unchanged parts of each file provided.
+
+        Mark your FULL changed code for each file with 
+        [start of path/to/file.py] and [end of path/to/file.py] tags, such that 
+        each file you provide is in format: 
+        [start of file]\n(code)\n[end of file]
+
+        Then, enclose all files, file tags included, in 
+        <code> and </code> tags, such that your final output looks like: 
+
+        <code>\n[start of file 1]\n(code of file 1)\n[end of file 1]
+        [start of file 2]\n(code of file 2)\n[end of file 2]\n(etc...)\n</code>
+
+        \nHere is an example:
+        \n<code>\n
+        [start of xyz.py]
+        from path.item_file import Item
+        
+        def square(x: int) -> int:
+            return x * x
+        
+        # fixed code, was 'return x*y*y*z'
+        def x_square_yz(x: int, y: int, z: int) -> int:
+            return square(x) * y * z
+        
+        def get_item_squared_yz(item: Item) -> int:
+            return x_square_yz(item.x, item.y, item.z)
+        [end of xyz.py]
+        [start of path/item.py]
+        class Item:
+            def __init__(self, x: int, y: int, z: int):
+                self.x = x
+                self.y = y
+                self.z = z
+        [end of path/item.py]
+        \n</code>"""
+
+        return self._query_and_extract(prompt, "code")
+
+    def _generate_and_check(self, issue_text: str, files_text: str, files_dict: dict[str, str]) -> dict[str, str]:
+        """
+        """
+        generated = self._generate_new_code(issue_text, files_text)
+
+        generated_dict = self._get_files(generated, False)
+        file_paths_set = set(files_dict.keys())
+        gen_paths_set = set(generated_dict.keys())
+
+        diff_miss = file_paths_set - gen_paths_set
+        if len(diff_miss) > 0:
+            raise ValueError(f"Missing Files in Generated Output:{'\n'.join(diff_miss)}")
+        
+        diff_gen = gen_paths_set - file_paths_set
+        if len(diff_gen) > 0:
+            raise ValueError(f"New Files in Generated Output:{'\n'.join(diff_gen)}")
+        
+        return generated_dict
+
+    def _get_patch_dict(self, issue_text: str, files_text: str, files_dict: dict):
+        if self.diff_retry:
+            gen_dict = self._func_with_retries(self._generate_and_check, issue_text, files_text, files_dict)
+        else:
+            gen_dict = self._generate_and_check(issue_text, files_text, files_dict)
+
+        return {key: self._generate_patch(files_dict[key], gen_dict[key]) for key in files_dict}
