@@ -21,7 +21,7 @@ class MultiAgent(Agent):
 
         self.agent_name = "Multi Agent"
 
-    def forward(self, prompt: str) -> str:
+    def forward(self, prompt: str) -> str | None:
         # remove patches from the prompt
         prompt = prompt.split('</code>', 1)[0] + '</code>'
 
