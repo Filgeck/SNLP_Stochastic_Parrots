@@ -390,6 +390,16 @@ class AgentProgrammer(Agent):
     def _generate_patch(file1: str, file2: str):
         """Generate a patch between two files using the diff command."""
 
+        # WIP!!!!!
+        # ========================
+        # - Need to create dirs, files from filepaths (file1 and file2 are file path strings)
+        # - use a base directory/folder (i.e. diff folder)
+        # - create files/directories there, add "_old.py" and "_new.py" or put them in diff subfolders
+        # - compare the 2 written files
+        # - then delete them
+        # - best thru try/except/finally block trio
+        # - finally ==> delete any mess that was made
+
         # diff command to generate a patch
         result = subprocess.run(
             ["diff", "-u", file1, file2],
