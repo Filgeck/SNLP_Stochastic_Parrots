@@ -3,6 +3,8 @@ from abc import abstractmethod
 import re
 from typing import List, Literal, Tuple
 import subprocess
+from datasets import load_dataset
+from sentence_transformers import SentenceTransformer
 
 
 class Agent(Retries):
@@ -134,6 +136,9 @@ class AgentFileSelector(Agent):
         if files_text is None:
             raise ValueError("Could not extract <code> tag from input text.")
 
+        # Get files dictionary with line numbers stripped if needed
+        files_dict = self._get_files(files_text, self.strip_line_num)
+
         if method == "batch":  # pass all files to the model
             selected_file_paths = self._func_with_retries(
                 self._select_by_batch, issue_text, files_text
@@ -148,7 +153,7 @@ class AgentFileSelector(Agent):
             )
 
         return selected_file_paths, self._format_output(
-            text, files_text, selected_file_paths
+            text, files_text, selected_file_paths, files_dict
         )
 
     def _select_by_batch(self, issue_text: str, files_text: str) -> List[str]:
@@ -214,24 +219,59 @@ class AgentFileSelector(Agent):
                 )
 
         return selected_file_paths
+    
+    def remove_line_numbers(self, text: str) -> str:
+        lines = text.split('\n')
+        new_lines = []
+        for line in lines:
+            new_line = re.sub(r'^\d+\s?', '', line)
+            new_lines.append(new_line)
+        return '\n'.join(new_lines)
+
+    def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
+        """
+        Extract file content from a string containing file blocks marked with [start of filename] and [end of filename].
+        
+        Args:
+            files_text: String containing file blocks
+            strip_line_num: Whether to strip line numbers from the file content
+            
+        Returns:
+            Dictionary mapping file paths to file contents
+        """
+        # Regex to find all file blocks
+        # \[start of (.*?)\] -> Capture [start of example/test.py]
+        # (.*?) -> Capture the file content (non-greedy)
+        # \[end of \1\] -> Match [end of example/test.py]
+        pattern = r"\[start of (.*?)\](.*?)\[end of \1\]"
+        matches = re.findall(pattern, files_text, re.DOTALL)
+        files_dict = {}
+        for match in matches:
+            file_path = match[0].strip()
+            file_content = match[1].strip()
+            files_dict[file_path] = file_content
+        if strip_line_num:
+            for file_path, file_content in files_dict.items():
+                files_dict[file_path] = self.remove_line_numbers(file_content)
+        return files_dict
 
     def _format_output(
-        self, text: str, files_text: str, selected_file_paths: List[str]
+        self, text: str, files_text: str, selected_file_paths: List[str], files_dict: dict
     ) -> str:
-        """Reconstructs the text within <code> tags to only include files specified in selected_files_paths."""
-        # similar to regex in self._get_files()
-        # Group 1: The entire block
-        # Group 2: The file path within the start marker
-        file_block_pattern = r"(\[start of (.*?)\]\s*?\n.*?\n\[end of \2\])"
-        all_file_blocks = re.findall(file_block_pattern, files_text, re.DOTALL)
-
+        """Reconstructs the text within <code> tags to only include files specified in selected_files_paths.
+        Uses the processed files_dict to ensure line numbers are properly handled."""
+        
         # only keep blocks whose paths are in selected_files_paths
         selected_blocks_text = []
         selected_files_set = set(selected_file_paths)
 
-        for full_block, file_path in all_file_blocks:
-            if file_path.strip() in selected_files_set:
-                selected_blocks_text.append(full_block)
+        # Use the processed files_dict to reconstruct the file blocks
+        for file_path in selected_files_set:
+            if file_path in files_dict:
+                file_content = files_dict[file_path]
+                # Reconstruct the file block with the processed content
+                block = f"[start of {file_path}]\n{file_content}\n[end of {file_path}]"
+                selected_blocks_text.append(block)
 
         reconstructed_code_content = "\n".join(selected_blocks_text)
 
@@ -291,33 +331,49 @@ class AgentExampleRetriever(Agent):
         self, model_client: ModelClient, rag_client: RagClient, max_retries: int = 3
     ):
         super().__init__(model_client=model_client, max_retries=max_retries)
-        self.agent_name = "agent_example_retriever"
+        self.rag_client = rag_client
+        self.model_client = model_client
 
-    def forward(self, issue: str, num_retrieve: int, num_select: int) -> str:
+    def forward(self, issue_description: str, num_retrieve: int, num_select: int) -> str:
         """AgentExampleRetriever fetches examples via RAG of stack exchange solutions to questions that are similar to the current issue/errors."""
 
-        rag_client = RagClient()
-        rag_client.query(issue, num_retrieve=num_retrieve)
 
-        # TODO: Implement
+        RAGS_unfiltered = self.rag_client.query(
+            issue_description = issue_description,
+            num_retrieve=num_retrieve,
+        )
 
-        # prompt llm to pick best 3 out of 10
+        RAGS_string = ""
+        for i, example in enumerate(RAGS_unfiltered):
+            RAGS_string += f"<example>\n{example}\n</example>\n"
 
-        # then return str:
+        prompt = f"""Your task is to select the top {num_select} relevant examples that are similar to the issue, 
+        this will be passed on to another model (to help it solve the issue) which will use these as context to solve the issue:
+        \n<issue>\n{issue_description}\n</issue>
+        \n<POTENTIAL_EXAMPLES>\n{RAGS_string}\n</POTENTIAL_EXAMPLES>
+        \n Return {num_select} examples in <example> exact text from example </example> tags so I can split them up. Do not solve the issue, just return the examples.
+        Make sure to put the examples in the correct format in between the <example> and </example> tags."""
 
-        # <examples>
-        # [start of example_1]
-        # content blah blah
-        # [end of example_1]
-        # [start of example_2]
-        # content blah blah
-        # [end of example_2]
-        # [start of example_3]
-        # content blah blah
-        # [end of example_3]
-        # </examples>
+        RAGS_filtered_string = self.model_client.query(prompt)
 
-        raise NotImplementedError
+        # extract all examples in <example> ... </example>
+        RAGS_filtered = []
+        for example in RAGS_filtered_string.split("<example>")[1:]:
+            example = example.split("</example>")[0]
+            if len(example) > 0:
+                RAGS_filtered.append(example)
+
+        RAGS_filtered_output = ""
+
+        for i, example in enumerate(RAGS_filtered):
+            # Add the start and end markers
+            example = example.strip()
+            if example:
+                RAGS_filtered_output += f"[start of example_{i+1}]\n{example}\n[end of example_{i+1}]\n"
+        # Add the closing tag
+        RAGS_filtered_output = f"<examples>\n{RAGS_filtered_output}</examples>"
+
+        return RAGS_filtered_output
 
 
 class AgentProgrammer(Agent):
@@ -331,30 +387,49 @@ class AgentProgrammer(Agent):
     ) -> str | None:
         """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
 
-        # TODO: Implement
+        files_dict = self._get_files(prompt)
 
-        # Steps:
-        # 0. Get file_paths of all files in <code> </code>, use same method as def _get_files above
-        # 1. remove all text after </code> from 'prompt',
-        # 2. Add an instruction to the end of 'prompt' that asks the LLM to fix the bug and return the FULL fixed files in a specific format, FULL is important
-        # 3. response = model_client.query(prompt)
-        # 5. Extract fully fixed files from 'response', I sugget you use similar method to above agent with _query_and_extract(), <example>[][][]</example>
-        # 6. in agent_cache create old_file.whatever and new_file.whatever (not those names, use actual names from 'file_paths')
-        # 7. _generate_patch(), but replace file paths with actual file paths
-        # 8. delete/cleanup agent_cache before next run
-        # 9. return patch
+        clean_prompt = prompt
 
-        cache_dir = "agent_cache"
+        clean_prompt += "\n\nPlease fix the bugs in the files and return the full fixed files in this format:\n\n" \
+            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n" \
+            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n" \
+            " etc make sure to write out the full file, not just the changes. And do not write line numbers!\n\n"
+        
+        response = self.model_client.query(clean_prompt)
+        
+        changed_files = self._get_files(response)
 
-        # could use AgentFileSelector with return_full_text=False, strip_line_num=True,
+        patch = self.create_patch_from_files(files_dict, changed_files, "agent_cache", cleanup=True)
 
-        def helper():
-            pass
+        return patch
 
-        return self._func_with_retries(helper, prompt)
+        # return self._func_with_retries(helper, prompt)
+    
+    def _get_files(self, files_text: str) -> dict:
+        """
+        Extract file content from a string containing file blocks marked with [start of filename] and [end of filename].
+        
+        Args:
+            files_text: String containing file blocks
+            
+        Returns:
+            Dictionary mapping file paths to file contents
+        """
+        # Regex to find all file blocks
+        # \[start of (.*?)\] -> Capture [start of example/test.py]
+        # (.*?) -> Capture the file content (non-greedy)
+        # \[end of \1\] -> Match [end of example/test.py]
+        pattern = r"\[start of (.*?)\](.*?)\[end of \1\]"
+        matches = re.findall(pattern, files_text, re.DOTALL)
+        files_dict = {}
+        for match in matches:
+            file_path = match[0].strip()
+            file_content = match[1].strip()
+            files_dict[file_path] = file_content
+        return files_dict
 
-    @staticmethod
-    def _generate_patch(file1: str, file2: str):
+    def _generate_patch(self, file1: str, file2: str):
         """Generate a patch between two files using the diff command."""
 
         # diff command to generate a patch
@@ -376,3 +451,88 @@ class AgentProgrammer(Agent):
             raise RuntimeError(f"Diff check failed: {diff_result.stderr}")
 
         return result.stdout
+
+    
+    def create_patch_from_files(self, files_dict: dict, changed_files: dict, cache_dir: str, cleanup=True) -> str:
+        """
+        Save original and fixed files in the cache directory, generate a patch, and optionally clean up.
+        Args:
+            files_dict: Dictionary of original files (path -> content)
+            changed_files: Dictionary of fixed files (path -> content)
+            cache_dir: Directory to save the files
+            cleanup: Whether to remove temporary files after generating the patch (default: True)
+        Returns:
+            Generated patch as a string
+        """
+        import os
+        import subprocess
+        
+        modified_files = []
+        temp_files = {}
+
+        try:
+            # Create a temporary directory for our files if it doesn’t exist
+            os.makedirs(cache_dir, exist_ok=True)
+
+            # Check *all* file paths we know about (union of original & changed)
+            for file_path in set(files_dict.keys()) | set(changed_files.keys()):
+                original_content = files_dict.get(file_path, "")
+                fixed_content = changed_files.get(file_path, "")
+
+                # -------------------------------------------------------------
+                # KEY CHANGE: Treat an empty "fixed_content" as "no change."
+                # Also skip if the file is unchanged.
+                # -------------------------------------------------------------
+                if (fixed_content.strip() == "" 
+                    or fixed_content == original_content):
+                    # This means "no effective changes" => skip
+                    continue
+
+                # Otherwise, we do have changes, so create temp files to diff
+                orig_file = os.path.join(cache_dir, f"orig_{os.path.basename(file_path)}")
+                fixed_file = os.path.join(cache_dir, f"fixed_{os.path.basename(file_path)}")
+
+                with open(orig_file, 'w', encoding='utf-8') as f:
+                    f.write(original_content)
+                with open(fixed_file, 'w', encoding='utf-8') as f:
+                    f.write(fixed_content)
+
+                temp_files[file_path] = (orig_file, fixed_file)
+                modified_files.append(file_path)
+
+            all_patches = []
+            for file_path in modified_files:
+                orig_file, fixed_file = temp_files[file_path]
+
+                # Run diff and capture output
+                result = subprocess.run(
+                    ["diff", "-u", orig_file, fixed_file],
+                    capture_output=True,
+                    text=True
+                )
+
+                # diff returns 1 if files differ, which we do expect
+                # but anything else is a real error
+                if result.returncode not in [0, 1]:
+                    raise RuntimeError(f"Diff failed: {result.stderr}")
+
+                diff_output = result.stdout.splitlines()
+
+                # Adjust the headers so they show the actual file paths
+                if len(diff_output) >= 2:
+                    diff_output[0] = f"--- {file_path}"
+                    diff_output[1] = f"+++ {file_path}"
+
+                all_patches.append("\n".join(diff_output))
+
+            print(f"Patched {len(all_patches)} files")
+            return "\n".join(all_patches)
+
+        finally:
+            # Clean up
+            if cleanup:
+                for orig_file, fixed_file in temp_files.values():
+                    if os.path.exists(orig_file):
+                        os.remove(orig_file)
+                    if os.path.exists(fixed_file):
+                        os.remove(fixed_file)

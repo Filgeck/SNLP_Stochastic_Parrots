@@ -1,0 +1,3830 @@
+You will be provided with a partial code base and an issue statement explaining a problem to resolve.
+<issue>
+Opus audio conversion failure
+When trying to extract and convert audio from a youtube video into an opus-encoded audio file I get "ERROR: audio conversion failed:" with no further explanation. Both libopus0 and opus-tools are installed and I have no problems with other codecs like vorbis. I'm not sure if this is because of the ffmpeg/avconv issue in Ubuntu or a bug in youtube-dl.
+
+Distribution: Ubuntu 13.04
+Version: 2013.08.17
+
+Debug output:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/youtube-dl/youtube_dl/YoutubeDL.py", line 589, in post_process
+    keep_video_wish,new_info = pp.run(info)
+  File "/usr/local/bin/youtube-dl/youtube_dl/PostProcessor.py", line 205, in run
+    raise PostProcessingError(msg)
+PostProcessingError
+
+
+</issue>
+<code>
+[start of README.md]
+1 % YOUTUBE-DL(1)
+2 
+3 # NAME
+4 youtube-dl - download videos from youtube.com or other video platforms
+5 
+6 # SYNOPSIS
+7 **youtube-dl** [OPTIONS] URL [URL...]
+8 
+9 # DESCRIPTION
+10 **youtube-dl** is a small command-line program to download videos from
+11 YouTube.com and a few more sites. It requires the Python interpreter, version
+12 2.6, 2.7, or 3.3+, and it is not platform specific. It should work on
+13 your Unix box, on Windows or on Mac OS X. It is released to the public domain,
+14 which means you can modify it, redistribute it or use it however you like.
+15 
+16 # OPTIONS
+17     -h, --help                 print this help text and exit
+18     --version                  print program version and exit
+19     -U, --update               update this program to latest version. Make sure
+20                                that you have sufficient permissions (run with
+21                                sudo if needed)
+22     -i, --ignore-errors        continue on download errors, for example to to
+23                                skip unavailable videos in a playlist
+24     --dump-user-agent          display the current browser identification
+25     --user-agent UA            specify a custom user agent
+26     --referer REF              specify a custom referer, use if the video access
+27                                is restricted to one domain
+28     --list-extractors          List all supported extractors and the URLs they
+29                                would handle
+30     --extractor-descriptions   Output descriptions of all supported extractors
+31     --proxy URL                Use the specified HTTP/HTTPS proxy
+32     --no-check-certificate     Suppress HTTPS certificate validation.
+33     --cache-dir None           Location in the filesystem where youtube-dl can
+34                                store downloaded information permanently. By
+35                                default $XDG_CACHE_HOME/youtube-dl or ~/.cache
+36                                /youtube-dl .
+37     --no-cache-dir             Disable filesystem caching
+38 
+39 ## Video Selection:
+40     --playlist-start NUMBER    playlist video to start at (default is 1)
+41     --playlist-end NUMBER      playlist video to end at (default is last)
+42     --match-title REGEX        download only matching titles (regex or caseless
+43                                sub-string)
+44     --reject-title REGEX       skip download for matching titles (regex or
+45                                caseless sub-string)
+46     --max-downloads NUMBER     Abort after downloading NUMBER files
+47     --min-filesize SIZE        Do not download any videos smaller than SIZE
+48                                (e.g. 50k or 44.6m)
+49     --max-filesize SIZE        Do not download any videos larger than SIZE (e.g.
+50                                50k or 44.6m)
+51     --date DATE                download only videos uploaded in this date
+52     --datebefore DATE          download only videos uploaded before this date
+53     --dateafter DATE           download only videos uploaded after this date
+54     --no-playlist              download only the currently playing video
+55     --age-limit YEARS          download only videos suitable for the given age
+56     --download-archive FILE    Download only videos not present in the archive
+57                                file. Record all downloaded videos in it.
+58 
+59 ## Download Options:
+60     -r, --rate-limit LIMIT     maximum download rate (e.g. 50k or 44.6m)
+61     -R, --retries RETRIES      number of retries (default is 10)
+62     --buffer-size SIZE         size of download buffer (e.g. 1024 or 16k)
+63                                (default is 1024)
+64     --no-resize-buffer         do not automatically adjust the buffer size. By
+65                                default, the buffer size is automatically resized
+66                                from an initial value of SIZE.
+67 
+68 ## Filesystem Options:
+69     -t, --title                use title in file name (default)
+70     --id                       use only video ID in file name
+71     -l, --literal              [deprecated] alias of --title
+72     -A, --auto-number          number downloaded files starting from 00000
+73     -o, --output TEMPLATE      output filename template. Use %(title)s to get
+74                                the title, %(uploader)s for the uploader name,
+75                                %(uploader_id)s for the uploader nickname if
+76                                different, %(autonumber)s to get an automatically
+77                                incremented number, %(ext)s for the filename
+78                                extension, %(upload_date)s for the upload date
+79                                (YYYYMMDD), %(extractor)s for the provider
+80                                (youtube, metacafe, etc), %(id)s for the video id
+81                                , %(playlist)s for the playlist the video is in,
+82                                %(playlist_index)s for the position in the
+83                                playlist and %% for a literal percent. Use - to
+84                                output to stdout. Can also be used to download to
+85                                a different directory, for example with -o '/my/d
+86                                ownloads/%(uploader)s/%(title)s-%(id)s.%(ext)s' .
+87     --autonumber-size NUMBER   Specifies the number of digits in %(autonumber)s
+88                                when it is present in output filename template or
+89                                --autonumber option is given
+90     --restrict-filenames       Restrict filenames to only ASCII characters, and
+91                                avoid "&" and spaces in filenames
+92     -a, --batch-file FILE      file containing URLs to download ('-' for stdin)
+93     -w, --no-overwrites        do not overwrite files
+94     -c, --continue             resume partially downloaded files
+95     --no-continue              do not resume partially downloaded files (restart
+96                                from beginning)
+97     --cookies FILE             file to read cookies from and dump cookie jar in
+98     --no-part                  do not use .part files
+99     --no-mtime                 do not use the Last-modified header to set the
+100                                file modification time
+101     --write-description        write video description to a .description file
+102     --write-info-json          write video metadata to a .info.json file
+103     --write-thumbnail          write thumbnail image to disk
+104 
+105 ## Verbosity / Simulation Options:
+106     -q, --quiet                activates quiet mode
+107     -s, --simulate             do not download the video and do not write
+108                                anything to disk
+109     --skip-download            do not download the video
+110     -g, --get-url              simulate, quiet but print URL
+111     -e, --get-title            simulate, quiet but print title
+112     --get-id                   simulate, quiet but print id
+113     --get-thumbnail            simulate, quiet but print thumbnail URL
+114     --get-description          simulate, quiet but print video description
+115     --get-filename             simulate, quiet but print output filename
+116     --get-format               simulate, quiet but print output format
+117     --newline                  output progress bar as new lines
+118     --no-progress              do not print progress bar
+119     --console-title            display progress in console titlebar
+120     -v, --verbose              print various debugging information
+121     --dump-intermediate-pages  print downloaded pages to debug problems(very
+122                                verbose)
+123 
+124 ## Video Format Options:
+125     -f, --format FORMAT        video format code, specifiy the order of
+126                                preference using slashes: "-f 22/17/18". "-f mp4"
+127                                and "-f flv" are also supported
+128     --all-formats              download all available video formats
+129     --prefer-free-formats      prefer free video formats unless a specific one
+130                                is requested
+131     --max-quality FORMAT       highest quality format to download
+132     -F, --list-formats         list all available formats (currently youtube
+133                                only)
+134 
+135 ## Subtitle Options:
+136     --write-sub                write subtitle file
+137     --write-auto-sub           write automatic subtitle file (youtube only)
+138     --all-subs                 downloads all the available subtitles of the
+139                                video
+140     --list-subs                lists all available subtitles for the video
+141     --sub-format FORMAT        subtitle format (default=srt) ([sbv/vtt] youtube
+142                                only)
+143     --sub-lang LANGS           languages of the subtitles to download (optional)
+144                                separated by commas, use IETF language tags like
+145                                'en,pt'
+146 
+147 ## Authentication Options:
+148     -u, --username USERNAME    account username
+149     -p, --password PASSWORD    account password
+150     -n, --netrc                use .netrc authentication data
+151     --video-password PASSWORD  video password (vimeo only)
+152 
+153 ## Post-processing Options:
+154     -x, --extract-audio        convert video files to audio-only files (requires
+155                                ffmpeg or avconv and ffprobe or avprobe)
+156     --audio-format FORMAT      "best", "aac", "vorbis", "mp3", "m4a", "opus", or
+157                                "wav"; best by default
+158     --audio-quality QUALITY    ffmpeg/avconv audio quality specification, insert
+159                                a value between 0 (better) and 9 (worse) for VBR
+160                                or a specific bitrate like 128K (default 5)
+161     --recode-video FORMAT      Encode the video to another format if necessary
+162                                (currently supported: mp4|flv|ogg|webm)
+163     -k, --keep-video           keeps the video file on disk after the post-
+164                                processing; the video is erased by default
+165     --no-post-overwrites       do not overwrite post-processed files; the post-
+166                                processed files are overwritten by default
+167     --embed-subs               embed subtitles in the video (only for mp4
+168                                videos)
+169 
+170 # CONFIGURATION
+171 
+172 You can configure youtube-dl by placing default arguments (such as `--extract-audio --no-mtime` to always extract the audio and not copy the mtime) into `/etc/youtube-dl.conf` and/or `~/.config/youtube-dl.conf`.
+173 
+174 # OUTPUT TEMPLATE
+175 
+176 The `-o` option allows users to indicate a template for the output file names. The basic usage is not to set any template arguments when downloading a single file, like in `youtube-dl -o funny_video.flv "http://some/video"`. However, it may contain special sequences that will be replaced when downloading each video. The special sequences have the format `%(NAME)s`. To clarify, that is a percent symbol followed by a name in parenthesis, followed by a lowercase S. Allowed names are:
+177 
+178  - `id`: The sequence will be replaced by the video identifier.
+179  - `url`: The sequence will be replaced by the video URL.
+180  - `uploader`: The sequence will be replaced by the nickname of the person who uploaded the video.
+181  - `upload_date`: The sequence will be replaced by the upload date in YYYYMMDD format.
+182  - `title`: The sequence will be replaced by the video title.
+183  - `ext`: The sequence will be replaced by the appropriate extension (like flv or mp4).
+184  - `epoch`: The sequence will be replaced by the Unix epoch when creating the file.
+185  - `autonumber`: The sequence will be replaced by a five-digit number that will be increased with each download, starting at zero.
+186  - `playlist`: The name or the id of the playlist that contains the video.
+187  - `playlist_index`: The index of the video in the playlist, a five-digit number.
+188 
+189 The current default template is `%(title)s-%(id)s.%(ext)s`.
+190 
+191 In some cases, you don't want special characters such as 中, spaces, or &, such as when transferring the downloaded filename to a Windows system or the filename through an 8bit-unsafe channel. In these cases, add the `--restrict-filenames` flag to get a shorter title:
+192 
+193     $ youtube-dl --get-filename -o "%(title)s.%(ext)s" BaW_jenozKc
+194     youtube-dl test video ''_ä↭𝕐.mp4    # All kinds of weird characters
+195     $ youtube-dl --get-filename -o "%(title)s.%(ext)s" BaW_jenozKc --restrict-filenames
+196     youtube-dl_test_video_.mp4          # A simple file name
+197 
+198 # VIDEO SELECTION
+199 
+200 Videos can be filtered by their upload date using the options `--date`, `--datebefore` or `--dateafter`, they accept dates in two formats:
+201 
+202  - Absolute dates: Dates in the format `YYYYMMDD`.
+203  - Relative dates: Dates in the format `(now|today)[+-][0-9](day|week|month|year)(s)?`
+204  
+205 Examples:
+206 
+207 	$ youtube-dl --dateafter now-6months #will only download the videos uploaded in the last 6 months
+208 	$ youtube-dl --date 19700101 #will only download the videos uploaded in January 1, 1970
+209 	$ youtube-dl --dateafter 20000101 --datebefore 20100101 #will only download the videos uploaded between 2000 and 2010
+210 
+211 # FAQ
+212 
+213 ### Can you please put the -b option back?
+214 
+215 Most people asking this question are not aware that youtube-dl now defaults to downloading the highest available quality as reported by YouTube, which will be 1080p or 720p in some cases, so you no longer need the `-b` option. For some specific videos, maybe YouTube does not report them to be available in a specific high quality format you're interested in. In that case, simply request it with the `-f` option and youtube-dl will try to download it.
+216 
+217 ### I get HTTP error 402 when trying to download a video. What's this?
+218 
+219 Apparently YouTube requires you to pass a CAPTCHA test if you download too much. We're [considering to provide a way to let you solve the CAPTCHA](https://github.com/rg3/youtube-dl/issues/154), but at the moment, your best course of action is pointing a webbrowser to the youtube URL, solving the CAPTCHA, and restart youtube-dl.
+220 
+221 ### I have downloaded a video but how can I play it?
+222 
+223 Once the video is fully downloaded, use any video player, such as [vlc](http://www.videolan.org) or [mplayer](http://www.mplayerhq.hu/).
+224 
+225 ### The links provided by youtube-dl -g are not working anymore
+226 
+227 The URLs youtube-dl outputs require the downloader to have the correct cookies. Use the `--cookies` option to write the required cookies into a file, and advise your downloader to read cookies from that file. Some sites also require a common user agent to be used, use `--dump-user-agent` to see the one in use by youtube-dl.
+228 
+229 ### ERROR: no fmt_url_map or conn information found in video info
+230 
+231 youtube has switched to a new video info format in July 2011 which is not supported by old versions of youtube-dl. You can update youtube-dl with `sudo youtube-dl --update`.
+232 
+233 ### ERROR: unable to download video ###
+234 
+235 youtube requires an additional signature since September 2012 which is not supported by old versions of youtube-dl. You can update youtube-dl with `sudo youtube-dl --update`.
+236 
+237 ### SyntaxError: Non-ASCII character ###
+238 
+239 The error
+240 
+241     File "youtube-dl", line 2
+242     SyntaxError: Non-ASCII character '\x93' ...
+243 
+244 means you're using an outdated version of Python. Please update to Python 2.6 or 2.7.
+245 
+246 ### What is this binary file? Where has the code gone?
+247 
+248 Since June 2012 (#342) youtube-dl is packed as an executable zipfile, simply unzip it (might need renaming to `youtube-dl.zip` first on some systems) or clone the git repository, as laid out above. If you modify the code, you can run it by executing the `__main__.py` file. To recompile the executable, run `make youtube-dl`.
+249 
+250 ### The exe throws a *Runtime error from Visual C++*
+251 
+252 To run the exe you need to install first the [Microsoft Visual C++ 2008 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=29).
+253 
+254 # COPYRIGHT
+255 
+256 youtube-dl is released into the public domain by the copyright holders.
+257 
+258 This README file was originally written by Daniel Bolton (<https://github.com/dbbolton>) and is likewise released into the public domain.
+259 
+260 # BUGS
+261 
+262 Bugs and suggestions should be reported at: <https://github.com/rg3/youtube-dl/issues>
+263 
+264 Please include:
+265 
+266 * Your exact command line, like `youtube-dl -t "http://www.youtube.com/watch?v=uHlDtZ6Oc3s&feature=channel_video_title"`. A common mistake is not to escape the `&`. Putting URLs in quotes should solve this problem.
+267 * If possible re-run the command with `--verbose`, and include the full output, it is really helpful to us.
+268 * The output of `youtube-dl --version`
+269 * The output of `python --version`
+270 * The name and version of your Operating System ("Ubuntu 11.04 x64" or "Windows 7 x64" is usually enough).
+271 
+272 For discussions, join us in the irc channel #youtube-dl on freenode.
+273 
+[end of README.md]
+[start of devscripts/buildserver.py]
+1 #!/usr/bin/python3
+2 
+3 from http.server import HTTPServer, BaseHTTPRequestHandler
+4 from socketserver import ThreadingMixIn
+5 import argparse
+6 import ctypes
+7 import functools
+8 import sys
+9 import threading
+10 import traceback
+11 import os.path
+12 
+13 
+14 class BuildHTTPServer(ThreadingMixIn, HTTPServer):
+15     allow_reuse_address = True
+16 
+17 
+18 advapi32 = ctypes.windll.advapi32
+19 
+20 SC_MANAGER_ALL_ACCESS = 0xf003f
+21 SC_MANAGER_CREATE_SERVICE = 0x02
+22 SERVICE_WIN32_OWN_PROCESS = 0x10
+23 SERVICE_AUTO_START = 0x2
+24 SERVICE_ERROR_NORMAL = 0x1
+25 DELETE = 0x00010000
+26 SERVICE_STATUS_START_PENDING = 0x00000002
+27 SERVICE_STATUS_RUNNING = 0x00000004
+28 SERVICE_ACCEPT_STOP = 0x1
+29 
+30 SVCNAME = 'youtubedl_builder'
+31 
+32 LPTSTR = ctypes.c_wchar_p
+33 START_CALLBACK = ctypes.WINFUNCTYPE(None, ctypes.c_int, ctypes.POINTER(LPTSTR))
+34 
+35 
+36 class SERVICE_TABLE_ENTRY(ctypes.Structure):
+37     _fields_ = [
+38         ('lpServiceName', LPTSTR),
+39         ('lpServiceProc', START_CALLBACK)
+40     ]
+41 
+42 
+43 HandlerEx = ctypes.WINFUNCTYPE(
+44     ctypes.c_int,     # return
+45     ctypes.c_int,     # dwControl
+46     ctypes.c_int,     # dwEventType
+47     ctypes.c_void_p,  # lpEventData,
+48     ctypes.c_void_p,  # lpContext,
+49 )
+50 
+51 
+52 def _ctypes_array(c_type, py_array):
+53     ar = (c_type * len(py_array))()
+54     ar[:] = py_array
+55     return ar
+56 
+57 
+58 def win_OpenSCManager():
+59     res = advapi32.OpenSCManagerW(None, None, SC_MANAGER_ALL_ACCESS)
+60     if not res:
+61         raise Exception('Opening service manager failed - '
+62                         'are you running this as administrator?')
+63     return res
+64 
+65 
+66 def win_install_service(service_name, cmdline):
+67     manager = win_OpenSCManager()
+68     try:
+69         h = advapi32.CreateServiceW(
+70             manager, service_name, None,
+71             SC_MANAGER_CREATE_SERVICE, SERVICE_WIN32_OWN_PROCESS,
+72             SERVICE_AUTO_START, SERVICE_ERROR_NORMAL,
+73             cmdline, None, None, None, None, None)
+74         if not h:
+75             raise OSError('Service creation failed: %s' % ctypes.FormatError())
+76 
+77         advapi32.CloseServiceHandle(h)
+78     finally:
+79         advapi32.CloseServiceHandle(manager)
+80 
+81 
+82 def win_uninstall_service(service_name):
+83     manager = win_OpenSCManager()
+84     try:
+85         h = advapi32.OpenServiceW(manager, service_name, DELETE)
+86         if not h:
+87             raise OSError('Could not find service %s: %s' % (
+88                 service_name, ctypes.FormatError()))
+89 
+90         try:
+91             if not advapi32.DeleteService(h):
+92                 raise OSError('Deletion failed: %s' % ctypes.FormatError())
+93         finally:
+94             advapi32.CloseServiceHandle(h)
+95     finally:
+96         advapi32.CloseServiceHandle(manager)
+97 
+98 
+99 def win_service_report_event(service_name, msg, is_error=True):
+100     with open('C:/sshkeys/log', 'a', encoding='utf-8') as f:
+101         f.write(msg + '\n')
+102 
+103     event_log = advapi32.RegisterEventSourceW(None, service_name)
+104     if not event_log:
+105         raise OSError('Could not report event: %s' % ctypes.FormatError())
+106 
+107     try:
+108         type_id = 0x0001 if is_error else 0x0004
+109         event_id = 0xc0000000 if is_error else 0x40000000
+110         lines = _ctypes_array(LPTSTR, [msg])
+111 
+112         if not advapi32.ReportEventW(
+113                 event_log, type_id, 0, event_id, None, len(lines), 0,
+114                 lines, None):
+115             raise OSError('Event reporting failed: %s' % ctypes.FormatError())
+116     finally:
+117         advapi32.DeregisterEventSource(event_log)
+118 
+119 
+120 def win_service_handler(stop_event, *args):
+121     try:
+122         raise ValueError('Handler called with args ' + repr(args))
+123         TODO
+124     except Exception as e:
+125         tb = traceback.format_exc()
+126         msg = str(e) + '\n' + tb
+127         win_service_report_event(service_name, msg, is_error=True)
+128         raise
+129 
+130 
+131 def win_service_set_status(handle, status_code):
+132     svcStatus = SERVICE_STATUS()
+133     svcStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS
+134     svcStatus.dwCurrentState = status_code
+135     svcStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP
+136 
+137     svcStatus.dwServiceSpecificExitCode = 0
+138 
+139     if not advapi32.SetServiceStatus(handle, ctypes.byref(svcStatus)):
+140         raise OSError('SetServiceStatus failed: %r' % ctypes.FormatError())
+141 
+142 
+143 def win_service_main(service_name, real_main, argc, argv_raw):
+144     try:
+145         #args = [argv_raw[i].value for i in range(argc)]
+146         stop_event = threading.Event()
+147         handler = HandlerEx(functools.partial(stop_event, win_service_handler))
+148         h = advapi32.RegisterServiceCtrlHandlerExW(service_name, handler, None)
+149         if not h:
+150             raise OSError('Handler registration failed: %s' %
+151                           ctypes.FormatError())
+152 
+153         TODO
+154     except Exception as e:
+155         tb = traceback.format_exc()
+156         msg = str(e) + '\n' + tb
+157         win_service_report_event(service_name, msg, is_error=True)
+158         raise
+159 
+160 
+161 def win_service_start(service_name, real_main):
+162     try:
+163         cb = START_CALLBACK(
+164             functools.partial(win_service_main, service_name, real_main))
+165         dispatch_table = _ctypes_array(SERVICE_TABLE_ENTRY, [
+166             SERVICE_TABLE_ENTRY(
+167                 service_name,
+168                 cb
+169             ),
+170             SERVICE_TABLE_ENTRY(None, ctypes.cast(None, START_CALLBACK))
+171         ])
+172 
+173         if not advapi32.StartServiceCtrlDispatcherW(dispatch_table):
+174             raise OSError('ctypes start failed: %s' % ctypes.FormatError())
+175     except Exception as e:
+176         tb = traceback.format_exc()
+177         msg = str(e) + '\n' + tb
+178         win_service_report_event(service_name, msg, is_error=True)
+179         raise
+180 
+181 
+182 def main(args=None):
+183     parser = argparse.ArgumentParser()
+184     parser.add_argument('-i', '--install',
+185                         action='store_const', dest='action', const='install',
+186                         help='Launch at Windows startup')
+187     parser.add_argument('-u', '--uninstall',
+188                         action='store_const', dest='action', const='uninstall',
+189                         help='Remove Windows service')
+190     parser.add_argument('-s', '--service',
+191                         action='store_const', dest='action', const='service',
+192                         help='Run as a Windows service')
+193     parser.add_argument('-b', '--bind', metavar='<host:port>',
+194                         action='store', default='localhost:8142',
+195                         help='Bind to host:port (default %default)')
+196     options = parser.parse_args(args=args)
+197 
+198     if options.action == 'install':
+199         fn = os.path.abspath(__file__).replace('v:', '\\\\vboxsrv\\vbox')
+200         cmdline = '%s %s -s -b %s' % (sys.executable, fn, options.bind)
+201         win_install_service(SVCNAME, cmdline)
+202         return
+203 
+204     if options.action == 'uninstall':
+205         win_uninstall_service(SVCNAME)
+206         return
+207 
+208     if options.action == 'service':
+209         win_service_start(SVCNAME, main)
+210         return
+211 
+212     host, port_str = options.bind.split(':')
+213     port = int(port_str)
+214 
+215     print('Listening on %s:%d' % (host, port))
+216     srv = BuildHTTPServer((host, port), BuildHTTPRequestHandler)
+217     thr = threading.Thread(target=srv.serve_forever)
+218     thr.start()
+219     input('Press ENTER to shut down')
+220     srv.shutdown()
+221     thr.join()
+222 
+223 
+224 def rmtree(path):
+225     for name in os.listdir(path):
+226         fname = os.path.join(path, name)
+227         if os.path.isdir(fname):
+228             rmtree(fname)
+229         else:
+230             os.chmod(fname, 0o666)
+231             os.remove(fname)
+232     os.rmdir(path)
+233 
+234 #==============================================================================
+235 
+236 class BuildError(Exception):
+237     def __init__(self, output, code=500):
+238         self.output = output
+239         self.code = code
+240 
+241     def __str__(self):
+242         return self.output
+243 
+244 
+245 class HTTPError(BuildError):
+246     pass
+247 
+248 
+249 class PythonBuilder(object):
+250     def __init__(self, **kwargs):
+251         pythonVersion = kwargs.pop('python', '2.7')
+252         try:
+253             key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\Python\PythonCore\%s\InstallPath' % pythonVersion)
+254             try:
+255                 self.pythonPath, _ = _winreg.QueryValueEx(key, '')
+256             finally:
+257                 _winreg.CloseKey(key)
+258         except Exception:
+259             raise BuildError('No such Python version: %s' % pythonVersion)
+260 
+261         super(PythonBuilder, self).__init__(**kwargs)
+262 
+263 
+264 class GITInfoBuilder(object):
+265     def __init__(self, **kwargs):
+266         try:
+267             self.user, self.repoName = kwargs['path'][:2]
+268             self.rev = kwargs.pop('rev')
+269         except ValueError:
+270             raise BuildError('Invalid path')
+271         except KeyError as e:
+272             raise BuildError('Missing mandatory parameter "%s"' % e.args[0])
+273 
+274         path = os.path.join(os.environ['APPDATA'], 'Build archive', self.repoName, self.user)
+275         if not os.path.exists(path):
+276             os.makedirs(path)
+277         self.basePath = tempfile.mkdtemp(dir=path)
+278         self.buildPath = os.path.join(self.basePath, 'build')
+279 
+280         super(GITInfoBuilder, self).__init__(**kwargs)
+281 
+282 
+283 class GITBuilder(GITInfoBuilder):
+284     def build(self):
+285         try:
+286             subprocess.check_output(['git', 'clone', 'git://github.com/%s/%s.git' % (self.user, self.repoName), self.buildPath])
+287             subprocess.check_output(['git', 'checkout', self.rev], cwd=self.buildPath)
+288         except subprocess.CalledProcessError as e:
+289             raise BuildError(e.output)
+290 
+291         super(GITBuilder, self).build()
+292 
+293 
+294 class YoutubeDLBuilder(object):
+295     authorizedUsers = ['fraca7', 'phihag', 'rg3', 'FiloSottile']
+296 
+297     def __init__(self, **kwargs):
+298         if self.repoName != 'youtube-dl':
+299             raise BuildError('Invalid repository "%s"' % self.repoName)
+300         if self.user not in self.authorizedUsers:
+301             raise HTTPError('Unauthorized user "%s"' % self.user, 401)
+302 
+303         super(YoutubeDLBuilder, self).__init__(**kwargs)
+304 
+305     def build(self):
+306         try:
+307             subprocess.check_output([os.path.join(self.pythonPath, 'python.exe'), 'setup.py', 'py2exe'],
+308                                     cwd=self.buildPath)
+309         except subprocess.CalledProcessError as e:
+310             raise BuildError(e.output)
+311 
+312         super(YoutubeDLBuilder, self).build()
+313 
+314 
+315 class DownloadBuilder(object):
+316     def __init__(self, **kwargs):
+317         self.handler = kwargs.pop('handler')
+318         self.srcPath = os.path.join(self.buildPath, *tuple(kwargs['path'][2:]))
+319         self.srcPath = os.path.abspath(os.path.normpath(self.srcPath))
+320         if not self.srcPath.startswith(self.buildPath):
+321             raise HTTPError(self.srcPath, 401)
+322 
+323         super(DownloadBuilder, self).__init__(**kwargs)
+324 
+325     def build(self):
+326         if not os.path.exists(self.srcPath):
+327             raise HTTPError('No such file', 404)
+328         if os.path.isdir(self.srcPath):
+329             raise HTTPError('Is a directory: %s' % self.srcPath, 401)
+330 
+331         self.handler.send_response(200)
+332         self.handler.send_header('Content-Type', 'application/octet-stream')
+333         self.handler.send_header('Content-Disposition', 'attachment; filename=%s' % os.path.split(self.srcPath)[-1])
+334         self.handler.send_header('Content-Length', str(os.stat(self.srcPath).st_size))
+335         self.handler.end_headers()
+336 
+337         with open(self.srcPath, 'rb') as src:
+338             shutil.copyfileobj(src, self.handler.wfile)
+339 
+340         super(DownloadBuilder, self).build()
+341 
+342 
+343 class CleanupTempDir(object):
+344     def build(self):
+345         try:
+346             rmtree(self.basePath)
+347         except Exception as e:
+348             print('WARNING deleting "%s": %s' % (self.basePath, e))
+349 
+350         super(CleanupTempDir, self).build()
+351 
+352 
+353 class Null(object):
+354     def __init__(self, **kwargs):
+355         pass
+356 
+357     def start(self):
+358         pass
+359 
+360     def close(self):
+361         pass
+362 
+363     def build(self):
+364         pass
+365 
+366 
+367 class Builder(PythonBuilder, GITBuilder, YoutubeDLBuilder, DownloadBuilder, CleanupTempDir, Null):
+368     pass
+369 
+370 
+371 class BuildHTTPRequestHandler(BaseHTTPRequestHandler):
+372     actionDict = { 'build': Builder, 'download': Builder } # They're the same, no more caching.
+373 
+374     def do_GET(self):
+375         path = urlparse.urlparse(self.path)
+376         paramDict = dict([(key, value[0]) for key, value in urlparse.parse_qs(path.query).items()])
+377         action, _, path = path.path.strip('/').partition('/')
+378         if path:
+379             path = path.split('/')
+380             if action in self.actionDict:
+381                 try:
+382                     builder = self.actionDict[action](path=path, handler=self, **paramDict)
+383                     builder.start()
+384                     try:
+385                         builder.build()
+386                     finally:
+387                         builder.close()
+388                 except BuildError as e:
+389                     self.send_response(e.code)
+390                     msg = unicode(e).encode('UTF-8')
+391                     self.send_header('Content-Type', 'text/plain; charset=UTF-8')
+392                     self.send_header('Content-Length', len(msg))
+393                     self.end_headers()
+394                     self.wfile.write(msg)
+395                 except HTTPError as e:
+396                     self.send_response(e.code, str(e))
+397             else:
+398                 self.send_response(500, 'Unknown build method "%s"' % action)
+399         else:
+400             self.send_response(500, 'Malformed URL')
+401 
+402 #==============================================================================
+403 
+404 if __name__ == '__main__':
+405     main()
+406 
+[end of devscripts/buildserver.py]
+[start of devscripts/transition_helper.py]
+1 #!/usr/bin/env python
+2 
+3 import sys, os
+4 
+5 try:
+6     import urllib.request as compat_urllib_request
+7 except ImportError: # Python 2
+8     import urllib2 as compat_urllib_request
+9 
+10 sys.stderr.write(u'Hi! We changed distribution method and now youtube-dl needs to update itself one more time.\n')
+11 sys.stderr.write(u'This will only happen once. Simply press enter to go on. Sorry for the trouble!\n')
+12 sys.stderr.write(u'The new location of the binaries is https://github.com/rg3/youtube-dl/downloads, not the git repository.\n\n')
+13 
+14 try:
+15 	raw_input()
+16 except NameError: # Python 3
+17 	input()
+18 
+19 filename = sys.argv[0]
+20 
+21 API_URL = "https://api.github.com/repos/rg3/youtube-dl/downloads"
+22 BIN_URL = "https://github.com/downloads/rg3/youtube-dl/youtube-dl"
+23 
+24 if not os.access(filename, os.W_OK):
+25     sys.exit('ERROR: no write permissions on %s' % filename)
+26 
+27 try:
+28     urlh = compat_urllib_request.urlopen(BIN_URL)
+29     newcontent = urlh.read()
+30     urlh.close()
+31 except (IOError, OSError) as err:
+32     sys.exit('ERROR: unable to download latest version')
+33 
+34 try:
+35     with open(filename, 'wb') as outf:
+36         outf.write(newcontent)
+37 except (IOError, OSError) as err:
+38     sys.exit('ERROR: unable to overwrite current version')
+39 
+40 sys.stderr.write(u'Done! Now you can run youtube-dl.\n')
+41 
+[end of devscripts/transition_helper.py]
+[start of devscripts/transition_helper_exe/youtube-dl.py]
+1 #!/usr/bin/env python
+2 
+3 import sys, os
+4 import urllib2
+5 import json, hashlib
+6 
+7 def rsa_verify(message, signature, key):
+8     from struct import pack
+9     from hashlib import sha256
+10     from sys import version_info
+11     def b(x):
+12         if version_info[0] == 2: return x
+13         else: return x.encode('latin1')
+14     assert(type(message) == type(b('')))
+15     block_size = 0
+16     n = key[0]
+17     while n:
+18         block_size += 1
+19         n >>= 8
+20     signature = pow(int(signature, 16), key[1], key[0])
+21     raw_bytes = []
+22     while signature:
+23         raw_bytes.insert(0, pack("B", signature & 0xFF))
+24         signature >>= 8
+25     signature = (block_size - len(raw_bytes)) * b('\x00') + b('').join(raw_bytes)
+26     if signature[0:2] != b('\x00\x01'): return False
+27     signature = signature[2:]
+28     if not b('\x00') in signature: return False
+29     signature = signature[signature.index(b('\x00'))+1:]
+30     if not signature.startswith(b('\x30\x31\x30\x0D\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x05\x00\x04\x20')): return False
+31     signature = signature[19:]
+32     if signature != sha256(message).digest(): return False
+33     return True
+34 
+35 sys.stderr.write(u'Hi! We changed distribution method and now youtube-dl needs to update itself one more time.\n')
+36 sys.stderr.write(u'This will only happen once. Simply press enter to go on. Sorry for the trouble!\n')
+37 sys.stderr.write(u'From now on, get the binaries from http://rg3.github.com/youtube-dl/download.html, not from the git repository.\n\n')
+38 
+39 raw_input()
+40 
+41 filename = sys.argv[0]
+42 
+43 UPDATE_URL = "http://rg3.github.io/youtube-dl/update/"
+44 VERSION_URL = UPDATE_URL + 'LATEST_VERSION'
+45 JSON_URL = UPDATE_URL + 'versions.json'
+46 UPDATES_RSA_KEY = (0x9d60ee4d8f805312fdb15a62f87b95bd66177b91df176765d13514a0f1754bcd2057295c5b6f1d35daa6742c3ffc9a82d3e118861c207995a8031e151d863c9927e304576bc80692bc8e094896fcf11b66f3e29e04e3a71e9a11558558acea1840aec37fc396fb6b65dc81a1c4144e03bd1c011de62e3f1357b327d08426fe93, 65537)
+47 
+48 if not os.access(filename, os.W_OK):
+49     sys.exit('ERROR: no write permissions on %s' % filename)
+50 
+51 exe = os.path.abspath(filename)
+52 directory = os.path.dirname(exe)
+53 if not os.access(directory, os.W_OK):
+54     sys.exit('ERROR: no write permissions on %s' % directory)
+55 
+56 try:
+57     versions_info = urllib2.urlopen(JSON_URL).read().decode('utf-8')
+58     versions_info = json.loads(versions_info)
+59 except:
+60     sys.exit(u'ERROR: can\'t obtain versions info. Please try again later.')
+61 if not 'signature' in versions_info:
+62     sys.exit(u'ERROR: the versions file is not signed or corrupted. Aborting.')
+63 signature = versions_info['signature']
+64 del versions_info['signature']
+65 if not rsa_verify(json.dumps(versions_info, sort_keys=True), signature, UPDATES_RSA_KEY):
+66     sys.exit(u'ERROR: the versions file signature is invalid. Aborting.')
+67 
+68 version = versions_info['versions'][versions_info['latest']]
+69 
+70 try:
+71     urlh = urllib2.urlopen(version['exe'][0])
+72     newcontent = urlh.read()
+73     urlh.close()
+74 except (IOError, OSError) as err:
+75     sys.exit('ERROR: unable to download latest version')
+76 
+77 newcontent_hash = hashlib.sha256(newcontent).hexdigest()
+78 if newcontent_hash != version['exe'][1]:
+79     sys.exit(u'ERROR: the downloaded file hash does not match. Aborting.')
+80 
+81 try:
+82     with open(exe + '.new', 'wb') as outf:
+83         outf.write(newcontent)
+84 except (IOError, OSError) as err:
+85     sys.exit(u'ERROR: unable to write the new version')
+86 
+87 try:
+88     bat = os.path.join(directory, 'youtube-dl-updater.bat')
+89     b = open(bat, 'w')
+90     b.write("""
+91 echo Updating youtube-dl...
+92 ping 127.0.0.1 -n 5 -w 1000 > NUL
+93 move /Y "%s.new" "%s"
+94 del "%s"
+95     \n""" %(exe, exe, bat))
+96     b.close()
+97 
+98     os.startfile(bat)
+99 except (IOError, OSError) as err:
+100     sys.exit('ERROR: unable to overwrite current version')
+101 
+102 sys.stderr.write(u'Done! Now you can run youtube-dl.\n')
+103 
+[end of devscripts/transition_helper_exe/youtube-dl.py]
+[start of setup.py]
+1 #!/usr/bin/env python
+2 # -*- coding: utf-8 -*-
+3 
+4 from __future__ import print_function
+5 
+6 import pkg_resources
+7 import sys
+8 
+9 try:
+10     from setuptools import setup
+11 except ImportError:
+12     from distutils.core import setup
+13 
+14 try:
+15     # This will create an exe that needs Microsoft Visual C++ 2008
+16     # Redistributable Package
+17     import py2exe
+18 except ImportError:
+19     if len(sys.argv) >= 2 and sys.argv[1] == 'py2exe':
+20         print("Cannot import py2exe", file=sys.stderr)
+21         exit(1)
+22 
+23 py2exe_options = {
+24     "bundle_files": 1,
+25     "compressed": 1,
+26     "optimize": 2,
+27     "dist_dir": '.',
+28     "dll_excludes": ['w9xpopen.exe'],
+29 }
+30 
+31 py2exe_console = [{
+32     "script": "./youtube_dl/__main__.py",
+33     "dest_base": "youtube-dl",
+34 }]
+35 
+36 py2exe_params = {
+37     'console': py2exe_console,
+38     'options': {"py2exe": py2exe_options},
+39     'zipfile': None
+40 }
+41 
+42 if len(sys.argv) >= 2 and sys.argv[1] == 'py2exe':
+43     params = py2exe_params
+44 else:
+45     params = {
+46         'scripts': ['bin/youtube-dl'],
+47         'data_files': [  # Installing system-wide would require sudo...
+48             ('etc/bash_completion.d', ['youtube-dl.bash-completion']),
+49             ('share/doc/youtube_dl', ['README.txt']),
+50             ('share/man/man1/', ['youtube-dl.1'])
+51         ]
+52     }
+53 
+54 # Get the version from youtube_dl/version.py without importing the package
+55 exec(compile(open('youtube_dl/version.py').read(),
+56              'youtube_dl/version.py', 'exec'))
+57 
+58 setup(
+59     name='youtube_dl',
+60     version=__version__,
+61     description='YouTube video downloader',
+62     long_description='Small command-line program to download videos from'
+63     ' YouTube.com and other video sites.',
+64     url='https://github.com/rg3/youtube-dl',
+65     author='Ricardo Garcia',
+66     maintainer='Philipp Hagemeister',
+67     maintainer_email='phihag@phihag.de',
+68     packages=['youtube_dl', 'youtube_dl.extractor'],
+69 
+70     # Provokes warning on most systems (why?!)
+71     # test_suite = 'nose.collector',
+72     # test_requires = ['nosetest'],
+73 
+74     classifiers=[
+75         "Topic :: Multimedia :: Video",
+76         "Development Status :: 5 - Production/Stable",
+77         "Environment :: Console",
+78         "License :: Public Domain",
+79         "Programming Language :: Python :: 2.6",
+80         "Programming Language :: Python :: 2.7",
+81         "Programming Language :: Python :: 3",
+82         "Programming Language :: Python :: 3.3"
+83     ],
+84 
+85     **params
+86 )
+87 
+[end of setup.py]
+[start of youtube_dl/PostProcessor.py]
+1 import os
+2 import subprocess
+3 import sys
+4 import time
+5 import datetime
+6 
+7 from .utils import *
+8 
+9 
+10 class PostProcessor(object):
+11     """Post Processor class.
+12 
+13     PostProcessor objects can be added to downloaders with their
+14     add_post_processor() method. When the downloader has finished a
+15     successful download, it will take its internal chain of PostProcessors
+16     and start calling the run() method on each one of them, first with
+17     an initial argument and then with the returned value of the previous
+18     PostProcessor.
+19 
+20     The chain will be stopped if one of them ever returns None or the end
+21     of the chain is reached.
+22 
+23     PostProcessor objects follow a "mutual registration" process similar
+24     to InfoExtractor objects.
+25     """
+26 
+27     _downloader = None
+28 
+29     def __init__(self, downloader=None):
+30         self._downloader = downloader
+31 
+32     def set_downloader(self, downloader):
+33         """Sets the downloader for this PP."""
+34         self._downloader = downloader
+35 
+36     def run(self, information):
+37         """Run the PostProcessor.
+38 
+39         The "information" argument is a dictionary like the ones
+40         composed by InfoExtractors. The only difference is that this
+41         one has an extra field called "filepath" that points to the
+42         downloaded file.
+43 
+44         This method returns a tuple, the first element of which describes
+45         whether the original file should be kept (i.e. not deleted - None for
+46         no preference), and the second of which is the updated information.
+47 
+48         In addition, this method may raise a PostProcessingError
+49         exception if post processing fails.
+50         """
+51         return None, information # by default, keep file and do nothing
+52 
+53 class FFmpegPostProcessorError(PostProcessingError):
+54     pass
+55 
+56 class AudioConversionError(PostProcessingError):
+57     pass
+58 
+59 class FFmpegPostProcessor(PostProcessor):
+60     def __init__(self,downloader=None):
+61         PostProcessor.__init__(self, downloader)
+62         self._exes = self.detect_executables()
+63 
+64     @staticmethod
+65     def detect_executables():
+66         def executable(exe):
+67             try:
+68                 subprocess.Popen([exe, '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+69             except OSError:
+70                 return False
+71             return exe
+72         programs = ['avprobe', 'avconv', 'ffmpeg', 'ffprobe']
+73         return dict((program, executable(program)) for program in programs)
+74 
+75     def run_ffmpeg_multiple_files(self, input_paths, out_path, opts):
+76         if not self._exes['ffmpeg'] and not self._exes['avconv']:
+77             raise FFmpegPostProcessorError(u'ffmpeg or avconv not found. Please install one.')
+78 
+79         files_cmd = []
+80         for path in input_paths:
+81             files_cmd.extend(['-i', encodeFilename(path)])
+82         cmd = ([self._exes['avconv'] or self._exes['ffmpeg'], '-y'] + files_cmd
+83                + opts +
+84                [encodeFilename(self._ffmpeg_filename_argument(out_path))])
+85 
+86         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+87         stdout,stderr = p.communicate()
+88         if p.returncode != 0:
+89             stderr = stderr.decode('utf-8', 'replace')
+90             msg = stderr.strip().split('\n')[-1]
+91             raise FFmpegPostProcessorError(msg)
+92 
+93     def run_ffmpeg(self, path, out_path, opts):
+94         self.run_ffmpeg_multiple_files([path], out_path, opts)
+95 
+96     def _ffmpeg_filename_argument(self, fn):
+97         # ffmpeg broke --, see https://ffmpeg.org/trac/ffmpeg/ticket/2127 for details
+98         if fn.startswith(u'-'):
+99             return u'./' + fn
+100         return fn
+101 
+102 class FFmpegExtractAudioPP(FFmpegPostProcessor):
+103     def __init__(self, downloader=None, preferredcodec=None, preferredquality=None, nopostoverwrites=False):
+104         FFmpegPostProcessor.__init__(self, downloader)
+105         if preferredcodec is None:
+106             preferredcodec = 'best'
+107         self._preferredcodec = preferredcodec
+108         self._preferredquality = preferredquality
+109         self._nopostoverwrites = nopostoverwrites
+110 
+111     def get_audio_codec(self, path):
+112         if not self._exes['ffprobe'] and not self._exes['avprobe']:
+113             raise PostProcessingError(u'ffprobe or avprobe not found. Please install one.')
+114         try:
+115             cmd = [self._exes['avprobe'] or self._exes['ffprobe'], '-show_streams', encodeFilename(self._ffmpeg_filename_argument(path))]
+116             handle = subprocess.Popen(cmd, stderr=compat_subprocess_get_DEVNULL(), stdout=subprocess.PIPE)
+117             output = handle.communicate()[0]
+118             if handle.wait() != 0:
+119                 return None
+120         except (IOError, OSError):
+121             return None
+122         audio_codec = None
+123         for line in output.decode('ascii', 'ignore').split('\n'):
+124             if line.startswith('codec_name='):
+125                 audio_codec = line.split('=')[1].strip()
+126             elif line.strip() == 'codec_type=audio' and audio_codec is not None:
+127                 return audio_codec
+128         return None
+129 
+130     def run_ffmpeg(self, path, out_path, codec, more_opts):
+131         if not self._exes['ffmpeg'] and not self._exes['avconv']:
+132             raise AudioConversionError('ffmpeg or avconv not found. Please install one.')
+133         if codec is None:
+134             acodec_opts = []
+135         else:
+136             acodec_opts = ['-acodec', codec]
+137         opts = ['-vn'] + acodec_opts + more_opts
+138         try:
+139             FFmpegPostProcessor.run_ffmpeg(self, path, out_path, opts)
+140         except FFmpegPostProcessorError as err:
+141             raise AudioConversionError(err.msg)
+142 
+143     def run(self, information):
+144         path = information['filepath']
+145 
+146         filecodec = self.get_audio_codec(path)
+147         if filecodec is None:
+148             raise PostProcessingError(u'WARNING: unable to obtain file audio codec with ffprobe')
+149 
+150         more_opts = []
+151         if self._preferredcodec == 'best' or self._preferredcodec == filecodec or (self._preferredcodec == 'm4a' and filecodec == 'aac'):
+152             if filecodec == 'aac' and self._preferredcodec in ['m4a', 'best']:
+153                 # Lossless, but in another container
+154                 acodec = 'copy'
+155                 extension = 'm4a'
+156                 more_opts = [self._exes['avconv'] and '-bsf:a' or '-absf', 'aac_adtstoasc']
+157             elif filecodec in ['aac', 'mp3', 'vorbis', 'opus']:
+158                 # Lossless if possible
+159                 acodec = 'copy'
+160                 extension = filecodec
+161                 if filecodec == 'aac':
+162                     more_opts = ['-f', 'adts']
+163                 if filecodec == 'vorbis':
+164                     extension = 'ogg'
+165             else:
+166                 # MP3 otherwise.
+167                 acodec = 'libmp3lame'
+168                 extension = 'mp3'
+169                 more_opts = []
+170                 if self._preferredquality is not None:
+171                     if int(self._preferredquality) < 10:
+172                         more_opts += [self._exes['avconv'] and '-q:a' or '-aq', self._preferredquality]
+173                     else:
+174                         more_opts += [self._exes['avconv'] and '-b:a' or '-ab', self._preferredquality + 'k']
+175         else:
+176             # We convert the audio (lossy)
+177             acodec = {'mp3': 'libmp3lame', 'aac': 'aac', 'm4a': 'aac', 'opus': 'opus', 'vorbis': 'libvorbis', 'wav': None}[self._preferredcodec]
+178             extension = self._preferredcodec
+179             more_opts = []
+180             if self._preferredquality is not None:
+181                 if int(self._preferredquality) < 10:
+182                     more_opts += [self._exes['avconv'] and '-q:a' or '-aq', self._preferredquality]
+183                 else:
+184                     more_opts += [self._exes['avconv'] and '-b:a' or '-ab', self._preferredquality + 'k']
+185             if self._preferredcodec == 'aac':
+186                 more_opts += ['-f', 'adts']
+187             if self._preferredcodec == 'm4a':
+188                 more_opts += [self._exes['avconv'] and '-bsf:a' or '-absf', 'aac_adtstoasc']
+189             if self._preferredcodec == 'vorbis':
+190                 extension = 'ogg'
+191             if self._preferredcodec == 'wav':
+192                 extension = 'wav'
+193                 more_opts += ['-f', 'wav']
+194 
+195         prefix, sep, ext = path.rpartition(u'.') # not os.path.splitext, since the latter does not work on unicode in all setups
+196         new_path = prefix + sep + extension
+197 
+198         # If we download foo.mp3 and convert it to... foo.mp3, then don't delete foo.mp3, silly.
+199         if new_path == path:
+200             self._nopostoverwrites = True
+201 
+202         try:
+203             if self._nopostoverwrites and os.path.exists(encodeFilename(new_path)):
+204                 self._downloader.to_screen(u'[youtube] Post-process file %s exists, skipping' % new_path)
+205             else:
+206                 self._downloader.to_screen(u'[' + (self._exes['avconv'] and 'avconv' or 'ffmpeg') + '] Destination: ' + new_path)
+207                 self.run_ffmpeg(path, new_path, acodec, more_opts)
+208         except:
+209             etype,e,tb = sys.exc_info()
+210             if isinstance(e, AudioConversionError):
+211                 msg = u'audio conversion failed: ' + e.msg
+212             else:
+213                 msg = u'error running ' + (self._exes['avconv'] and 'avconv' or 'ffmpeg')
+214             raise PostProcessingError(msg)
+215 
+216         # Try to update the date time for extracted audio file.
+217         if information.get('filetime') is not None:
+218             try:
+219                 os.utime(encodeFilename(new_path), (time.time(), information['filetime']))
+220             except:
+221                 self._downloader.report_warning(u'Cannot update utime of audio file')
+222 
+223         information['filepath'] = new_path
+224         return self._nopostoverwrites,information
+225 
+226 class FFmpegVideoConvertor(FFmpegPostProcessor):
+227     def __init__(self, downloader=None,preferedformat=None):
+228         super(FFmpegVideoConvertor, self).__init__(downloader)
+229         self._preferedformat=preferedformat
+230 
+231     def run(self, information):
+232         path = information['filepath']
+233         prefix, sep, ext = path.rpartition(u'.')
+234         outpath = prefix + sep + self._preferedformat
+235         if information['ext'] == self._preferedformat:
+236             self._downloader.to_screen(u'[ffmpeg] Not converting video file %s - already is in target format %s' % (path, self._preferedformat))
+237             return True,information
+238         self._downloader.to_screen(u'['+'ffmpeg'+'] Converting video from %s to %s, Destination: ' % (information['ext'], self._preferedformat) +outpath)
+239         self.run_ffmpeg(path, outpath, [])
+240         information['filepath'] = outpath
+241         information['format'] = self._preferedformat
+242         information['ext'] = self._preferedformat
+243         return False,information
+244 
+245 
+246 class FFmpegEmbedSubtitlePP(FFmpegPostProcessor):
+247     # See http://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
+248     _lang_map = {
+249         'aa': 'aar',
+250         'ab': 'abk',
+251         'ae': 'ave',
+252         'af': 'afr',
+253         'ak': 'aka',
+254         'am': 'amh',
+255         'an': 'arg',
+256         'ar': 'ara',
+257         'as': 'asm',
+258         'av': 'ava',
+259         'ay': 'aym',
+260         'az': 'aze',
+261         'ba': 'bak',
+262         'be': 'bel',
+263         'bg': 'bul',
+264         'bh': 'bih',
+265         'bi': 'bis',
+266         'bm': 'bam',
+267         'bn': 'ben',
+268         'bo': 'bod',
+269         'br': 'bre',
+270         'bs': 'bos',
+271         'ca': 'cat',
+272         'ce': 'che',
+273         'ch': 'cha',
+274         'co': 'cos',
+275         'cr': 'cre',
+276         'cs': 'ces',
+277         'cu': 'chu',
+278         'cv': 'chv',
+279         'cy': 'cym',
+280         'da': 'dan',
+281         'de': 'deu',
+282         'dv': 'div',
+283         'dz': 'dzo',
+284         'ee': 'ewe',
+285         'el': 'ell',
+286         'en': 'eng',
+287         'eo': 'epo',
+288         'es': 'spa',
+289         'et': 'est',
+290         'eu': 'eus',
+291         'fa': 'fas',
+292         'ff': 'ful',
+293         'fi': 'fin',
+294         'fj': 'fij',
+295         'fo': 'fao',
+296         'fr': 'fra',
+297         'fy': 'fry',
+298         'ga': 'gle',
+299         'gd': 'gla',
+300         'gl': 'glg',
+301         'gn': 'grn',
+302         'gu': 'guj',
+303         'gv': 'glv',
+304         'ha': 'hau',
+305         'he': 'heb',
+306         'hi': 'hin',
+307         'ho': 'hmo',
+308         'hr': 'hrv',
+309         'ht': 'hat',
+310         'hu': 'hun',
+311         'hy': 'hye',
+312         'hz': 'her',
+313         'ia': 'ina',
+314         'id': 'ind',
+315         'ie': 'ile',
+316         'ig': 'ibo',
+317         'ii': 'iii',
+318         'ik': 'ipk',
+319         'io': 'ido',
+320         'is': 'isl',
+321         'it': 'ita',
+322         'iu': 'iku',
+323         'ja': 'jpn',
+324         'jv': 'jav',
+325         'ka': 'kat',
+326         'kg': 'kon',
+327         'ki': 'kik',
+328         'kj': 'kua',
+329         'kk': 'kaz',
+330         'kl': 'kal',
+331         'km': 'khm',
+332         'kn': 'kan',
+333         'ko': 'kor',
+334         'kr': 'kau',
+335         'ks': 'kas',
+336         'ku': 'kur',
+337         'kv': 'kom',
+338         'kw': 'cor',
+339         'ky': 'kir',
+340         'la': 'lat',
+341         'lb': 'ltz',
+342         'lg': 'lug',
+343         'li': 'lim',
+344         'ln': 'lin',
+345         'lo': 'lao',
+346         'lt': 'lit',
+347         'lu': 'lub',
+348         'lv': 'lav',
+349         'mg': 'mlg',
+350         'mh': 'mah',
+351         'mi': 'mri',
+352         'mk': 'mkd',
+353         'ml': 'mal',
+354         'mn': 'mon',
+355         'mr': 'mar',
+356         'ms': 'msa',
+357         'mt': 'mlt',
+358         'my': 'mya',
+359         'na': 'nau',
+360         'nb': 'nob',
+361         'nd': 'nde',
+362         'ne': 'nep',
+363         'ng': 'ndo',
+364         'nl': 'nld',
+365         'nn': 'nno',
+366         'no': 'nor',
+367         'nr': 'nbl',
+368         'nv': 'nav',
+369         'ny': 'nya',
+370         'oc': 'oci',
+371         'oj': 'oji',
+372         'om': 'orm',
+373         'or': 'ori',
+374         'os': 'oss',
+375         'pa': 'pan',
+376         'pi': 'pli',
+377         'pl': 'pol',
+378         'ps': 'pus',
+379         'pt': 'por',
+380         'qu': 'que',
+381         'rm': 'roh',
+382         'rn': 'run',
+383         'ro': 'ron',
+384         'ru': 'rus',
+385         'rw': 'kin',
+386         'sa': 'san',
+387         'sc': 'srd',
+388         'sd': 'snd',
+389         'se': 'sme',
+390         'sg': 'sag',
+391         'si': 'sin',
+392         'sk': 'slk',
+393         'sl': 'slv',
+394         'sm': 'smo',
+395         'sn': 'sna',
+396         'so': 'som',
+397         'sq': 'sqi',
+398         'sr': 'srp',
+399         'ss': 'ssw',
+400         'st': 'sot',
+401         'su': 'sun',
+402         'sv': 'swe',
+403         'sw': 'swa',
+404         'ta': 'tam',
+405         'te': 'tel',
+406         'tg': 'tgk',
+407         'th': 'tha',
+408         'ti': 'tir',
+409         'tk': 'tuk',
+410         'tl': 'tgl',
+411         'tn': 'tsn',
+412         'to': 'ton',
+413         'tr': 'tur',
+414         'ts': 'tso',
+415         'tt': 'tat',
+416         'tw': 'twi',
+417         'ty': 'tah',
+418         'ug': 'uig',
+419         'uk': 'ukr',
+420         'ur': 'urd',
+421         'uz': 'uzb',
+422         've': 'ven',
+423         'vi': 'vie',
+424         'vo': 'vol',
+425         'wa': 'wln',
+426         'wo': 'wol',
+427         'xh': 'xho',
+428         'yi': 'yid',
+429         'yo': 'yor',
+430         'za': 'zha',
+431         'zh': 'zho',
+432         'zu': 'zul',
+433     }
+434 
+435     def __init__(self, downloader=None, subtitlesformat='srt'):
+436         super(FFmpegEmbedSubtitlePP, self).__init__(downloader)
+437         self._subformat = subtitlesformat
+438 
+439     @classmethod
+440     def _conver_lang_code(cls, code):
+441         """Convert language code from ISO 639-1 to ISO 639-2/T"""
+442         return cls._lang_map.get(code[:2])
+443 
+444     def run(self, information):
+445         if information['ext'] != u'mp4':
+446             self._downloader.to_screen(u'[ffmpeg] Subtitles can only be embedded in mp4 files')
+447             return True, information
+448         if not information.get('subtitles'):
+449             self._downloader.to_screen(u'[ffmpeg] There aren\'t any subtitles to embed') 
+450             return True, information
+451 
+452         sub_langs = [key for key in information['subtitles']]
+453         filename = information['filepath']
+454         input_files = [filename] + [subtitles_filename(filename, lang, self._subformat) for lang in sub_langs]
+455 
+456         opts = ['-map', '0:0', '-map', '0:1', '-c:v', 'copy', '-c:a', 'copy']
+457         for (i, lang) in enumerate(sub_langs):
+458             opts.extend(['-map', '%d:0' % (i+1), '-c:s:%d' % i, 'mov_text'])
+459             lang_code = self._conver_lang_code(lang)
+460             if lang_code is not None:
+461                 opts.extend(['-metadata:s:s:%d' % i, 'language=%s' % lang_code])
+462         opts.extend(['-f', 'mp4'])
+463 
+464         temp_filename = filename + u'.temp'
+465         self._downloader.to_screen(u'[ffmpeg] Embedding subtitles in \'%s\'' % filename)
+466         self.run_ffmpeg_multiple_files(input_files, temp_filename, opts)
+467         os.remove(encodeFilename(filename))
+468         os.rename(encodeFilename(temp_filename), encodeFilename(filename))
+469 
+470         return True, information
+471 
+472 
+473 class FFmpegMetadataPP(FFmpegPostProcessor):
+474     def run(self, info):
+475         metadata = {}
+476         if info.get('title') is not None:
+477             metadata['title'] = info['title']
+478         if info.get('upload_date') is not None:
+479             metadata['date'] = info['upload_date']
+480         if info.get('uploader') is not None:
+481             metadata['artist'] = info['uploader']
+482         elif info.get('uploader_id') is not None:
+483             metadata['artist'] = info['uploader_id']
+484 
+485         if not metadata:
+486             self._downloader.to_screen(u'[ffmpeg] There isn\'t any metadata to add')
+487             return True, info
+488 
+489         filename = info['filepath']
+490         ext = os.path.splitext(filename)[1][1:]
+491         temp_filename = filename + u'.temp'
+492 
+493         options = ['-c', 'copy']
+494         for (name, value) in metadata.items():
+495             options.extend(['-metadata', '%s="%s"' % (name, value)])
+496         options.extend(['-f', ext])
+497 
+498         self._downloader.to_screen(u'[ffmpeg] Adding metadata to \'%s\'' % filename)
+499         self.run_ffmpeg(filename, temp_filename, options)
+500         os.remove(encodeFilename(filename))
+501         os.rename(encodeFilename(temp_filename), encodeFilename(filename))
+502         return True, info
+503 
+[end of youtube_dl/PostProcessor.py]
+[start of youtube_dl/YoutubeDL.py]
+1 #!/usr/bin/env python
+2 # -*- coding: utf-8 -*-
+3 
+4 from __future__ import absolute_import
+5 
+6 import errno
+7 import io
+8 import os
+9 import re
+10 import shutil
+11 import socket
+12 import sys
+13 import time
+14 import traceback
+15 
+16 from .utils import *
+17 from .extractor import get_info_extractor, gen_extractors
+18 from .FileDownloader import FileDownloader
+19 
+20 
+21 class YoutubeDL(object):
+22     """YoutubeDL class.
+23 
+24     YoutubeDL objects are the ones responsible of downloading the
+25     actual video file and writing it to disk if the user has requested
+26     it, among some other tasks. In most cases there should be one per
+27     program. As, given a video URL, the downloader doesn't know how to
+28     extract all the needed information, task that InfoExtractors do, it
+29     has to pass the URL to one of them.
+30 
+31     For this, YoutubeDL objects have a method that allows
+32     InfoExtractors to be registered in a given order. When it is passed
+33     a URL, the YoutubeDL object handles it to the first InfoExtractor it
+34     finds that reports being able to handle it. The InfoExtractor extracts
+35     all the information about the video or videos the URL refers to, and
+36     YoutubeDL process the extracted information, possibly using a File
+37     Downloader to download the video.
+38 
+39     YoutubeDL objects accept a lot of parameters. In order not to saturate
+40     the object constructor with arguments, it receives a dictionary of
+41     options instead. These options are available through the params
+42     attribute for the InfoExtractors to use. The YoutubeDL also
+43     registers itself as the downloader in charge for the InfoExtractors
+44     that are added to it, so this is a "mutual registration".
+45 
+46     Available options:
+47 
+48     username:          Username for authentication purposes.
+49     password:          Password for authentication purposes.
+50     videopassword:     Password for acces a video.
+51     usenetrc:          Use netrc for authentication instead.
+52     verbose:           Print additional info to stdout.
+53     quiet:             Do not print messages to stdout.
+54     forceurl:          Force printing final URL.
+55     forcetitle:        Force printing title.
+56     forceid:           Force printing ID.
+57     forcethumbnail:    Force printing thumbnail URL.
+58     forcedescription:  Force printing description.
+59     forcefilename:     Force printing final filename.
+60     simulate:          Do not download the video files.
+61     format:            Video format code.
+62     format_limit:      Highest quality format to try.
+63     outtmpl:           Template for output names.
+64     restrictfilenames: Do not allow "&" and spaces in file names
+65     ignoreerrors:      Do not stop on download errors.
+66     nooverwrites:      Prevent overwriting files.
+67     playliststart:     Playlist item to start at.
+68     playlistend:       Playlist item to end at.
+69     matchtitle:        Download only matching titles.
+70     rejecttitle:       Reject downloads for matching titles.
+71     logtostderr:       Log messages to stderr instead of stdout.
+72     writedescription:  Write the video description to a .description file
+73     writeinfojson:     Write the video description to a .info.json file
+74     writethumbnail:    Write the thumbnail image to a file
+75     writesubtitles:    Write the video subtitles to a file
+76     writeautomaticsub: Write the automatic subtitles to a file
+77     allsubtitles:      Downloads all the subtitles of the video
+78                        (requires writesubtitles or writeautomaticsub)
+79     listsubtitles:     Lists all available subtitles for the video
+80     subtitlesformat:   Subtitle format [srt/sbv/vtt] (default=srt)
+81     subtitleslangs:    List of languages of the subtitles to download
+82     keepvideo:         Keep the video file after post-processing
+83     daterange:         A DateRange object, download only if the upload_date is in the range.
+84     skip_download:     Skip the actual download of the video file
+85     cachedir:          Location of the cache files in the filesystem.
+86                        None to disable filesystem cache.
+87     noplaylist:        Download single video instead of a playlist if in doubt.
+88     age_limit:         An integer representing the user's age in years.
+89                        Unsuitable videos for the given age are skipped.
+90     downloadarchive:   File name of a file where all downloads are recorded.
+91                        Videos already present in the file are not downloaded
+92                        again.
+93     
+94     The following parameters are not used by YoutubeDL itself, they are used by
+95     the FileDownloader:
+96     nopart, updatetime, buffersize, ratelimit, min_filesize, max_filesize, test,
+97     noresizebuffer, retries, continuedl, noprogress, consoletitle
+98     """
+99 
+100     params = None
+101     _ies = []
+102     _pps = []
+103     _download_retcode = None
+104     _num_downloads = None
+105     _screen_file = None
+106 
+107     def __init__(self, params):
+108         """Create a FileDownloader object with the given options."""
+109         self._ies = []
+110         self._ies_instances = {}
+111         self._pps = []
+112         self._progress_hooks = []
+113         self._download_retcode = 0
+114         self._num_downloads = 0
+115         self._screen_file = [sys.stdout, sys.stderr][params.get('logtostderr', False)]
+116 
+117         if (sys.version_info >= (3,) and sys.platform != 'win32' and
+118                 sys.getfilesystemencoding() in ['ascii', 'ANSI_X3.4-1968']
+119                 and not params['restrictfilenames']):
+120             # On Python 3, the Unicode filesystem API will throw errors (#1474)
+121             self.report_warning(
+122                 u'Assuming --restrict-filenames since file system encoding '
+123                 u'cannot encode all charactes. '
+124                 u'Set the LC_ALL environment variable to fix this.')
+125             params['restrictfilenames'] = True
+126 
+127         self.params = params
+128         self.fd = FileDownloader(self, self.params)
+129 
+130         if '%(stitle)s' in self.params['outtmpl']:
+131             self.report_warning(u'%(stitle)s is deprecated. Use the %(title)s and the --restrict-filenames flag(which also secures %(uploader)s et al) instead.')
+132 
+133     def add_info_extractor(self, ie):
+134         """Add an InfoExtractor object to the end of the list."""
+135         self._ies.append(ie)
+136         self._ies_instances[ie.ie_key()] = ie
+137         ie.set_downloader(self)
+138 
+139     def get_info_extractor(self, ie_key):
+140         """
+141         Get an instance of an IE with name ie_key, it will try to get one from
+142         the _ies list, if there's no instance it will create a new one and add
+143         it to the extractor list.
+144         """
+145         ie = self._ies_instances.get(ie_key)
+146         if ie is None:
+147             ie = get_info_extractor(ie_key)()
+148             self.add_info_extractor(ie)
+149         return ie
+150 
+151     def add_default_info_extractors(self):
+152         """
+153         Add the InfoExtractors returned by gen_extractors to the end of the list
+154         """
+155         for ie in gen_extractors():
+156             self.add_info_extractor(ie)
+157 
+158     def add_post_processor(self, pp):
+159         """Add a PostProcessor object to the end of the chain."""
+160         self._pps.append(pp)
+161         pp.set_downloader(self)
+162 
+163     def to_screen(self, message, skip_eol=False):
+164         """Print message to stdout if not in quiet mode."""
+165         if not self.params.get('quiet', False):
+166             terminator = [u'\n', u''][skip_eol]
+167             output = message + terminator
+168             write_string(output, self._screen_file)
+169 
+170     def to_stderr(self, message):
+171         """Print message to stderr."""
+172         assert type(message) == type(u'')
+173         output = message + u'\n'
+174         if 'b' in getattr(self._screen_file, 'mode', '') or sys.version_info[0] < 3: # Python 2 lies about the mode of sys.stdout/sys.stderr
+175             output = output.encode(preferredencoding())
+176         sys.stderr.write(output)
+177 
+178     def fixed_template(self):
+179         """Checks if the output template is fixed."""
+180         return (re.search(u'(?u)%\\(.+?\\)s', self.params['outtmpl']) is None)
+181 
+182     def trouble(self, message=None, tb=None):
+183         """Determine action to take when a download problem appears.
+184 
+185         Depending on if the downloader has been configured to ignore
+186         download errors or not, this method may throw an exception or
+187         not when errors are found, after printing the message.
+188 
+189         tb, if given, is additional traceback information.
+190         """
+191         if message is not None:
+192             self.to_stderr(message)
+193         if self.params.get('verbose'):
+194             if tb is None:
+195                 if sys.exc_info()[0]:  # if .trouble has been called from an except block
+196                     tb = u''
+197                     if hasattr(sys.exc_info()[1], 'exc_info') and sys.exc_info()[1].exc_info[0]:
+198                         tb += u''.join(traceback.format_exception(*sys.exc_info()[1].exc_info))
+199                     tb += compat_str(traceback.format_exc())
+200                 else:
+201                     tb_data = traceback.format_list(traceback.extract_stack())
+202                     tb = u''.join(tb_data)
+203             self.to_stderr(tb)
+204         if not self.params.get('ignoreerrors', False):
+205             if sys.exc_info()[0] and hasattr(sys.exc_info()[1], 'exc_info') and sys.exc_info()[1].exc_info[0]:
+206                 exc_info = sys.exc_info()[1].exc_info
+207             else:
+208                 exc_info = sys.exc_info()
+209             raise DownloadError(message, exc_info)
+210         self._download_retcode = 1
+211 
+212     def report_warning(self, message):
+213         '''
+214         Print the message to stderr, it will be prefixed with 'WARNING:'
+215         If stderr is a tty file the 'WARNING:' will be colored
+216         '''
+217         if sys.stderr.isatty() and os.name != 'nt':
+218             _msg_header=u'\033[0;33mWARNING:\033[0m'
+219         else:
+220             _msg_header=u'WARNING:'
+221         warning_message=u'%s %s' % (_msg_header,message)
+222         self.to_stderr(warning_message)
+223 
+224     def report_error(self, message, tb=None):
+225         '''
+226         Do the same as trouble, but prefixes the message with 'ERROR:', colored
+227         in red if stderr is a tty file.
+228         '''
+229         if sys.stderr.isatty() and os.name != 'nt':
+230             _msg_header = u'\033[0;31mERROR:\033[0m'
+231         else:
+232             _msg_header = u'ERROR:'
+233         error_message = u'%s %s' % (_msg_header, message)
+234         self.trouble(error_message, tb)
+235 
+236     def slow_down(self, start_time, byte_counter):
+237         """Sleep if the download speed is over the rate limit."""
+238         rate_limit = self.params.get('ratelimit', None)
+239         if rate_limit is None or byte_counter == 0:
+240             return
+241         now = time.time()
+242         elapsed = now - start_time
+243         if elapsed <= 0.0:
+244             return
+245         speed = float(byte_counter) / elapsed
+246         if speed > rate_limit:
+247             time.sleep((byte_counter - rate_limit * (now - start_time)) / rate_limit)
+248 
+249     def report_writedescription(self, descfn):
+250         """ Report that the description file is being written """
+251         self.to_screen(u'[info] Writing video description to: ' + descfn)
+252 
+253     def report_writesubtitles(self, sub_filename):
+254         """ Report that the subtitles file is being written """
+255         self.to_screen(u'[info] Writing video subtitles to: ' + sub_filename)
+256 
+257     def report_writeinfojson(self, infofn):
+258         """ Report that the metadata file has been written """
+259         self.to_screen(u'[info] Video description metadata as JSON to: ' + infofn)
+260 
+261     def report_file_already_downloaded(self, file_name):
+262         """Report file has already been fully downloaded."""
+263         try:
+264             self.to_screen(u'[download] %s has already been downloaded' % file_name)
+265         except (UnicodeEncodeError) as err:
+266             self.to_screen(u'[download] The file has already been downloaded')
+267 
+268     def increment_downloads(self):
+269         """Increment the ordinal that assigns a number to each file."""
+270         self._num_downloads += 1
+271 
+272     def prepare_filename(self, info_dict):
+273         """Generate the output filename."""
+274         try:
+275             template_dict = dict(info_dict)
+276 
+277             template_dict['epoch'] = int(time.time())
+278             autonumber_size = self.params.get('autonumber_size')
+279             if autonumber_size is None:
+280                 autonumber_size = 5
+281             autonumber_templ = u'%0' + str(autonumber_size) + u'd'
+282             template_dict['autonumber'] = autonumber_templ % self._num_downloads
+283             if template_dict['playlist_index'] is not None:
+284                 template_dict['playlist_index'] = u'%05d' % template_dict['playlist_index']
+285 
+286             sanitize = lambda k,v: sanitize_filename(
+287                 u'NA' if v is None else compat_str(v),
+288                 restricted=self.params.get('restrictfilenames'),
+289                 is_id=(k==u'id'))
+290             template_dict = dict((k, sanitize(k, v)) for k,v in template_dict.items())
+291 
+292             filename = self.params['outtmpl'] % template_dict
+293             return filename
+294         except KeyError as err:
+295             self.report_error(u'Erroneous output template')
+296             return None
+297         except ValueError as err:
+298             self.report_error(u'Error in output template: ' + str(err) + u' (encoding: ' + repr(preferredencoding()) + ')')
+299             return None
+300 
+301     def _match_entry(self, info_dict):
+302         """ Returns None iff the file should be downloaded """
+303 
+304         title = info_dict['title']
+305         matchtitle = self.params.get('matchtitle', False)
+306         if matchtitle:
+307             if not re.search(matchtitle, title, re.IGNORECASE):
+308                 return u'[download] "' + title + '" title did not match pattern "' + matchtitle + '"'
+309         rejecttitle = self.params.get('rejecttitle', False)
+310         if rejecttitle:
+311             if re.search(rejecttitle, title, re.IGNORECASE):
+312                 return u'"' + title + '" title matched reject pattern "' + rejecttitle + '"'
+313         date = info_dict.get('upload_date', None)
+314         if date is not None:
+315             dateRange = self.params.get('daterange', DateRange())
+316             if date not in dateRange:
+317                 return u'[download] %s upload date is not in range %s' % (date_from_str(date).isoformat(), dateRange)
+318         age_limit = self.params.get('age_limit')
+319         if age_limit is not None:
+320             if age_limit < info_dict.get('age_limit', 0):
+321                 return u'Skipping "' + title + '" because it is age restricted'
+322         if self.in_download_archive(info_dict):
+323             return (u'%(title)s has already been recorded in archive'
+324                     % info_dict)
+325         return None
+326         
+327     def extract_info(self, url, download=True, ie_key=None, extra_info={}):
+328         '''
+329         Returns a list with a dictionary for each video we find.
+330         If 'download', also downloads the videos.
+331         extra_info is a dict containing the extra values to add to each result
+332          '''
+333         
+334         if ie_key:
+335             ies = [self.get_info_extractor(ie_key)]
+336         else:
+337             ies = self._ies
+338 
+339         for ie in ies:
+340             if not ie.suitable(url):
+341                 continue
+342 
+343             if not ie.working():
+344                 self.report_warning(u'The program functionality for this site has been marked as broken, '
+345                                     u'and will probably not work.')
+346 
+347             try:
+348                 ie_result = ie.extract(url)
+349                 if ie_result is None: # Finished already (backwards compatibility; listformats and friends should be moved here)
+350                     break
+351                 if isinstance(ie_result, list):
+352                     # Backwards compatibility: old IE result format
+353                     for result in ie_result:
+354                         result.update(extra_info)
+355                     ie_result = {
+356                         '_type': 'compat_list',
+357                         'entries': ie_result,
+358                     }
+359                 else:
+360                     ie_result.update(extra_info)
+361                 if 'extractor' not in ie_result:
+362                     ie_result['extractor'] = ie.IE_NAME
+363                 return self.process_ie_result(ie_result, download=download)
+364             except ExtractorError as de: # An error we somewhat expected
+365                 self.report_error(compat_str(de), de.format_traceback())
+366                 break
+367             except Exception as e:
+368                 if self.params.get('ignoreerrors', False):
+369                     self.report_error(compat_str(e), tb=compat_str(traceback.format_exc()))
+370                     break
+371                 else:
+372                     raise
+373         else:
+374             self.report_error(u'no suitable InfoExtractor: %s' % url)
+375         
+376     def process_ie_result(self, ie_result, download=True, extra_info={}):
+377         """
+378         Take the result of the ie(may be modified) and resolve all unresolved
+379         references (URLs, playlist items).
+380 
+381         It will also download the videos if 'download'.
+382         Returns the resolved ie_result.
+383         """
+384 
+385         result_type = ie_result.get('_type', 'video') # If not given we suppose it's a video, support the default old system
+386         if result_type == 'video':
+387             ie_result.update(extra_info)
+388             if 'playlist' not in ie_result:
+389                 # It isn't part of a playlist
+390                 ie_result['playlist'] = None
+391                 ie_result['playlist_index'] = None
+392             if download:
+393                 self.process_info(ie_result)
+394             return ie_result
+395         elif result_type == 'url':
+396             # We have to add extra_info to the results because it may be
+397             # contained in a playlist
+398             return self.extract_info(ie_result['url'],
+399                                      download,
+400                                      ie_key=ie_result.get('ie_key'),
+401                                      extra_info=extra_info)
+402         elif result_type == 'playlist':
+403             # We process each entry in the playlist
+404             playlist = ie_result.get('title', None) or ie_result.get('id', None)
+405             self.to_screen(u'[download] Downloading playlist: %s'  % playlist)
+406 
+407             playlist_results = []
+408 
+409             n_all_entries = len(ie_result['entries'])
+410             playliststart = self.params.get('playliststart', 1) - 1
+411             playlistend = self.params.get('playlistend', -1)
+412 
+413             if playlistend == -1:
+414                 entries = ie_result['entries'][playliststart:]
+415             else:
+416                 entries = ie_result['entries'][playliststart:playlistend]
+417 
+418             n_entries = len(entries)
+419 
+420             self.to_screen(u"[%s] playlist '%s': Collected %d video ids (downloading %d of them)" %
+421                 (ie_result['extractor'], playlist, n_all_entries, n_entries))
+422 
+423             for i,entry in enumerate(entries,1):
+424                 self.to_screen(u'[download] Downloading video #%s of %s' %(i, n_entries))
+425                 extra = {
+426                          'playlist': playlist, 
+427                          'playlist_index': i + playliststart,
+428                          }
+429                 if not 'extractor' in entry:
+430                     # We set the extractor, if it's an url it will be set then to
+431                     # the new extractor, but if it's already a video we must make
+432                     # sure it's present: see issue #877
+433                     entry['extractor'] = ie_result['extractor']
+434                 entry_result = self.process_ie_result(entry,
+435                                                       download=download,
+436                                                       extra_info=extra)
+437                 playlist_results.append(entry_result)
+438             ie_result['entries'] = playlist_results
+439             return ie_result
+440         elif result_type == 'compat_list':
+441             def _fixup(r):
+442                 r.setdefault('extractor', ie_result['extractor'])
+443                 return r
+444             ie_result['entries'] = [
+445                 self.process_ie_result(_fixup(r), download=download)
+446                 for r in ie_result['entries']
+447             ]
+448             return ie_result
+449         else:
+450             raise Exception('Invalid result type: %s' % result_type)
+451 
+452     def process_info(self, info_dict):
+453         """Process a single resolved IE result."""
+454 
+455         assert info_dict.get('_type', 'video') == 'video'
+456         #We increment the download the download count here to match the previous behaviour.
+457         self.increment_downloads()
+458 
+459         info_dict['fulltitle'] = info_dict['title']
+460         if len(info_dict['title']) > 200:
+461             info_dict['title'] = info_dict['title'][:197] + u'...'
+462 
+463         # Keep for backwards compatibility
+464         info_dict['stitle'] = info_dict['title']
+465 
+466         if not 'format' in info_dict:
+467             info_dict['format'] = info_dict['ext']
+468 
+469         reason = self._match_entry(info_dict)
+470         if reason is not None:
+471             self.to_screen(u'[download] ' + reason)
+472             return
+473 
+474         max_downloads = self.params.get('max_downloads')
+475         if max_downloads is not None:
+476             if self._num_downloads > int(max_downloads):
+477                 raise MaxDownloadsReached()
+478 
+479         filename = self.prepare_filename(info_dict)
+480 
+481         # Forced printings
+482         if self.params.get('forcetitle', False):
+483             compat_print(info_dict['title'])
+484         if self.params.get('forceid', False):
+485             compat_print(info_dict['id'])
+486         if self.params.get('forceurl', False):
+487             # For RTMP URLs, also include the playpath
+488             compat_print(info_dict['url'] + info_dict.get('play_path', u''))
+489         if self.params.get('forcethumbnail', False) and 'thumbnail' in info_dict:
+490             compat_print(info_dict['thumbnail'])
+491         if self.params.get('forcedescription', False) and 'description' in info_dict:
+492             compat_print(info_dict['description'])
+493         if self.params.get('forcefilename', False) and filename is not None:
+494             compat_print(filename)
+495         if self.params.get('forceformat', False):
+496             compat_print(info_dict['format'])
+497 
+498         # Do nothing else if in simulate mode
+499         if self.params.get('simulate', False):
+500             return
+501 
+502         if filename is None:
+503             return
+504 
+505         try:
+506             dn = os.path.dirname(encodeFilename(filename))
+507             if dn != '' and not os.path.exists(dn):
+508                 os.makedirs(dn)
+509         except (OSError, IOError) as err:
+510             self.report_error(u'unable to create directory ' + compat_str(err))
+511             return
+512 
+513         if self.params.get('writedescription', False):
+514             try:
+515                 descfn = filename + u'.description'
+516                 self.report_writedescription(descfn)
+517                 with io.open(encodeFilename(descfn), 'w', encoding='utf-8') as descfile:
+518                     descfile.write(info_dict['description'])
+519             except (KeyError, TypeError):
+520                 self.report_warning(u'There\'s no description to write.')
+521             except (OSError, IOError):
+522                 self.report_error(u'Cannot write description file ' + descfn)
+523                 return
+524 
+525         subtitles_are_requested = any([self.params.get('writesubtitles', False),
+526                                        self.params.get('writeautomaticsub')])
+527 
+528         if  subtitles_are_requested and 'subtitles' in info_dict and info_dict['subtitles']:
+529             # subtitles download errors are already managed as troubles in relevant IE
+530             # that way it will silently go on when used with unsupporting IE
+531             subtitles = info_dict['subtitles']
+532             sub_format = self.params.get('subtitlesformat')
+533             for sub_lang in subtitles.keys():
+534                 sub = subtitles[sub_lang]
+535                 if sub is None:
+536                     continue
+537                 try:
+538                     sub_filename = subtitles_filename(filename, sub_lang, sub_format)
+539                     self.report_writesubtitles(sub_filename)
+540                     with io.open(encodeFilename(sub_filename), 'w', encoding='utf-8') as subfile:
+541                             subfile.write(sub)
+542                 except (OSError, IOError):
+543                     self.report_error(u'Cannot write subtitles file ' + descfn)
+544                     return
+545 
+546         if self.params.get('writeinfojson', False):
+547             infofn = filename + u'.info.json'
+548             self.report_writeinfojson(infofn)
+549             try:
+550                 json_info_dict = dict((k, v) for k,v in info_dict.items() if not k in ['urlhandle'])
+551                 write_json_file(json_info_dict, encodeFilename(infofn))
+552             except (OSError, IOError):
+553                 self.report_error(u'Cannot write metadata to JSON file ' + infofn)
+554                 return
+555 
+556         if self.params.get('writethumbnail', False):
+557             if info_dict.get('thumbnail') is not None:
+558                 thumb_format = determine_ext(info_dict['thumbnail'], u'jpg')
+559                 thumb_filename = filename.rpartition('.')[0] + u'.' + thumb_format
+560                 self.to_screen(u'[%s] %s: Downloading thumbnail ...' %
+561                                (info_dict['extractor'], info_dict['id']))
+562                 try:
+563                     uf = compat_urllib_request.urlopen(info_dict['thumbnail'])
+564                     with open(thumb_filename, 'wb') as thumbf:
+565                         shutil.copyfileobj(uf, thumbf)
+566                     self.to_screen(u'[%s] %s: Writing thumbnail to: %s' %
+567                         (info_dict['extractor'], info_dict['id'], thumb_filename))
+568                 except (compat_urllib_error.URLError, compat_http_client.HTTPException, socket.error) as err:
+569                     self.report_warning(u'Unable to download thumbnail "%s": %s' %
+570                         (info_dict['thumbnail'], compat_str(err)))
+571 
+572         if not self.params.get('skip_download', False):
+573             if self.params.get('nooverwrites', False) and os.path.exists(encodeFilename(filename)):
+574                 success = True
+575             else:
+576                 try:
+577                     success = self.fd._do_download(filename, info_dict)
+578                 except (compat_urllib_error.URLError, compat_http_client.HTTPException, socket.error) as err:
+579                     self.report_error(u'unable to download video data: %s' % str(err))
+580                     return
+581                 except (OSError, IOError) as err:
+582                     raise UnavailableVideoError(err)
+583                 except (ContentTooShortError, ) as err:
+584                     self.report_error(u'content too short (expected %s bytes and served %s)' % (err.expected, err.downloaded))
+585                     return
+586 
+587             if success:
+588                 try:
+589                     self.post_process(filename, info_dict)
+590                 except (PostProcessingError) as err:
+591                     self.report_error(u'postprocessing: %s' % str(err))
+592                     return
+593 
+594         self.record_download_archive(info_dict)
+595 
+596     def download(self, url_list):
+597         """Download a given list of URLs."""
+598         if len(url_list) > 1 and self.fixed_template():
+599             raise SameFileError(self.params['outtmpl'])
+600 
+601         for url in url_list:
+602             try:
+603                 #It also downloads the videos
+604                 videos = self.extract_info(url)
+605             except UnavailableVideoError:
+606                 self.report_error(u'unable to download video')
+607             except MaxDownloadsReached:
+608                 self.to_screen(u'[info] Maximum number of downloaded files reached.')
+609                 raise
+610 
+611         return self._download_retcode
+612 
+613     def post_process(self, filename, ie_info):
+614         """Run all the postprocessors on the given file."""
+615         info = dict(ie_info)
+616         info['filepath'] = filename
+617         keep_video = None
+618         for pp in self._pps:
+619             try:
+620                 keep_video_wish,new_info = pp.run(info)
+621                 if keep_video_wish is not None:
+622                     if keep_video_wish:
+623                         keep_video = keep_video_wish
+624                     elif keep_video is None:
+625                         # No clear decision yet, let IE decide
+626                         keep_video = keep_video_wish
+627             except PostProcessingError as e:
+628                 self.report_error(e.msg)
+629         if keep_video is False and not self.params.get('keepvideo', False):
+630             try:
+631                 self.to_screen(u'Deleting original file %s (pass -k to keep)' % filename)
+632                 os.remove(encodeFilename(filename))
+633             except (IOError, OSError):
+634                 self.report_warning(u'Unable to remove downloaded video file')
+635 
+636     def in_download_archive(self, info_dict):
+637         fn = self.params.get('download_archive')
+638         if fn is None:
+639             return False
+640         vid_id = info_dict['extractor'] + u' ' + info_dict['id']
+641         try:
+642             with locked_file(fn, 'r', encoding='utf-8') as archive_file:
+643                 for line in archive_file:
+644                     if line.strip() == vid_id:
+645                         return True
+646         except IOError as ioe:
+647             if ioe.errno != errno.ENOENT:
+648                 raise
+649         return False
+650 
+651     def record_download_archive(self, info_dict):
+652         fn = self.params.get('download_archive')
+653         if fn is None:
+654             return
+655         vid_id = info_dict['extractor'] + u' ' + info_dict['id']
+656         with locked_file(fn, 'a', encoding='utf-8') as archive_file:
+657             archive_file.write(vid_id + u'\n')
+658 
+[end of youtube_dl/YoutubeDL.py]
+[start of youtube_dl/__init__.py]
+1 #!/usr/bin/env python
+2 # -*- coding: utf-8 -*-
+3 
+4 __authors__  = (
+5     'Ricardo Garcia Gonzalez',
+6     'Danny Colligan',
+7     'Benjamin Johnson',
+8     'Vasyl\' Vavrychuk',
+9     'Witold Baryluk',
+10     'Paweł Paprota',
+11     'Gergely Imreh',
+12     'Rogério Brito',
+13     'Philipp Hagemeister',
+14     'Sören Schulze',
+15     'Kevin Ngo',
+16     'Ori Avtalion',
+17     'shizeeg',
+18     'Filippo Valsorda',
+19     'Christian Albrecht',
+20     'Dave Vasilevsky',
+21     'Jaime Marquínez Ferrándiz',
+22     'Jeff Crouse',
+23     'Osama Khalid',
+24     'Michael Walter',
+25     'M. Yasoob Ullah Khalid',
+26     'Julien Fraichard',
+27     'Johny Mo Swag',
+28     'Axel Noack',
+29     'Albert Kim',
+30     'Pierre Rudloff',
+31     'Huarong Huo',
+32     'Ismael Mejía',
+33     'Steffan \'Ruirize\' James',
+34 )
+35 
+36 __license__ = 'Public Domain'
+37 
+38 import codecs
+39 import collections
+40 import getpass
+41 import optparse
+42 import os
+43 import random
+44 import re
+45 import shlex
+46 import socket
+47 import subprocess
+48 import sys
+49 import warnings
+50 import platform
+51 
+52 
+53 from .utils import *
+54 from .update import update_self
+55 from .version import __version__
+56 from .FileDownloader import *
+57 from .extractor import gen_extractors
+58 from .YoutubeDL import YoutubeDL
+59 from .PostProcessor import *
+60 
+61 def parseOpts(overrideArguments=None):
+62     def _readOptions(filename_bytes):
+63         try:
+64             optionf = open(filename_bytes)
+65         except IOError:
+66             return [] # silently skip if file is not present
+67         try:
+68             res = []
+69             for l in optionf:
+70                 res += shlex.split(l, comments=True)
+71         finally:
+72             optionf.close()
+73         return res
+74 
+75     def _format_option_string(option):
+76         ''' ('-o', '--option') -> -o, --format METAVAR'''
+77 
+78         opts = []
+79 
+80         if option._short_opts:
+81             opts.append(option._short_opts[0])
+82         if option._long_opts:
+83             opts.append(option._long_opts[0])
+84         if len(opts) > 1:
+85             opts.insert(1, ', ')
+86 
+87         if option.takes_value(): opts.append(' %s' % option.metavar)
+88 
+89         return "".join(opts)
+90 
+91     def _comma_separated_values_options_callback(option, opt_str, value, parser):
+92         setattr(parser.values, option.dest, value.split(','))
+93 
+94     def _find_term_columns():
+95         columns = os.environ.get('COLUMNS', None)
+96         if columns:
+97             return int(columns)
+98 
+99         try:
+100             sp = subprocess.Popen(['stty', 'size'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+101             out,err = sp.communicate()
+102             return int(out.split()[1])
+103         except:
+104             pass
+105         return None
+106 
+107     def _hide_login_info(opts):
+108         opts = list(opts)
+109         for private_opt in ['-p', '--password', '-u', '--username']:
+110             try:
+111                 i = opts.index(private_opt)
+112                 opts[i+1] = '<PRIVATE>'
+113             except ValueError:
+114                 pass
+115         return opts
+116 
+117     max_width = 80
+118     max_help_position = 80
+119 
+120     # No need to wrap help messages if we're on a wide console
+121     columns = _find_term_columns()
+122     if columns: max_width = columns
+123 
+124     fmt = optparse.IndentedHelpFormatter(width=max_width, max_help_position=max_help_position)
+125     fmt.format_option_strings = _format_option_string
+126 
+127     kw = {
+128         'version'   : __version__,
+129         'formatter' : fmt,
+130         'usage' : '%prog [options] url [url...]',
+131         'conflict_handler' : 'resolve',
+132     }
+133 
+134     parser = optparse.OptionParser(**kw)
+135 
+136     # option groups
+137     general        = optparse.OptionGroup(parser, 'General Options')
+138     selection      = optparse.OptionGroup(parser, 'Video Selection')
+139     authentication = optparse.OptionGroup(parser, 'Authentication Options')
+140     video_format   = optparse.OptionGroup(parser, 'Video Format Options')
+141     subtitles      = optparse.OptionGroup(parser, 'Subtitle Options')
+142     downloader     = optparse.OptionGroup(parser, 'Download Options')
+143     postproc       = optparse.OptionGroup(parser, 'Post-processing Options')
+144     filesystem     = optparse.OptionGroup(parser, 'Filesystem Options')
+145     verbosity      = optparse.OptionGroup(parser, 'Verbosity / Simulation Options')
+146 
+147     general.add_option('-h', '--help',
+148             action='help', help='print this help text and exit')
+149     general.add_option('-v', '--version',
+150             action='version', help='print program version and exit')
+151     general.add_option('-U', '--update',
+152             action='store_true', dest='update_self', help='update this program to latest version. Make sure that you have sufficient permissions (run with sudo if needed)')
+153     general.add_option('-i', '--ignore-errors',
+154             action='store_true', dest='ignoreerrors', help='continue on download errors, for example to to skip unavailable videos in a playlist', default=False)
+155     general.add_option('--dump-user-agent',
+156             action='store_true', dest='dump_user_agent',
+157             help='display the current browser identification', default=False)
+158     general.add_option('--user-agent',
+159             dest='user_agent', help='specify a custom user agent', metavar='UA')
+160     general.add_option('--referer',
+161             dest='referer', help='specify a custom referer, use if the video access is restricted to one domain',
+162             metavar='REF', default=None)
+163     general.add_option('--list-extractors',
+164             action='store_true', dest='list_extractors',
+165             help='List all supported extractors and the URLs they would handle', default=False)
+166     general.add_option('--extractor-descriptions',
+167             action='store_true', dest='list_extractor_descriptions',
+168             help='Output descriptions of all supported extractors', default=False)
+169     general.add_option('--proxy', dest='proxy', default=None, help='Use the specified HTTP/HTTPS proxy', metavar='URL')
+170     general.add_option('--no-check-certificate', action='store_true', dest='no_check_certificate', default=False, help='Suppress HTTPS certificate validation.')
+171     general.add_option(
+172         '--cache-dir', dest='cachedir', default=get_cachedir(),
+173         help='Location in the filesystem where youtube-dl can store downloaded information permanently. By default $XDG_CACHE_HOME/youtube-dl or ~/.cache/youtube-dl .')
+174     general.add_option(
+175         '--no-cache-dir', action='store_const', const=None, dest='cachedir',
+176         help='Disable filesystem caching')
+177 
+178 
+179     selection.add_option('--playlist-start',
+180             dest='playliststart', metavar='NUMBER', help='playlist video to start at (default is %default)', default=1)
+181     selection.add_option('--playlist-end',
+182             dest='playlistend', metavar='NUMBER', help='playlist video to end at (default is last)', default=-1)
+183     selection.add_option('--match-title', dest='matchtitle', metavar='REGEX',help='download only matching titles (regex or caseless sub-string)')
+184     selection.add_option('--reject-title', dest='rejecttitle', metavar='REGEX',help='skip download for matching titles (regex or caseless sub-string)')
+185     selection.add_option('--max-downloads', metavar='NUMBER', dest='max_downloads', help='Abort after downloading NUMBER files', default=None)
+186     selection.add_option('--min-filesize', metavar='SIZE', dest='min_filesize', help="Do not download any videos smaller than SIZE (e.g. 50k or 44.6m)", default=None)
+187     selection.add_option('--max-filesize', metavar='SIZE', dest='max_filesize', help="Do not download any videos larger than SIZE (e.g. 50k or 44.6m)", default=None)
+188     selection.add_option('--date', metavar='DATE', dest='date', help='download only videos uploaded in this date', default=None)
+189     selection.add_option('--datebefore', metavar='DATE', dest='datebefore', help='download only videos uploaded before this date', default=None)
+190     selection.add_option('--dateafter', metavar='DATE', dest='dateafter', help='download only videos uploaded after this date', default=None)
+191     selection.add_option('--no-playlist', action='store_true', dest='noplaylist', help='download only the currently playing video', default=False)
+192     selection.add_option('--age-limit', metavar='YEARS', dest='age_limit',
+193                          help='download only videos suitable for the given age',
+194                          default=None, type=int)
+195     selection.add_option('--download-archive', metavar='FILE',
+196                          dest='download_archive',
+197                          help='Download only videos not present in the archive file. Record all downloaded videos in it.')
+198 
+199 
+200     authentication.add_option('-u', '--username',
+201             dest='username', metavar='USERNAME', help='account username')
+202     authentication.add_option('-p', '--password',
+203             dest='password', metavar='PASSWORD', help='account password')
+204     authentication.add_option('-n', '--netrc',
+205             action='store_true', dest='usenetrc', help='use .netrc authentication data', default=False)
+206     authentication.add_option('--video-password',
+207             dest='videopassword', metavar='PASSWORD', help='video password (vimeo only)')
+208 
+209 
+210     video_format.add_option('-f', '--format',
+211             action='store', dest='format', metavar='FORMAT',
+212             help='video format code, specifiy the order of preference using slashes: "-f 22/17/18". "-f mp4" and "-f flv" are also supported')
+213     video_format.add_option('--all-formats',
+214             action='store_const', dest='format', help='download all available video formats', const='all')
+215     video_format.add_option('--prefer-free-formats',
+216             action='store_true', dest='prefer_free_formats', default=False, help='prefer free video formats unless a specific one is requested')
+217     video_format.add_option('--max-quality',
+218             action='store', dest='format_limit', metavar='FORMAT', help='highest quality format to download')
+219     video_format.add_option('-F', '--list-formats',
+220             action='store_true', dest='listformats', help='list all available formats (currently youtube only)')
+221 
+222     subtitles.add_option('--write-sub', '--write-srt',
+223             action='store_true', dest='writesubtitles',
+224             help='write subtitle file', default=False)
+225     subtitles.add_option('--write-auto-sub', '--write-automatic-sub',
+226             action='store_true', dest='writeautomaticsub',
+227             help='write automatic subtitle file (youtube only)', default=False)
+228     subtitles.add_option('--all-subs',
+229             action='store_true', dest='allsubtitles',
+230             help='downloads all the available subtitles of the video', default=False)
+231     subtitles.add_option('--list-subs',
+232             action='store_true', dest='listsubtitles',
+233             help='lists all available subtitles for the video', default=False)
+234     subtitles.add_option('--sub-format',
+235             action='store', dest='subtitlesformat', metavar='FORMAT',
+236             help='subtitle format (default=srt) ([sbv/vtt] youtube only)', default='srt')
+237     subtitles.add_option('--sub-lang', '--sub-langs', '--srt-lang',
+238             action='callback', dest='subtitleslangs', metavar='LANGS', type='str',
+239             default=[], callback=_comma_separated_values_options_callback,
+240             help='languages of the subtitles to download (optional) separated by commas, use IETF language tags like \'en,pt\'')
+241 
+242     downloader.add_option('-r', '--rate-limit',
+243             dest='ratelimit', metavar='LIMIT', help='maximum download rate (e.g. 50k or 44.6m)')
+244     downloader.add_option('-R', '--retries',
+245             dest='retries', metavar='RETRIES', help='number of retries (default is %default)', default=10)
+246     downloader.add_option('--buffer-size',
+247             dest='buffersize', metavar='SIZE', help='size of download buffer (e.g. 1024 or 16k) (default is %default)', default="1024")
+248     downloader.add_option('--no-resize-buffer',
+249             action='store_true', dest='noresizebuffer',
+250             help='do not automatically adjust the buffer size. By default, the buffer size is automatically resized from an initial value of SIZE.', default=False)
+251     downloader.add_option('--test', action='store_true', dest='test', default=False, help=optparse.SUPPRESS_HELP)
+252 
+253     verbosity.add_option('-q', '--quiet',
+254             action='store_true', dest='quiet', help='activates quiet mode', default=False)
+255     verbosity.add_option('-s', '--simulate',
+256             action='store_true', dest='simulate', help='do not download the video and do not write anything to disk', default=False)
+257     verbosity.add_option('--skip-download',
+258             action='store_true', dest='skip_download', help='do not download the video', default=False)
+259     verbosity.add_option('-g', '--get-url',
+260             action='store_true', dest='geturl', help='simulate, quiet but print URL', default=False)
+261     verbosity.add_option('-e', '--get-title',
+262             action='store_true', dest='gettitle', help='simulate, quiet but print title', default=False)
+263     verbosity.add_option('--get-id',
+264             action='store_true', dest='getid', help='simulate, quiet but print id', default=False)
+265     verbosity.add_option('--get-thumbnail',
+266             action='store_true', dest='getthumbnail',
+267             help='simulate, quiet but print thumbnail URL', default=False)
+268     verbosity.add_option('--get-description',
+269             action='store_true', dest='getdescription',
+270             help='simulate, quiet but print video description', default=False)
+271     verbosity.add_option('--get-filename',
+272             action='store_true', dest='getfilename',
+273             help='simulate, quiet but print output filename', default=False)
+274     verbosity.add_option('--get-format',
+275             action='store_true', dest='getformat',
+276             help='simulate, quiet but print output format', default=False)
+277     verbosity.add_option('--newline',
+278             action='store_true', dest='progress_with_newline', help='output progress bar as new lines', default=False)
+279     verbosity.add_option('--no-progress',
+280             action='store_true', dest='noprogress', help='do not print progress bar', default=False)
+281     verbosity.add_option('--console-title',
+282             action='store_true', dest='consoletitle',
+283             help='display progress in console titlebar', default=False)
+284     verbosity.add_option('-v', '--verbose',
+285             action='store_true', dest='verbose', help='print various debugging information', default=False)
+286     verbosity.add_option('--dump-intermediate-pages',
+287             action='store_true', dest='dump_intermediate_pages', default=False,
+288             help='print downloaded pages to debug problems(very verbose)')
+289     verbosity.add_option('--youtube-print-sig-code',
+290             action='store_true', dest='youtube_print_sig_code', default=False,
+291             help=optparse.SUPPRESS_HELP)
+292 
+293 
+294     filesystem.add_option('-t', '--title',
+295             action='store_true', dest='usetitle', help='use title in file name (default)', default=False)
+296     filesystem.add_option('--id',
+297             action='store_true', dest='useid', help='use only video ID in file name', default=False)
+298     filesystem.add_option('-l', '--literal',
+299             action='store_true', dest='usetitle', help='[deprecated] alias of --title', default=False)
+300     filesystem.add_option('-A', '--auto-number',
+301             action='store_true', dest='autonumber',
+302             help='number downloaded files starting from 00000', default=False)
+303     filesystem.add_option('-o', '--output',
+304             dest='outtmpl', metavar='TEMPLATE',
+305             help=('output filename template. Use %(title)s to get the title, '
+306                   '%(uploader)s for the uploader name, %(uploader_id)s for the uploader nickname if different, '
+307                   '%(autonumber)s to get an automatically incremented number, '
+308                   '%(ext)s for the filename extension, %(upload_date)s for the upload date (YYYYMMDD), '
+309                   '%(extractor)s for the provider (youtube, metacafe, etc), '
+310                   '%(id)s for the video id , %(playlist)s for the playlist the video is in, '
+311                   '%(playlist_index)s for the position in the playlist and %% for a literal percent. '
+312                   'Use - to output to stdout. Can also be used to download to a different directory, '
+313                   'for example with -o \'/my/downloads/%(uploader)s/%(title)s-%(id)s.%(ext)s\' .'))
+314     filesystem.add_option('--autonumber-size',
+315             dest='autonumber_size', metavar='NUMBER',
+316             help='Specifies the number of digits in %(autonumber)s when it is present in output filename template or --autonumber option is given')
+317     filesystem.add_option('--restrict-filenames',
+318             action='store_true', dest='restrictfilenames',
+319             help='Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames', default=False)
+320     filesystem.add_option('-a', '--batch-file',
+321             dest='batchfile', metavar='FILE', help='file containing URLs to download (\'-\' for stdin)')
+322     filesystem.add_option('-w', '--no-overwrites',
+323             action='store_true', dest='nooverwrites', help='do not overwrite files', default=False)
+324     filesystem.add_option('-c', '--continue',
+325             action='store_true', dest='continue_dl', help='resume partially downloaded files', default=True)
+326     filesystem.add_option('--no-continue',
+327             action='store_false', dest='continue_dl',
+328             help='do not resume partially downloaded files (restart from beginning)')
+329     filesystem.add_option('--cookies',
+330             dest='cookiefile', metavar='FILE', help='file to read cookies from and dump cookie jar in')
+331     filesystem.add_option('--no-part',
+332             action='store_true', dest='nopart', help='do not use .part files', default=False)
+333     filesystem.add_option('--no-mtime',
+334             action='store_false', dest='updatetime',
+335             help='do not use the Last-modified header to set the file modification time', default=True)
+336     filesystem.add_option('--write-description',
+337             action='store_true', dest='writedescription',
+338             help='write video description to a .description file', default=False)
+339     filesystem.add_option('--write-info-json',
+340             action='store_true', dest='writeinfojson',
+341             help='write video metadata to a .info.json file', default=False)
+342     filesystem.add_option('--write-thumbnail',
+343             action='store_true', dest='writethumbnail',
+344             help='write thumbnail image to disk', default=False)
+345 
+346 
+347     postproc.add_option('-x', '--extract-audio', action='store_true', dest='extractaudio', default=False,
+348             help='convert video files to audio-only files (requires ffmpeg or avconv and ffprobe or avprobe)')
+349     postproc.add_option('--audio-format', metavar='FORMAT', dest='audioformat', default='best',
+350             help='"best", "aac", "vorbis", "mp3", "m4a", "opus", or "wav"; best by default')
+351     postproc.add_option('--audio-quality', metavar='QUALITY', dest='audioquality', default='5',
+352             help='ffmpeg/avconv audio quality specification, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default 5)')
+353     postproc.add_option('--recode-video', metavar='FORMAT', dest='recodevideo', default=None,
+354             help='Encode the video to another format if necessary (currently supported: mp4|flv|ogg|webm)')
+355     postproc.add_option('-k', '--keep-video', action='store_true', dest='keepvideo', default=False,
+356             help='keeps the video file on disk after the post-processing; the video is erased by default')
+357     postproc.add_option('--no-post-overwrites', action='store_true', dest='nopostoverwrites', default=False,
+358             help='do not overwrite post-processed files; the post-processed files are overwritten by default')
+359     postproc.add_option('--embed-subs', action='store_true', dest='embedsubtitles', default=False,
+360             help='embed subtitles in the video (only for mp4 videos)')
+361     postproc.add_option('--add-metadata', action='store_true', dest='addmetadata', default=False,
+362             help='add metadata to the files')
+363 
+364 
+365     parser.add_option_group(general)
+366     parser.add_option_group(selection)
+367     parser.add_option_group(downloader)
+368     parser.add_option_group(filesystem)
+369     parser.add_option_group(verbosity)
+370     parser.add_option_group(video_format)
+371     parser.add_option_group(subtitles)
+372     parser.add_option_group(authentication)
+373     parser.add_option_group(postproc)
+374 
+375     if overrideArguments is not None:
+376         opts, args = parser.parse_args(overrideArguments)
+377         if opts.verbose:
+378             write_string(u'[debug] Override config: ' + repr(overrideArguments) + '\n')
+379     else:
+380         xdg_config_home = os.environ.get('XDG_CONFIG_HOME')
+381         if xdg_config_home:
+382             userConfFile = os.path.join(xdg_config_home, 'youtube-dl', 'config')
+383             if not os.path.isfile(userConfFile):
+384                 userConfFile = os.path.join(xdg_config_home, 'youtube-dl.conf')
+385         else:
+386             userConfFile = os.path.join(os.path.expanduser('~'), '.config', 'youtube-dl', 'config')
+387             if not os.path.isfile(userConfFile):
+388                 userConfFile = os.path.join(os.path.expanduser('~'), '.config', 'youtube-dl.conf')
+389         systemConf = _readOptions('/etc/youtube-dl.conf')
+390         userConf = _readOptions(userConfFile)
+391         commandLineConf = sys.argv[1:]
+392         argv = systemConf + userConf + commandLineConf
+393         opts, args = parser.parse_args(argv)
+394         if opts.verbose:
+395             write_string(u'[debug] System config: ' + repr(_hide_login_info(systemConf)) + '\n')
+396             write_string(u'[debug] User config: ' + repr(_hide_login_info(userConf)) + '\n')
+397             write_string(u'[debug] Command-line args: ' + repr(_hide_login_info(commandLineConf)) + '\n')
+398 
+399     return parser, opts, args
+400 
+401 def _real_main(argv=None):
+402     # Compatibility fixes for Windows
+403     if sys.platform == 'win32':
+404         # https://github.com/rg3/youtube-dl/issues/820
+405         codecs.register(lambda name: codecs.lookup('utf-8') if name == 'cp65001' else None)
+406 
+407     parser, opts, args = parseOpts(argv)
+408 
+409     # Open appropriate CookieJar
+410     if opts.cookiefile is None:
+411         jar = compat_cookiejar.CookieJar()
+412     else:
+413         try:
+414             jar = compat_cookiejar.MozillaCookieJar(opts.cookiefile)
+415             if os.access(opts.cookiefile, os.R_OK):
+416                 jar.load()
+417         except (IOError, OSError) as err:
+418             if opts.verbose:
+419                 traceback.print_exc()
+420             write_string(u'ERROR: unable to open cookie file\n')
+421             sys.exit(101)
+422     # Set user agent
+423     if opts.user_agent is not None:
+424         std_headers['User-Agent'] = opts.user_agent
+425 
+426     # Set referer
+427     if opts.referer is not None:
+428         std_headers['Referer'] = opts.referer
+429 
+430     # Dump user agent
+431     if opts.dump_user_agent:
+432         compat_print(std_headers['User-Agent'])
+433         sys.exit(0)
+434 
+435     # Batch file verification
+436     batchurls = []
+437     if opts.batchfile is not None:
+438         try:
+439             if opts.batchfile == '-':
+440                 batchfd = sys.stdin
+441             else:
+442                 batchfd = open(opts.batchfile, 'r')
+443             batchurls = batchfd.readlines()
+444             batchurls = [x.strip() for x in batchurls]
+445             batchurls = [x for x in batchurls if len(x) > 0 and not re.search(r'^[#/;]', x)]
+446             if opts.verbose:
+447                 write_string(u'[debug] Batch file urls: ' + repr(batchurls) + u'\n')
+448         except IOError:
+449             sys.exit(u'ERROR: batch file could not be read')
+450     all_urls = batchurls + args
+451     all_urls = [url.strip() for url in all_urls]
+452 
+453     opener = _setup_opener(jar=jar, opts=opts)
+454 
+455     extractors = gen_extractors()
+456 
+457     if opts.list_extractors:
+458         for ie in sorted(extractors, key=lambda ie: ie.IE_NAME.lower()):
+459             compat_print(ie.IE_NAME + (' (CURRENTLY BROKEN)' if not ie._WORKING else ''))
+460             matchedUrls = [url for url in all_urls if ie.suitable(url)]
+461             all_urls = [url for url in all_urls if url not in matchedUrls]
+462             for mu in matchedUrls:
+463                 compat_print(u'  ' + mu)
+464         sys.exit(0)
+465     if opts.list_extractor_descriptions:
+466         for ie in sorted(extractors, key=lambda ie: ie.IE_NAME.lower()):
+467             if not ie._WORKING:
+468                 continue
+469             desc = getattr(ie, 'IE_DESC', ie.IE_NAME)
+470             if desc is False:
+471                 continue
+472             if hasattr(ie, 'SEARCH_KEY'):
+473                 _SEARCHES = (u'cute kittens', u'slithering pythons', u'falling cat', u'angry poodle', u'purple fish', u'running tortoise')
+474                 _COUNTS = (u'', u'5', u'10', u'all')
+475                 desc += u' (Example: "%s%s:%s" )' % (ie.SEARCH_KEY, random.choice(_COUNTS), random.choice(_SEARCHES))
+476             compat_print(desc)
+477         sys.exit(0)
+478 
+479 
+480     # Conflicting, missing and erroneous options
+481     if opts.usenetrc and (opts.username is not None or opts.password is not None):
+482         parser.error(u'using .netrc conflicts with giving username/password')
+483     if opts.password is not None and opts.username is None:
+484         parser.error(u' account username missing\n')
+485     if opts.outtmpl is not None and (opts.usetitle or opts.autonumber or opts.useid):
+486         parser.error(u'using output template conflicts with using title, video ID or auto number')
+487     if opts.usetitle and opts.useid:
+488         parser.error(u'using title conflicts with using video ID')
+489     if opts.username is not None and opts.password is None:
+490         opts.password = getpass.getpass(u'Type account password and press return:')
+491     if opts.ratelimit is not None:
+492         numeric_limit = FileDownloader.parse_bytes(opts.ratelimit)
+493         if numeric_limit is None:
+494             parser.error(u'invalid rate limit specified')
+495         opts.ratelimit = numeric_limit
+496     if opts.min_filesize is not None:
+497         numeric_limit = FileDownloader.parse_bytes(opts.min_filesize)
+498         if numeric_limit is None:
+499             parser.error(u'invalid min_filesize specified')
+500         opts.min_filesize = numeric_limit
+501     if opts.max_filesize is not None:
+502         numeric_limit = FileDownloader.parse_bytes(opts.max_filesize)
+503         if numeric_limit is None:
+504             parser.error(u'invalid max_filesize specified')
+505         opts.max_filesize = numeric_limit
+506     if opts.retries is not None:
+507         try:
+508             opts.retries = int(opts.retries)
+509         except (TypeError, ValueError) as err:
+510             parser.error(u'invalid retry count specified')
+511     if opts.buffersize is not None:
+512         numeric_buffersize = FileDownloader.parse_bytes(opts.buffersize)
+513         if numeric_buffersize is None:
+514             parser.error(u'invalid buffer size specified')
+515         opts.buffersize = numeric_buffersize
+516     try:
+517         opts.playliststart = int(opts.playliststart)
+518         if opts.playliststart <= 0:
+519             raise ValueError(u'Playlist start must be positive')
+520     except (TypeError, ValueError) as err:
+521         parser.error(u'invalid playlist start number specified')
+522     try:
+523         opts.playlistend = int(opts.playlistend)
+524         if opts.playlistend != -1 and (opts.playlistend <= 0 or opts.playlistend < opts.playliststart):
+525             raise ValueError(u'Playlist end must be greater than playlist start')
+526     except (TypeError, ValueError) as err:
+527         parser.error(u'invalid playlist end number specified')
+528     if opts.extractaudio:
+529         if opts.audioformat not in ['best', 'aac', 'mp3', 'm4a', 'opus', 'vorbis', 'wav']:
+530             parser.error(u'invalid audio format specified')
+531     if opts.audioquality:
+532         opts.audioquality = opts.audioquality.strip('k').strip('K')
+533         if not opts.audioquality.isdigit():
+534             parser.error(u'invalid audio quality specified')
+535     if opts.recodevideo is not None:
+536         if opts.recodevideo not in ['mp4', 'flv', 'webm', 'ogg']:
+537             parser.error(u'invalid video recode format specified')
+538     if opts.date is not None:
+539         date = DateRange.day(opts.date)
+540     else:
+541         date = DateRange(opts.dateafter, opts.datebefore)
+542 
+543     # --all-sub automatically sets --write-sub if --write-auto-sub is not given
+544     # this was the old behaviour if only --all-sub was given.
+545     if opts.allsubtitles and (opts.writeautomaticsub == False):
+546         opts.writesubtitles = True
+547 
+548     if sys.version_info < (3,):
+549         # In Python 2, sys.argv is a bytestring (also note http://bugs.python.org/issue2128 for Windows systems)
+550         if opts.outtmpl is not None:
+551             opts.outtmpl = opts.outtmpl.decode(preferredencoding())
+552     outtmpl =((opts.outtmpl is not None and opts.outtmpl)
+553             or (opts.format == '-1' and opts.usetitle and u'%(title)s-%(id)s-%(format)s.%(ext)s')
+554             or (opts.format == '-1' and u'%(id)s-%(format)s.%(ext)s')
+555             or (opts.usetitle and opts.autonumber and u'%(autonumber)s-%(title)s-%(id)s.%(ext)s')
+556             or (opts.usetitle and u'%(title)s-%(id)s.%(ext)s')
+557             or (opts.useid and u'%(id)s.%(ext)s')
+558             or (opts.autonumber and u'%(autonumber)s-%(id)s.%(ext)s')
+559             or u'%(title)s-%(id)s.%(ext)s')
+560     if '%(ext)s' not in outtmpl and opts.extractaudio:
+561         parser.error(u'Cannot download a video and extract audio into the same'
+562                      u' file! Use "%%(ext)s" instead of %r' %
+563                      determine_ext(outtmpl, u''))
+564 
+565     # YoutubeDL
+566     ydl = YoutubeDL({
+567         'usenetrc': opts.usenetrc,
+568         'username': opts.username,
+569         'password': opts.password,
+570         'videopassword': opts.videopassword,
+571         'quiet': (opts.quiet or opts.geturl or opts.gettitle or opts.getid or opts.getthumbnail or opts.getdescription or opts.getfilename or opts.getformat),
+572         'forceurl': opts.geturl,
+573         'forcetitle': opts.gettitle,
+574         'forceid': opts.getid,
+575         'forcethumbnail': opts.getthumbnail,
+576         'forcedescription': opts.getdescription,
+577         'forcefilename': opts.getfilename,
+578         'forceformat': opts.getformat,
+579         'simulate': opts.simulate,
+580         'skip_download': (opts.skip_download or opts.simulate or opts.geturl or opts.gettitle or opts.getid or opts.getthumbnail or opts.getdescription or opts.getfilename or opts.getformat),
+581         'format': opts.format,
+582         'format_limit': opts.format_limit,
+583         'listformats': opts.listformats,
+584         'outtmpl': outtmpl,
+585         'autonumber_size': opts.autonumber_size,
+586         'restrictfilenames': opts.restrictfilenames,
+587         'ignoreerrors': opts.ignoreerrors,
+588         'ratelimit': opts.ratelimit,
+589         'nooverwrites': opts.nooverwrites,
+590         'retries': opts.retries,
+591         'buffersize': opts.buffersize,
+592         'noresizebuffer': opts.noresizebuffer,
+593         'continuedl': opts.continue_dl,
+594         'noprogress': opts.noprogress,
+595         'progress_with_newline': opts.progress_with_newline,
+596         'playliststart': opts.playliststart,
+597         'playlistend': opts.playlistend,
+598         'noplaylist': opts.noplaylist,
+599         'logtostderr': opts.outtmpl == '-',
+600         'consoletitle': opts.consoletitle,
+601         'nopart': opts.nopart,
+602         'updatetime': opts.updatetime,
+603         'writedescription': opts.writedescription,
+604         'writeinfojson': opts.writeinfojson,
+605         'writethumbnail': opts.writethumbnail,
+606         'writesubtitles': opts.writesubtitles,
+607         'writeautomaticsub': opts.writeautomaticsub,
+608         'allsubtitles': opts.allsubtitles,
+609         'listsubtitles': opts.listsubtitles,
+610         'subtitlesformat': opts.subtitlesformat,
+611         'subtitleslangs': opts.subtitleslangs,
+612         'matchtitle': decodeOption(opts.matchtitle),
+613         'rejecttitle': decodeOption(opts.rejecttitle),
+614         'max_downloads': opts.max_downloads,
+615         'prefer_free_formats': opts.prefer_free_formats,
+616         'verbose': opts.verbose,
+617         'dump_intermediate_pages': opts.dump_intermediate_pages,
+618         'test': opts.test,
+619         'keepvideo': opts.keepvideo,
+620         'min_filesize': opts.min_filesize,
+621         'max_filesize': opts.max_filesize,
+622         'daterange': date,
+623         'cachedir': opts.cachedir,
+624         'youtube_print_sig_code': opts.youtube_print_sig_code,
+625         'age_limit': opts.age_limit,
+626         'download_archive': opts.download_archive,
+627         })
+628 
+629     if opts.verbose:
+630         write_string(u'[debug] youtube-dl version ' + __version__ + u'\n')
+631         try:
+632             sp = subprocess.Popen(
+633                 ['git', 'rev-parse', '--short', 'HEAD'],
+634                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+635                 cwd=os.path.dirname(os.path.abspath(__file__)))
+636             out, err = sp.communicate()
+637             out = out.decode().strip()
+638             if re.match('[0-9a-f]+', out):
+639                 write_string(u'[debug] Git HEAD: ' + out + u'\n')
+640         except:
+641             try:
+642                 sys.exc_clear()
+643             except:
+644                 pass
+645         write_string(u'[debug] Python version %s - %s' %(platform.python_version(), platform_name()) + u'\n')
+646 
+647         proxy_map = {}
+648         for handler in opener.handlers:
+649             if hasattr(handler, 'proxies'):
+650                 proxy_map.update(handler.proxies)
+651         write_string(u'[debug] Proxy map: ' + compat_str(proxy_map) + u'\n')
+652 
+653     ydl.add_default_info_extractors()
+654 
+655     # PostProcessors
+656     # Add the metadata pp first, the other pps will copy it
+657     if opts.addmetadata:
+658         ydl.add_post_processor(FFmpegMetadataPP())
+659     if opts.extractaudio:
+660         ydl.add_post_processor(FFmpegExtractAudioPP(preferredcodec=opts.audioformat, preferredquality=opts.audioquality, nopostoverwrites=opts.nopostoverwrites))
+661     if opts.recodevideo:
+662         ydl.add_post_processor(FFmpegVideoConvertor(preferedformat=opts.recodevideo))
+663     if opts.embedsubtitles:
+664         ydl.add_post_processor(FFmpegEmbedSubtitlePP(subtitlesformat=opts.subtitlesformat))
+665 
+666     # Update version
+667     if opts.update_self:
+668         update_self(ydl.to_screen, opts.verbose)
+669 
+670     # Maybe do nothing
+671     if len(all_urls) < 1:
+672         if not opts.update_self:
+673             parser.error(u'you must provide at least one URL')
+674         else:
+675             sys.exit()
+676 
+677     try:
+678         retcode = ydl.download(all_urls)
+679     except MaxDownloadsReached:
+680         ydl.to_screen(u'--max-download limit reached, aborting.')
+681         retcode = 101
+682 
+683     # Dump cookie jar if requested
+684     if opts.cookiefile is not None:
+685         try:
+686             jar.save()
+687         except (IOError, OSError) as err:
+688             sys.exit(u'ERROR: unable to save cookie jar')
+689 
+690     sys.exit(retcode)
+691 
+692 
+693 def _setup_opener(jar=None, opts=None, timeout=300):
+694     if opts is None:
+695         FakeOptions = collections.namedtuple(
+696             'FakeOptions', ['proxy', 'no_check_certificate'])
+697         opts = FakeOptions(proxy=None, no_check_certificate=False)
+698 
+699     cookie_processor = compat_urllib_request.HTTPCookieProcessor(jar)
+700     if opts.proxy is not None:
+701         if opts.proxy == '':
+702             proxies = {}
+703         else:
+704             proxies = {'http': opts.proxy, 'https': opts.proxy}
+705     else:
+706         proxies = compat_urllib_request.getproxies()
+707         # Set HTTPS proxy to HTTP one if given (https://github.com/rg3/youtube-dl/issues/805)
+708         if 'http' in proxies and 'https' not in proxies:
+709             proxies['https'] = proxies['http']
+710     proxy_handler = compat_urllib_request.ProxyHandler(proxies)
+711     https_handler = make_HTTPS_handler(opts)
+712     opener = compat_urllib_request.build_opener(
+713         https_handler, proxy_handler, cookie_processor, YoutubeDLHandler())
+714     # Delete the default user-agent header, which would otherwise apply in
+715     # cases where our custom HTTP handler doesn't come into play
+716     # (See https://github.com/rg3/youtube-dl/issues/1309 for details)
+717     opener.addheaders = []
+718     compat_urllib_request.install_opener(opener)
+719     socket.setdefaulttimeout(timeout)
+720     return opener
+721 
+722 
+723 def main(argv=None):
+724     try:
+725         _real_main(argv)
+726     except DownloadError:
+727         sys.exit(1)
+728     except SameFileError:
+729         sys.exit(u'ERROR: fixed output name but more than one file to download')
+730     except KeyboardInterrupt:
+731         sys.exit(u'\nERROR: Interrupted by user')
+732 
+[end of youtube_dl/__init__.py]
+[start of youtube_dl/utils.py]
+1 #!/usr/bin/env python
+2 # -*- coding: utf-8 -*-
+3 
+4 import datetime
+5 import email.utils
+6 import errno
+7 import gzip
+8 import io
+9 import json
+10 import locale
+11 import os
+12 import platform
+13 import re
+14 import socket
+15 import sys
+16 import traceback
+17 import zlib
+18 
+19 try:
+20     import urllib.request as compat_urllib_request
+21 except ImportError: # Python 2
+22     import urllib2 as compat_urllib_request
+23 
+24 try:
+25     import urllib.error as compat_urllib_error
+26 except ImportError: # Python 2
+27     import urllib2 as compat_urllib_error
+28 
+29 try:
+30     import urllib.parse as compat_urllib_parse
+31 except ImportError: # Python 2
+32     import urllib as compat_urllib_parse
+33 
+34 try:
+35     from urllib.parse import urlparse as compat_urllib_parse_urlparse
+36 except ImportError: # Python 2
+37     from urlparse import urlparse as compat_urllib_parse_urlparse
+38 
+39 try:
+40     import urllib.parse as compat_urlparse
+41 except ImportError: # Python 2
+42     import urlparse as compat_urlparse
+43 
+44 try:
+45     import http.cookiejar as compat_cookiejar
+46 except ImportError: # Python 2
+47     import cookielib as compat_cookiejar
+48 
+49 try:
+50     import html.entities as compat_html_entities
+51 except ImportError: # Python 2
+52     import htmlentitydefs as compat_html_entities
+53 
+54 try:
+55     import html.parser as compat_html_parser
+56 except ImportError: # Python 2
+57     import HTMLParser as compat_html_parser
+58 
+59 try:
+60     import http.client as compat_http_client
+61 except ImportError: # Python 2
+62     import httplib as compat_http_client
+63 
+64 try:
+65     from urllib.error import HTTPError as compat_HTTPError
+66 except ImportError:  # Python 2
+67     from urllib2 import HTTPError as compat_HTTPError
+68 
+69 try:
+70     from urllib.request import urlretrieve as compat_urlretrieve
+71 except ImportError:  # Python 2
+72     from urllib import urlretrieve as compat_urlretrieve
+73 
+74 
+75 try:
+76     from subprocess import DEVNULL
+77     compat_subprocess_get_DEVNULL = lambda: DEVNULL
+78 except ImportError:
+79     compat_subprocess_get_DEVNULL = lambda: open(os.path.devnull, 'w')
+80 
+81 try:
+82     from urllib.parse import parse_qs as compat_parse_qs
+83 except ImportError: # Python 2
+84     # HACK: The following is the correct parse_qs implementation from cpython 3's stdlib.
+85     # Python 2's version is apparently totally broken
+86     def _unquote(string, encoding='utf-8', errors='replace'):
+87         if string == '':
+88             return string
+89         res = string.split('%')
+90         if len(res) == 1:
+91             return string
+92         if encoding is None:
+93             encoding = 'utf-8'
+94         if errors is None:
+95             errors = 'replace'
+96         # pct_sequence: contiguous sequence of percent-encoded bytes, decoded
+97         pct_sequence = b''
+98         string = res[0]
+99         for item in res[1:]:
+100             try:
+101                 if not item:
+102                     raise ValueError
+103                 pct_sequence += item[:2].decode('hex')
+104                 rest = item[2:]
+105                 if not rest:
+106                     # This segment was just a single percent-encoded character.
+107                     # May be part of a sequence of code units, so delay decoding.
+108                     # (Stored in pct_sequence).
+109                     continue
+110             except ValueError:
+111                 rest = '%' + item
+112             # Encountered non-percent-encoded characters. Flush the current
+113             # pct_sequence.
+114             string += pct_sequence.decode(encoding, errors) + rest
+115             pct_sequence = b''
+116         if pct_sequence:
+117             # Flush the final pct_sequence
+118             string += pct_sequence.decode(encoding, errors)
+119         return string
+120 
+121     def _parse_qsl(qs, keep_blank_values=False, strict_parsing=False,
+122                 encoding='utf-8', errors='replace'):
+123         qs, _coerce_result = qs, unicode
+124         pairs = [s2 for s1 in qs.split('&') for s2 in s1.split(';')]
+125         r = []
+126         for name_value in pairs:
+127             if not name_value and not strict_parsing:
+128                 continue
+129             nv = name_value.split('=', 1)
+130             if len(nv) != 2:
+131                 if strict_parsing:
+132                     raise ValueError("bad query field: %r" % (name_value,))
+133                 # Handle case of a control-name with no equal sign
+134                 if keep_blank_values:
+135                     nv.append('')
+136                 else:
+137                     continue
+138             if len(nv[1]) or keep_blank_values:
+139                 name = nv[0].replace('+', ' ')
+140                 name = _unquote(name, encoding=encoding, errors=errors)
+141                 name = _coerce_result(name)
+142                 value = nv[1].replace('+', ' ')
+143                 value = _unquote(value, encoding=encoding, errors=errors)
+144                 value = _coerce_result(value)
+145                 r.append((name, value))
+146         return r
+147 
+148     def compat_parse_qs(qs, keep_blank_values=False, strict_parsing=False,
+149                 encoding='utf-8', errors='replace'):
+150         parsed_result = {}
+151         pairs = _parse_qsl(qs, keep_blank_values, strict_parsing,
+152                         encoding=encoding, errors=errors)
+153         for name, value in pairs:
+154             if name in parsed_result:
+155                 parsed_result[name].append(value)
+156             else:
+157                 parsed_result[name] = [value]
+158         return parsed_result
+159 
+160 try:
+161     compat_str = unicode # Python 2
+162 except NameError:
+163     compat_str = str
+164 
+165 try:
+166     compat_chr = unichr # Python 2
+167 except NameError:
+168     compat_chr = chr
+169 
+170 def compat_ord(c):
+171     if type(c) is int: return c
+172     else: return ord(c)
+173 
+174 # This is not clearly defined otherwise
+175 compiled_regex_type = type(re.compile(''))
+176 
+177 std_headers = {
+178     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0 (Chrome)',
+179     'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+180     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+181     'Accept-Encoding': 'gzip, deflate',
+182     'Accept-Language': 'en-us,en;q=0.5',
+183 }
+184 
+185 def preferredencoding():
+186     """Get preferred encoding.
+187 
+188     Returns the best encoding scheme for the system, based on
+189     locale.getpreferredencoding() and some further tweaks.
+190     """
+191     try:
+192         pref = locale.getpreferredencoding()
+193         u'TEST'.encode(pref)
+194     except:
+195         pref = 'UTF-8'
+196 
+197     return pref
+198 
+199 if sys.version_info < (3,0):
+200     def compat_print(s):
+201         print(s.encode(preferredencoding(), 'xmlcharrefreplace'))
+202 else:
+203     def compat_print(s):
+204         assert type(s) == type(u'')
+205         print(s)
+206 
+207 # In Python 2.x, json.dump expects a bytestream.
+208 # In Python 3.x, it writes to a character stream
+209 if sys.version_info < (3,0):
+210     def write_json_file(obj, fn):
+211         with open(fn, 'wb') as f:
+212             json.dump(obj, f)
+213 else:
+214     def write_json_file(obj, fn):
+215         with open(fn, 'w', encoding='utf-8') as f:
+216             json.dump(obj, f)
+217 
+218 if sys.version_info >= (2,7):
+219     def find_xpath_attr(node, xpath, key, val):
+220         """ Find the xpath xpath[@key=val] """
+221         assert re.match(r'^[a-zA-Z]+$', key)
+222         assert re.match(r'^[a-zA-Z0-9@\s]*$', val)
+223         expr = xpath + u"[@%s='%s']" % (key, val)
+224         return node.find(expr)
+225 else:
+226     def find_xpath_attr(node, xpath, key, val):
+227         for f in node.findall(xpath):
+228             if f.attrib.get(key) == val:
+229                 return f
+230         return None
+231 
+232 def htmlentity_transform(matchobj):
+233     """Transforms an HTML entity to a character.
+234 
+235     This function receives a match object and is intended to be used with
+236     the re.sub() function.
+237     """
+238     entity = matchobj.group(1)
+239 
+240     # Known non-numeric HTML entity
+241     if entity in compat_html_entities.name2codepoint:
+242         return compat_chr(compat_html_entities.name2codepoint[entity])
+243 
+244     mobj = re.match(u'(?u)#(x?\\d+)', entity)
+245     if mobj is not None:
+246         numstr = mobj.group(1)
+247         if numstr.startswith(u'x'):
+248             base = 16
+249             numstr = u'0%s' % numstr
+250         else:
+251             base = 10
+252         return compat_chr(int(numstr, base))
+253 
+254     # Unknown entity in name, return its literal representation
+255     return (u'&%s;' % entity)
+256 
+257 compat_html_parser.locatestarttagend = re.compile(r"""<[a-zA-Z][-.a-zA-Z0-9:_]*(?:\s+(?:(?<=['"\s])[^\s/>][^\s/=>]*(?:\s*=+\s*(?:'[^']*'|"[^"]*"|(?!['"])[^>\s]*))?\s*)*)?\s*""", re.VERBOSE) # backport bugfix
+258 class BaseHTMLParser(compat_html_parser.HTMLParser):
+259     def __init(self):
+260         compat_html_parser.HTMLParser.__init__(self)
+261         self.html = None
+262 
+263     def loads(self, html):
+264         self.html = html
+265         self.feed(html)
+266         self.close()
+267 
+268 class AttrParser(BaseHTMLParser):
+269     """Modified HTMLParser that isolates a tag with the specified attribute"""
+270     def __init__(self, attribute, value):
+271         self.attribute = attribute
+272         self.value = value
+273         self.result = None
+274         self.started = False
+275         self.depth = {}
+276         self.watch_startpos = False
+277         self.error_count = 0
+278         BaseHTMLParser.__init__(self)
+279 
+280     def error(self, message):
+281         if self.error_count > 10 or self.started:
+282             raise compat_html_parser.HTMLParseError(message, self.getpos())
+283         self.rawdata = '\n'.join(self.html.split('\n')[self.getpos()[0]:]) # skip one line
+284         self.error_count += 1
+285         self.goahead(1)
+286 
+287     def handle_starttag(self, tag, attrs):
+288         attrs = dict(attrs)
+289         if self.started:
+290             self.find_startpos(None)
+291         if self.attribute in attrs and attrs[self.attribute] == self.value:
+292             self.result = [tag]
+293             self.started = True
+294             self.watch_startpos = True
+295         if self.started:
+296             if not tag in self.depth: self.depth[tag] = 0
+297             self.depth[tag] += 1
+298 
+299     def handle_endtag(self, tag):
+300         if self.started:
+301             if tag in self.depth: self.depth[tag] -= 1
+302             if self.depth[self.result[0]] == 0:
+303                 self.started = False
+304                 self.result.append(self.getpos())
+305 
+306     def find_startpos(self, x):
+307         """Needed to put the start position of the result (self.result[1])
+308         after the opening tag with the requested id"""
+309         if self.watch_startpos:
+310             self.watch_startpos = False
+311             self.result.append(self.getpos())
+312     handle_entityref = handle_charref = handle_data = handle_comment = \
+313     handle_decl = handle_pi = unknown_decl = find_startpos
+314 
+315     def get_result(self):
+316         if self.result is None:
+317             return None
+318         if len(self.result) != 3:
+319             return None
+320         lines = self.html.split('\n')
+321         lines = lines[self.result[1][0]-1:self.result[2][0]]
+322         lines[0] = lines[0][self.result[1][1]:]
+323         if len(lines) == 1:
+324             lines[-1] = lines[-1][:self.result[2][1]-self.result[1][1]]
+325         lines[-1] = lines[-1][:self.result[2][1]]
+326         return '\n'.join(lines).strip()
+327 # Hack for https://github.com/rg3/youtube-dl/issues/662
+328 if sys.version_info < (2, 7, 3):
+329     AttrParser.parse_endtag = (lambda self, i:
+330         i + len("</scr'+'ipt>")
+331         if self.rawdata[i:].startswith("</scr'+'ipt>")
+332         else compat_html_parser.HTMLParser.parse_endtag(self, i))
+333 
+334 def get_element_by_id(id, html):
+335     """Return the content of the tag with the specified ID in the passed HTML document"""
+336     return get_element_by_attribute("id", id, html)
+337 
+338 def get_element_by_attribute(attribute, value, html):
+339     """Return the content of the tag with the specified attribute in the passed HTML document"""
+340     parser = AttrParser(attribute, value)
+341     try:
+342         parser.loads(html)
+343     except compat_html_parser.HTMLParseError:
+344         pass
+345     return parser.get_result()
+346 
+347 class MetaParser(BaseHTMLParser):
+348     """
+349     Modified HTMLParser that isolates a meta tag with the specified name 
+350     attribute.
+351     """
+352     def __init__(self, name):
+353         BaseHTMLParser.__init__(self)
+354         self.name = name
+355         self.content = None
+356         self.result = None
+357 
+358     def handle_starttag(self, tag, attrs):
+359         if tag != 'meta':
+360             return
+361         attrs = dict(attrs)
+362         if attrs.get('name') == self.name:
+363             self.result = attrs.get('content')
+364 
+365     def get_result(self):
+366         return self.result
+367 
+368 def get_meta_content(name, html):
+369     """
+370     Return the content attribute from the meta tag with the given name attribute.
+371     """
+372     parser = MetaParser(name)
+373     try:
+374         parser.loads(html)
+375     except compat_html_parser.HTMLParseError:
+376         pass
+377     return parser.get_result()
+378 
+379 
+380 def clean_html(html):
+381     """Clean an HTML snippet into a readable string"""
+382     # Newline vs <br />
+383     html = html.replace('\n', ' ')
+384     html = re.sub(r'\s*<\s*br\s*/?\s*>\s*', '\n', html)
+385     html = re.sub(r'<\s*/\s*p\s*>\s*<\s*p[^>]*>', '\n', html)
+386     # Strip html tags
+387     html = re.sub('<.*?>', '', html)
+388     # Replace html entities
+389     html = unescapeHTML(html)
+390     return html.strip()
+391 
+392 
+393 def sanitize_open(filename, open_mode):
+394     """Try to open the given filename, and slightly tweak it if this fails.
+395 
+396     Attempts to open the given filename. If this fails, it tries to change
+397     the filename slightly, step by step, until it's either able to open it
+398     or it fails and raises a final exception, like the standard open()
+399     function.
+400 
+401     It returns the tuple (stream, definitive_file_name).
+402     """
+403     try:
+404         if filename == u'-':
+405             if sys.platform == 'win32':
+406                 import msvcrt
+407                 msvcrt.setmode(sys.stdout.fileno(), os.O_BINARY)
+408             return (sys.stdout.buffer if hasattr(sys.stdout, 'buffer') else sys.stdout, filename)
+409         stream = open(encodeFilename(filename), open_mode)
+410         return (stream, filename)
+411     except (IOError, OSError) as err:
+412         if err.errno in (errno.EACCES,):
+413             raise
+414 
+415         # In case of error, try to remove win32 forbidden chars
+416         alt_filename = os.path.join(
+417                         re.sub(u'[/<>:"\\|\\\\?\\*]', u'#', path_part)
+418                         for path_part in os.path.split(filename)
+419                        )
+420         if alt_filename == filename:
+421             raise
+422         else:
+423             # An exception here should be caught in the caller
+424             stream = open(encodeFilename(filename), open_mode)
+425             return (stream, alt_filename)
+426 
+427 
+428 def timeconvert(timestr):
+429     """Convert RFC 2822 defined time string into system timestamp"""
+430     timestamp = None
+431     timetuple = email.utils.parsedate_tz(timestr)
+432     if timetuple is not None:
+433         timestamp = email.utils.mktime_tz(timetuple)
+434     return timestamp
+435 
+436 def sanitize_filename(s, restricted=False, is_id=False):
+437     """Sanitizes a string so it could be used as part of a filename.
+438     If restricted is set, use a stricter subset of allowed characters.
+439     Set is_id if this is not an arbitrary string, but an ID that should be kept if possible
+440     """
+441     def replace_insane(char):
+442         if char == '?' or ord(char) < 32 or ord(char) == 127:
+443             return ''
+444         elif char == '"':
+445             return '' if restricted else '\''
+446         elif char == ':':
+447             return '_-' if restricted else ' -'
+448         elif char in '\\/|*<>':
+449             return '_'
+450         if restricted and (char in '!&\'()[]{}$;`^,#' or char.isspace()):
+451             return '_'
+452         if restricted and ord(char) > 127:
+453             return '_'
+454         return char
+455 
+456     result = u''.join(map(replace_insane, s))
+457     if not is_id:
+458         while '__' in result:
+459             result = result.replace('__', '_')
+460         result = result.strip('_')
+461         # Common case of "Foreign band name - English song title"
+462         if restricted and result.startswith('-_'):
+463             result = result[2:]
+464         if not result:
+465             result = '_'
+466     return result
+467 
+468 def orderedSet(iterable):
+469     """ Remove all duplicates from the input iterable """
+470     res = []
+471     for el in iterable:
+472         if el not in res:
+473             res.append(el)
+474     return res
+475 
+476 def unescapeHTML(s):
+477     """
+478     @param s a string
+479     """
+480     assert type(s) == type(u'')
+481 
+482     result = re.sub(u'(?u)&(.+?);', htmlentity_transform, s)
+483     return result
+484 
+485 def encodeFilename(s):
+486     """
+487     @param s The name of the file
+488     """
+489 
+490     assert type(s) == type(u'')
+491 
+492     # Python 3 has a Unicode API
+493     if sys.version_info >= (3, 0):
+494         return s
+495 
+496     if sys.platform == 'win32' and sys.getwindowsversion()[0] >= 5:
+497         # Pass u'' directly to use Unicode APIs on Windows 2000 and up
+498         # (Detecting Windows NT 4 is tricky because 'major >= 4' would
+499         # match Windows 9x series as well. Besides, NT 4 is obsolete.)
+500         return s
+501     else:
+502         encoding = sys.getfilesystemencoding()
+503         if encoding is None:
+504             encoding = 'utf-8'
+505         return s.encode(encoding, 'ignore')
+506 
+507 def decodeOption(optval):
+508     if optval is None:
+509         return optval
+510     if isinstance(optval, bytes):
+511         optval = optval.decode(preferredencoding())
+512 
+513     assert isinstance(optval, compat_str)
+514     return optval
+515 
+516 def formatSeconds(secs):
+517     if secs > 3600:
+518         return '%d:%02d:%02d' % (secs // 3600, (secs % 3600) // 60, secs % 60)
+519     elif secs > 60:
+520         return '%d:%02d' % (secs // 60, secs % 60)
+521     else:
+522         return '%d' % secs
+523 
+524 def make_HTTPS_handler(opts):
+525     if sys.version_info < (3,2):
+526         # Python's 2.x handler is very simplistic
+527         return compat_urllib_request.HTTPSHandler()
+528     else:
+529         import ssl
+530         context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+531         context.set_default_verify_paths()
+532         
+533         context.verify_mode = (ssl.CERT_NONE
+534                                if opts.no_check_certificate
+535                                else ssl.CERT_REQUIRED)
+536         return compat_urllib_request.HTTPSHandler(context=context)
+537 
+538 class ExtractorError(Exception):
+539     """Error during info extraction."""
+540     def __init__(self, msg, tb=None, expected=False, cause=None):
+541         """ tb, if given, is the original traceback (so that it can be printed out).
+542         If expected is set, this is a normal error message and most likely not a bug in youtube-dl.
+543         """
+544 
+545         if sys.exc_info()[0] in (compat_urllib_error.URLError, socket.timeout, UnavailableVideoError):
+546             expected = True
+547         if not expected:
+548             msg = msg + u'; please report this issue on https://yt-dl.org/bug . Be sure to call youtube-dl with the --verbose flag and include its complete output. Make sure you are using the latest version; type  youtube-dl -U  to update.'
+549         super(ExtractorError, self).__init__(msg)
+550 
+551         self.traceback = tb
+552         self.exc_info = sys.exc_info()  # preserve original exception
+553         self.cause = cause
+554 
+555     def format_traceback(self):
+556         if self.traceback is None:
+557             return None
+558         return u''.join(traceback.format_tb(self.traceback))
+559 
+560 
+561 class DownloadError(Exception):
+562     """Download Error exception.
+563 
+564     This exception may be thrown by FileDownloader objects if they are not
+565     configured to continue on errors. They will contain the appropriate
+566     error message.
+567     """
+568     def __init__(self, msg, exc_info=None):
+569         """ exc_info, if given, is the original exception that caused the trouble (as returned by sys.exc_info()). """
+570         super(DownloadError, self).__init__(msg)
+571         self.exc_info = exc_info
+572 
+573 
+574 class SameFileError(Exception):
+575     """Same File exception.
+576 
+577     This exception will be thrown by FileDownloader objects if they detect
+578     multiple files would have to be downloaded to the same file on disk.
+579     """
+580     pass
+581 
+582 
+583 class PostProcessingError(Exception):
+584     """Post Processing exception.
+585 
+586     This exception may be raised by PostProcessor's .run() method to
+587     indicate an error in the postprocessing task.
+588     """
+589     def __init__(self, msg):
+590         self.msg = msg
+591 
+592 class MaxDownloadsReached(Exception):
+593     """ --max-downloads limit has been reached. """
+594     pass
+595 
+596 
+597 class UnavailableVideoError(Exception):
+598     """Unavailable Format exception.
+599 
+600     This exception will be thrown when a video is requested
+601     in a format that is not available for that video.
+602     """
+603     pass
+604 
+605 
+606 class ContentTooShortError(Exception):
+607     """Content Too Short exception.
+608 
+609     This exception may be raised by FileDownloader objects when a file they
+610     download is too small for what the server announced first, indicating
+611     the connection was probably interrupted.
+612     """
+613     # Both in bytes
+614     downloaded = None
+615     expected = None
+616 
+617     def __init__(self, downloaded, expected):
+618         self.downloaded = downloaded
+619         self.expected = expected
+620 
+621 class YoutubeDLHandler(compat_urllib_request.HTTPHandler):
+622     """Handler for HTTP requests and responses.
+623 
+624     This class, when installed with an OpenerDirector, automatically adds
+625     the standard headers to every HTTP request and handles gzipped and
+626     deflated responses from web servers. If compression is to be avoided in
+627     a particular request, the original request in the program code only has
+628     to include the HTTP header "Youtubedl-No-Compression", which will be
+629     removed before making the real request.
+630 
+631     Part of this code was copied from:
+632 
+633     http://techknack.net/python-urllib2-handlers/
+634 
+635     Andrew Rowls, the author of that code, agreed to release it to the
+636     public domain.
+637     """
+638 
+639     @staticmethod
+640     def deflate(data):
+641         try:
+642             return zlib.decompress(data, -zlib.MAX_WBITS)
+643         except zlib.error:
+644             return zlib.decompress(data)
+645 
+646     @staticmethod
+647     def addinfourl_wrapper(stream, headers, url, code):
+648         if hasattr(compat_urllib_request.addinfourl, 'getcode'):
+649             return compat_urllib_request.addinfourl(stream, headers, url, code)
+650         ret = compat_urllib_request.addinfourl(stream, headers, url)
+651         ret.code = code
+652         return ret
+653 
+654     def http_request(self, req):
+655         for h,v in std_headers.items():
+656             if h in req.headers:
+657                 del req.headers[h]
+658             req.add_header(h, v)
+659         if 'Youtubedl-no-compression' in req.headers:
+660             if 'Accept-encoding' in req.headers:
+661                 del req.headers['Accept-encoding']
+662             del req.headers['Youtubedl-no-compression']
+663         if 'Youtubedl-user-agent' in req.headers:
+664             if 'User-agent' in req.headers:
+665                 del req.headers['User-agent']
+666             req.headers['User-agent'] = req.headers['Youtubedl-user-agent']
+667             del req.headers['Youtubedl-user-agent']
+668         return req
+669 
+670     def http_response(self, req, resp):
+671         old_resp = resp
+672         # gzip
+673         if resp.headers.get('Content-encoding', '') == 'gzip':
+674             content = resp.read()
+675             gz = gzip.GzipFile(fileobj=io.BytesIO(content), mode='rb')
+676             try:
+677                 uncompressed = io.BytesIO(gz.read())
+678             except IOError as original_ioerror:
+679                 # There may be junk add the end of the file
+680                 # See http://stackoverflow.com/q/4928560/35070 for details
+681                 for i in range(1, 1024):
+682                     try:
+683                         gz = gzip.GzipFile(fileobj=io.BytesIO(content[:-i]), mode='rb')
+684                         uncompressed = io.BytesIO(gz.read())
+685                     except IOError:
+686                         continue
+687                     break
+688                 else:
+689                     raise original_ioerror
+690             resp = self.addinfourl_wrapper(uncompressed, old_resp.headers, old_resp.url, old_resp.code)
+691             resp.msg = old_resp.msg
+692         # deflate
+693         if resp.headers.get('Content-encoding', '') == 'deflate':
+694             gz = io.BytesIO(self.deflate(resp.read()))
+695             resp = self.addinfourl_wrapper(gz, old_resp.headers, old_resp.url, old_resp.code)
+696             resp.msg = old_resp.msg
+697         return resp
+698 
+699     https_request = http_request
+700     https_response = http_response
+701 
+702 def unified_strdate(date_str):
+703     """Return a string with the date in the format YYYYMMDD"""
+704     upload_date = None
+705     #Replace commas
+706     date_str = date_str.replace(',',' ')
+707     # %z (UTC offset) is only supported in python>=3.2
+708     date_str = re.sub(r' (\+|-)[\d]*$', '', date_str)
+709     format_expressions = [
+710         '%d %B %Y',
+711         '%B %d %Y',
+712         '%b %d %Y',
+713         '%Y-%m-%d',
+714         '%d/%m/%Y',
+715         '%Y/%m/%d %H:%M:%S',
+716         '%d.%m.%Y %H:%M',
+717         '%Y-%m-%dT%H:%M:%SZ',
+718         '%Y-%m-%dT%H:%M:%S',
+719     ]
+720     for expression in format_expressions:
+721         try:
+722             upload_date = datetime.datetime.strptime(date_str, expression).strftime('%Y%m%d')
+723         except:
+724             pass
+725     return upload_date
+726 
+727 def determine_ext(url, default_ext=u'unknown_video'):
+728     guess = url.partition(u'?')[0].rpartition(u'.')[2]
+729     if re.match(r'^[A-Za-z0-9]+$', guess):
+730         return guess
+731     else:
+732         return default_ext
+733 
+734 def subtitles_filename(filename, sub_lang, sub_format):
+735     return filename.rsplit('.', 1)[0] + u'.' + sub_lang + u'.' + sub_format
+736 
+737 def date_from_str(date_str):
+738     """
+739     Return a datetime object from a string in the format YYYYMMDD or
+740     (now|today)[+-][0-9](day|week|month|year)(s)?"""
+741     today = datetime.date.today()
+742     if date_str == 'now'or date_str == 'today':
+743         return today
+744     match = re.match('(now|today)(?P<sign>[+-])(?P<time>\d+)(?P<unit>day|week|month|year)(s)?', date_str)
+745     if match is not None:
+746         sign = match.group('sign')
+747         time = int(match.group('time'))
+748         if sign == '-':
+749             time = -time
+750         unit = match.group('unit')
+751         #A bad aproximation?
+752         if unit == 'month':
+753             unit = 'day'
+754             time *= 30
+755         elif unit == 'year':
+756             unit = 'day'
+757             time *= 365
+758         unit += 's'
+759         delta = datetime.timedelta(**{unit: time})
+760         return today + delta
+761     return datetime.datetime.strptime(date_str, "%Y%m%d").date()
+762     
+763 class DateRange(object):
+764     """Represents a time interval between two dates"""
+765     def __init__(self, start=None, end=None):
+766         """start and end must be strings in the format accepted by date"""
+767         if start is not None:
+768             self.start = date_from_str(start)
+769         else:
+770             self.start = datetime.datetime.min.date()
+771         if end is not None:
+772             self.end = date_from_str(end)
+773         else:
+774             self.end = datetime.datetime.max.date()
+775         if self.start > self.end:
+776             raise ValueError('Date range: "%s" , the start date must be before the end date' % self)
+777     @classmethod
+778     def day(cls, day):
+779         """Returns a range that only contains the given day"""
+780         return cls(day,day)
+781     def __contains__(self, date):
+782         """Check if the date is in the range"""
+783         if not isinstance(date, datetime.date):
+784             date = date_from_str(date)
+785         return self.start <= date <= self.end
+786     def __str__(self):
+787         return '%s - %s' % ( self.start.isoformat(), self.end.isoformat())
+788 
+789 
+790 def platform_name():
+791     """ Returns the platform name as a compat_str """
+792     res = platform.platform()
+793     if isinstance(res, bytes):
+794         res = res.decode(preferredencoding())
+795 
+796     assert isinstance(res, compat_str)
+797     return res
+798 
+799 
+800 def write_string(s, out=None):
+801     if out is None:
+802         out = sys.stderr
+803     assert type(s) == type(u'')
+804 
+805     if ('b' in getattr(out, 'mode', '') or
+806             sys.version_info[0] < 3):  # Python 2 lies about mode of sys.stderr
+807         s = s.encode(preferredencoding(), 'ignore')
+808     out.write(s)
+809     out.flush()
+810 
+811 
+812 def bytes_to_intlist(bs):
+813     if not bs:
+814         return []
+815     if isinstance(bs[0], int):  # Python 3
+816         return list(bs)
+817     else:
+818         return [ord(c) for c in bs]
+819 
+820 
+821 def intlist_to_bytes(xs):
+822     if not xs:
+823         return b''
+824     if isinstance(chr(0), bytes):  # Python 2
+825         return ''.join([chr(x) for x in xs])
+826     else:
+827         return bytes(xs)
+828 
+829 
+830 def get_cachedir(params={}):
+831     cache_root = os.environ.get('XDG_CACHE_HOME',
+832                                 os.path.expanduser('~/.cache'))
+833     return params.get('cachedir', os.path.join(cache_root, 'youtube-dl'))
+834 
+835 
+836 # Cross-platform file locking
+837 if sys.platform == 'win32':
+838     import ctypes.wintypes
+839     import msvcrt
+840 
+841     class OVERLAPPED(ctypes.Structure):
+842         _fields_ = [
+843             ('Internal', ctypes.wintypes.LPVOID),
+844             ('InternalHigh', ctypes.wintypes.LPVOID),
+845             ('Offset', ctypes.wintypes.DWORD),
+846             ('OffsetHigh', ctypes.wintypes.DWORD),
+847             ('hEvent', ctypes.wintypes.HANDLE),
+848         ]
+849 
+850     kernel32 = ctypes.windll.kernel32
+851     LockFileEx = kernel32.LockFileEx
+852     LockFileEx.argtypes = [
+853         ctypes.wintypes.HANDLE,     # hFile
+854         ctypes.wintypes.DWORD,      # dwFlags
+855         ctypes.wintypes.DWORD,      # dwReserved
+856         ctypes.wintypes.DWORD,      # nNumberOfBytesToLockLow
+857         ctypes.wintypes.DWORD,      # nNumberOfBytesToLockHigh
+858         ctypes.POINTER(OVERLAPPED)  # Overlapped
+859     ]
+860     LockFileEx.restype = ctypes.wintypes.BOOL
+861     UnlockFileEx = kernel32.UnlockFileEx
+862     UnlockFileEx.argtypes = [
+863         ctypes.wintypes.HANDLE,     # hFile
+864         ctypes.wintypes.DWORD,      # dwReserved
+865         ctypes.wintypes.DWORD,      # nNumberOfBytesToLockLow
+866         ctypes.wintypes.DWORD,      # nNumberOfBytesToLockHigh
+867         ctypes.POINTER(OVERLAPPED)  # Overlapped
+868     ]
+869     UnlockFileEx.restype = ctypes.wintypes.BOOL
+870     whole_low = 0xffffffff
+871     whole_high = 0x7fffffff
+872 
+873     def _lock_file(f, exclusive):
+874         overlapped = OVERLAPPED()
+875         overlapped.Offset = 0
+876         overlapped.OffsetHigh = 0
+877         overlapped.hEvent = 0
+878         f._lock_file_overlapped_p = ctypes.pointer(overlapped)
+879         handle = msvcrt.get_osfhandle(f.fileno())
+880         if not LockFileEx(handle, 0x2 if exclusive else 0x0, 0,
+881                           whole_low, whole_high, f._lock_file_overlapped_p):
+882             raise OSError('Locking file failed: %r' % ctypes.FormatError())
+883 
+884     def _unlock_file(f):
+885         assert f._lock_file_overlapped_p
+886         handle = msvcrt.get_osfhandle(f.fileno())
+887         if not UnlockFileEx(handle, 0,
+888                             whole_low, whole_high, f._lock_file_overlapped_p):
+889             raise OSError('Unlocking file failed: %r' % ctypes.FormatError())
+890 
+891 else:
+892     import fcntl
+893 
+894     def _lock_file(f, exclusive):
+895         fcntl.lockf(f, fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH)
+896 
+897     def _unlock_file(f):
+898         fcntl.lockf(f, fcntl.LOCK_UN)
+899 
+900 
+901 class locked_file(object):
+902     def __init__(self, filename, mode, encoding=None):
+903         assert mode in ['r', 'a', 'w']
+904         self.f = io.open(filename, mode, encoding=encoding)
+905         self.mode = mode
+906 
+907     def __enter__(self):
+908         exclusive = self.mode != 'r'
+909         try:
+910             _lock_file(self.f, exclusive)
+911         except IOError:
+912             self.f.close()
+913             raise
+914         return self
+915 
+916     def __exit__(self, etype, value, traceback):
+917         try:
+918             _unlock_file(self.f)
+919         finally:
+920             self.f.close()
+921 
+922     def __iter__(self):
+923         return iter(self.f)
+924 
+925     def write(self, *args):
+926         return self.f.write(*args)
+927 
+928     def read(self, *args):
+929         return self.f.read(*args)
+930 
+[end of youtube_dl/utils.py]
+</code>
+I need you to solve this issue by generating a single patch file that I can apply directly to this repository using git apply. Please respond with a single patch file in the following format.
+<patch>
+--- a/file.py
++++ b/file.py
+@@ -1,27 +1,35 @@
+ def euclidean(a, b):
+-    while b:
+-        a, b = b, a % b
+-    return a
++    if b == 0:
++        return a
++    return euclidean(b, a % b)
+ 
+ 
+ def bresenham(x0, y0, x1, y1):
+     points = []
+     dx = abs(x1 - x0)
+     dy = abs(y1 - y0)
+-    sx = 1 if x0 < x1 else -1
+-    sy = 1 if y0 < y1 else -1
+-    err = dx - dy
++    x, y = x0, y0
++    sx = -1 if x0 > x1 else 1
++    sy = -1 if y0 > y1 else 1
+ 
+-    while True:
+-        points.append((x0, y0))
+-        if x0 == x1 and y0 == y1:
+-            break
+-        e2 = 2 * err
+-        if e2 > -dy:
++    if dx > dy:
++        err = dx / 2.0
++        while x != x1:
++            points.append((x, y))
+             err -= dy
+-            x0 += sx
+-        if e2 < dx:
+-            err += dx
+-            y0 += sy
++            if err < 0:
++                y += sy
++                err += dx
++            x += sx
++    else:
++        err = dy / 2.0
++        while y != y1:
++            points.append((x, y))
++            err -= dx
++            if err < 0:
++                x += sx
++                err += dy
++            y += sy
+ 
++    points.append((x, y))
+     return points
+</patch>
+

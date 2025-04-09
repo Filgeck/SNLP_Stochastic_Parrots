@@ -1,0 +1,484 @@
+year,company_ric,storyId,versionCreated,headline,newsText
+2025,WM.N,urn:newsml:reuters.com:20250305:nL3N3PO0SE:4,2025-03-05 16:50:35.000,"U.S. RESEARCH ROUNDUP-Accolade, CrowdStrike, Marriott International","March 5 (Reuters) - Wall Street securities analysts revised their ratings and price targets on several
+U.S.-listed companies, including Accolade, Crowdstrike and Marriott International, on Wednesday.
+    
+  HIGHLIGHTS        
+
+     * Accolade Inc <ACCD.O>: Piper Sandler cuts to neutral from overweight
+     * Crowdstrike <CRWD.O>: Piper Sandler raises target price to $400 from $375
+     * CubeSmart <CUBE.N>: Scotiabank cuts to sector perform from sector outperform
+     * Intuit Inc <INTU.O>: JP Morgan raises to overweight from neutral
+                 * Marriott International Inc <MAR.O>: Morgan Stanley raises PT to $298.00 from $289.00
+ 
+Following is a summary of research actions on U.S. companies reported by Reuters on Wednesday. Stock entries are in
+alphabetical order.    
+      
+     * Abbvie Inc <ABBV.N>: Wells Fargo raises target price to $240 from $210
+     * Acadia Healthcare Company Inc <ACHC.O>: Leerink Partners cuts PT to $40 from $48
+     * Acadia Healthcare Company Inc <ACHC.O>: TD Cowen cuts target price to $44 from $66
+     * Accolade Inc <ACCD.O>: Piper Sandler cuts target price to $7.03 from $9
+     * Accolade Inc <ACCD.O>: Piper Sandler cuts to neutral from overweight
+     * Agilysys Inc <AGYS.O>: Needham cuts target price to $100 from $125 
+     * Akoya Biosciences Inc <AKYA.O>: Piper Sandler cuts target price to $2.4 from $3
+     * Akoya Biosciences Inc <AKYA.O>: Piper Sandler cuts to neutral from overweight
+     * Ameresco Inc <AMRC.N>: Stifel cuts target price to $18 from $34
+                 * American Healthcare REIT Inc <AHR.N>: RBC raises target price to $34 from $30
+ 
+                 * Amgen Inc <AMGN.O>: BofA Global Research raises price objective to $294 from
+ $275
+ 
+     * Angel Oak Mortgage Reit, Inc. <AOMR.N>: Wells Fargo cuts target price to $11 from $12
+     * ANI Pharmaceuticals Inc <ANIP.O>: Guggenheim raises target price to $86 from $84
+                 * Apellis Pharmaceuticals Inc <APLS.O>: UBS cuts target price to $43 from $45
+ 
+                 * Arista Networks Inc <ANET.N>: UBS raises target price to $115 from $112
+ 
+                 * Arista Networks Inc <ANET.N>: UBS raises to buy from neutral
+ 
+     * AST Spacemobile <ASTS.O>: Deutsche Bank raises target price to $64 from $53
+     * AST Spacemobile Inc <ASTS.O>: Scotiabank raises target price to $47.9 from $40.2 
+     * AST Spacemobile Inc <ASTS.O>: UBS raises target price to $38 from $31
+     * Astronics Corp <ATRO.O>: Truist Securities raises target price to $23 from $17
+     * Autozone Inc <AZO.N>: BMO raises target price to $3,850 from $3,700
+     * Autozone Inc <AZO.N>: BofA Global Research raises price objective to $3,700 from $3,600
+     * Autozone Inc <AZO.N>: Guggenheim raises target price to $3,850 from $3,750
+     * Autozone Inc <AZO.N>: JP Morgan raises target price to $3830 from $3775
+     * Autozone Inc <AZO.N>: Mizuho raises target price to $3,740 from $3,600
+     * Autozone Inc <AZO.N>: Morgan Stanley raises target price to $3750.00 from $3490.00
+     * Autozone Inc <AZO.N>: Raymond James raises target price to $4,000.00 from $3,850.00
+     * Autozone Inc <AZO.N>: TD Cowen raises target price to $3,900 from $3,800
+     * Autozone Inc <AZO.N>: Truist Securities raises target price to $3,841 from $3,753
+     * Autozone Inc <AZO.N>: UBS raises target price to $4025 from $3875
+     * Autozone Inc. <AZO.N>: Morgan Stanley raises target price to $3,750.00 from $3,490.00
+     * Autozone, Inc. <AZO.N>: Wells Fargo raises target price to $3,850 from $3,750
+     * Avidxchange Holdings Inc <AVDX.O>: Barclays cuts target price to $8 from $13
+     * Avidxchange Holdings Inc <AVDX.O>: Barclays cuts to equal weight from overweight
+     * Best buy Co Inc <BBY.N>: BofA Global Research cuts price objective to $75 from $80
+     * Best buy Co Inc <BBY.N>: Citigroup cuts target price to $93 from $105
+     * Best buy Co Inc <BBY.N>: Guggenheim cuts target price to $90 from $105
+     * Best Buy Co Inc <BBY.N>: JP Morgan cuts target price to $110 from $115
+     * Best buy Co Inc <BBY.N>: Morgan Stanley cuts target price to $85.00 from $100.00
+     * Best Buy Co Inc <BBY.N>: Piper Sandler cuts target price to $92 from $102
+     * Best Buy Co Inc <BBY.N>: Telsey Advisory Group cuts target price to $100 from $110
+     * Best buy Co Inc <BBY.N>: Truist Securities cuts target price to $81 from $95
+     * Best Buy Co Inc <BBY.N>: Wedbush cuts target price to $83 from $90
+     * Best buy Company, Inc. <BBY.N>: Wells Fargo cuts target price to $85 from $89
+     * Beyond Inc <BYON.N>: Needham cuts to hold from buy
+     * BorgWarner <BWA.N>: Guggenheim cuts target price to $38 from $39
+     * Box Inc <BOX.N>: JP Morgan cuts target price to $37 from $38
+     * Box Inc <BOX.N>: Raymond James cuts target price to $38 from $40
+     * Box Inc <BOX.N>: UBS cuts target price to $37 from $42
+     * BRC Inc <BRCC.N>: Telsey Advisory Group cuts target price to $4 from $6 
+     * Cactus Inc <WHD.N>: Barclays cuts target price to $54 from $61
+     * California Resources Corp <CRC.N>: Barclays cuts target price to $55 from $57
+     * Calumet, Inc. <CLMT.O>: Wells Fargo cuts target price to $28 from $29
+     * Carrier Global Corp <CARR.N>: JP Morgan raises target price to $78 from $77 
+     * Carrier Global Corp <CARR.N>: JP Morgan raises to overweight from neutral
+     * CF Industries Holdings Inc <CF.N>: Barclays cuts target price to $95 from $100
+     * Chargepoint Holdings Inc <CHPT.N>: RBC cuts target price to $1 from $2
+                 * Chimerix Inc <CMRX.O>: H.C. Wainwright cuts target price to $8.55 from $11
+ 
+                 * Chimerix Inc <CMRX.O>: H.C. Wainwright cuts to neutral from buy
+ 
+     * Chimerix Inc <CMRX.O>: Wedbush cuts to neutral from outperform
+     * Chimerix Inc <CMRX.O>: Wedbush raises target price to $8.55 from $7
+     * Choice Hotels International Inc <CHH.N>: Morgan Stanley raises PT to $139.00 from $131.00
+     * Crowdstrike <CRWD.O>: Barclays cuts target price to $475 from $506
+     * CrowdStrike <CRWD.O>: Bernstein cuts target price to $347 from $365
+     * Crowdstrike <CRWD.O>: BMO raises target price to $405 from $380
+     * Crowdstrike <CRWD.O>: Mizuho cuts target price to $410 from $450
+     * CrowdStrike <CRWD.O>: Piper Sandler raises target price to $400 from $375
+     * CrowdStrike <CRWD.O>: Raymond James raises target price to $390 from $360
+     * CrowdStrike <CRWD.O>: RBC cuts target price to $460 from $495
+     * Crowdstrike <CRWD.O>: Stifel cuts target price to $435 from $475
+     * Crowdstrike <CRWD.O>: Wedbush raises target price to $395 from $390
+     * Crowdstrike <CRWD.O>: Wells Fargo raises target price to $430 from $400
+     * Crowdstrike <CRWD.O>: UBS cuts target price to $425 from $450
+     * CubeSmart <CUBE.N>: Scotiabank cuts target price to $46 from $52 
+     * CubeSmart <CUBE.N>: Scotiabank cuts to sector perform from sector outperform
+     * Dine Brands Global Inc <DIN.N>: Piper Sandler cuts target price to $30 from $38
+     * Duke Energy Corp <DUK.N>: Guggenheim raises target price to $135 from $132
+     * Eli Lilly and Company <LLY.N>: Wells Fargo raises target price to $1,100 from $970
+     * Equity Lifestyle Properties <ELS.N>: Deutsche Bank raises target price to $75 from $73
+     * Evolus Inc <EOLS.O>: Barclays raises target price to $25 from $22
+     * Expro Group Holdings NV <XPRO.N>: Barclays cuts target price to $14 from $17
+     * Extra Space Storage Inc <EXR.N>: Scotiabank cuts target price to $165 from $167 
+     * Fluence Energy Inc <FLNC.O>: Mizuho initiates coverage with outperform rating; PT $8
+     * Flutter Entertainment Plc <FLUT.N>: Barclays raises target price to $308 from $301
+     * Flutter Entertainment Plc <FLUT.N>: Benchmark raises target price to $300 from $275
+     * Flutter Entertainment Plc <FLUT.N>: Needham raises target price to $310 from $300
+     * Flutter Entertainment Plc <FLUT.N>: Wells Fargo raises target price to $300 from $285
+     * GE Vernova Inc <GEV.N>: Guggenheim raises to buy from neutral
+     * Genesis Energy, L.P. <GEL.N>: Wells Fargo raises target price to $15 from $12
+     * Gentex Corp <GNTX.O>: Guggenheim cuts target price to $30 from $32
+                 * Geo Group Inc <GEO.N>: Noble Capital raises to outperform rating
+ 
+                 * Gilead <GILD.O>: BofA Global Research raises price objective to $126 from $116
+ 
+     * Gilead Sciences, Inc. <GILD.O>: Wells Fargo raises target price to $140 from $120
+     * Health Catalyst Inc <HCAT.O>: Citigroup cuts target price to $7 from $8.50
+     * Heico Corp <HEI.N>: Truist Securities raises target price to $294 from $282
+     * Hilton Worldwide Holdings Inc <HLT.N>: Morgan Stanley raises PT to $274.00 from $265.00
+     * Hyatt Hotels Corp <H.N>: Morgan Stanley cuts target price to $144.00 from $157.00
+     * Ingram Micro <INGM.N>: Morgan Stanley cuts target price to $26.00 from $27.00
+     * Ingram Micro Holding Corp <INGM.N>: JP Morgan cuts target price to $26 from $27
+     * Ingram Micro Holding Corp <INGM.N>: Raymond James cuts target price to $26 from $28 
+     * Innovex International Inc <INVX.N>: Barclays raises target price to $16 from $15
+     * Intellia Therapeutics, Inc. <NTLA.O>: H.C. Wainwright initiates coverage with PT $30 
+     * Intellia Therapeutics, Inc. <NTLA.O>: H.C. Wainwright initiates coverage with buy rating 
+     * International Paper Co <IP.N>: Citigroup resumes coverage with buy rating; PT $60
+     * Intuit Inc <INTU.O>: JP Morgan raises target price to $660 from $640 
+     * Intuit Inc <INTU.O>: JP Morgan raises to overweight from neutral
+                 * J&J <JNJ.N>: BofA Global Research raises price objective to $171 from $159
+ 
+                 * Kenvue Inc <KVUE.N>: Canaccord Genuity raises target price to $29 from $24
+ 
+     * Kimbell Royalty Partners LP <KRP.N>: Truist Securities cuts target price to $16 from $22
+     * Kimbell Royalty Partners LP <KRP.N>: Truist Securities cuts to hold from buy
+     * Kohls <KSS.N>: Telsey Advisory Group cuts target price to $13 from $17
+     * Life Time Group Holdings Inc <LTH.N>: Mizuho raises target price to $41 from $38
+     * Magna International Inc <MGA.N>: CIBC cuts target price to $36.50 from $44.00
+                 * Marker Therapeutics Inc <MRKR.O>: Canaccord Genuity initiates coverage with buy
+ rating
+ 
+                 * Marker Therapeutics Inc <MRKR.O>: Canaccord Genuity initiates coverage with PT
+ $8
+ 
+     * Marriott International Inc <MAR.O>: Morgan Stanley raises PT to $298.00 from $289.00
+                 * Mastec Inc <MTZ.N>: UBS raises target price to $174 from $169
+ 
+     * Molina Healthcare Inc <MOH.N>: Wells Fargo raises target price to $372 from $295
+     * Mosaic Co <MOS.N>: Barclays raises to equal weight from underweight
+     * Natera Inc <NTRA.O>: Morgan Stanley raises target price to $185.00 from $176.00
+     * Oceaneering International Inc <OII.N>: Barclays cuts target price to $22 from $26
+     * Olaplex Holdings Inc <OLPX.O>: Barclays raises target price to $1.7 from $1.5
+     * Old Dominion Freight Line Inc <ODFL.O>: Citigroup cuts target price to $186 from $205
+     * Ooma Inc <OOMA.N>: Benchmark raises target price to $20 from $17
+     * Oportun Financial Corp <OPRT.O>: BTIG initiates coverage with buy rating; PT $10
+     * Organogenesis Holdings Inc <ORGO.O>: Morgan Stanley raises PT to $6.00 from $4.00
+     * Orthopediatrics Corp <KIDS.O>: Stifel cuts target price to $32 from $40
+     * Passage Bio Inc <PASG.O>: Chardan Capital Markets cuts target price to $6 from $7
+     * Pennant Group Inc <PNTG.O>: RBC cuts target price to $30 from $38
+     * Permian Resources Corp <PR.N>: Susquehanna raises target price to $20 from $17 
+     * Permian Resources Corp <PR.N>: Susquehanna raises to positive from neutral
+     * Plug Power Inc <PLUG.O>: H.C. Wainwright cuts target price to $3 from $5 
+     * Plug Power Inc <PLUG.O>: Truist Securities cuts target price to $1.50 from $2
+     * Public Storage <PSA.N>: Scotiabank cuts target price to $333 from $338 
+     * Radnet Inc <RDNT.O>: Raymond James cuts target price to $65.00 from $85.00
+     * Radnet Inc <RDNT.O>: Raymond James raises to strong buy from outperform
+     * Republic Services Inc <RSG.N>: CIBC raises target price to $264.00 from $237.00
+     * ResMed Inc <RMD.N>: Stifel cuts target price to $240 from $250
+     * Rhythm Pharmaceuticals Inc <RYTM.O>: Stifel resumes coverage with buy rating; PT $78
+                 * Rocket Companies Inc <RKT.N>: UBS raises target price to $14 from $11.5
+ 
+     * Ross Stores Inc <ROST.O>: Barclays cuts target price to $150 from $175
+     * Ross Stores Inc <ROST.O>: BMO cuts target price to $156 from $168
+     * Ross Stores Inc <ROST.O>: Deutsche Bank cuts target price to $168 from $176
+     * Ross Stores Inc <ROST.O>: Morgan Stanley cuts target price to $130.00 from $140.00
+     * Ross Stores Inc <ROST.O>: TD Cowen cuts target price to $169 from $175
+     * Ross Stores Inc <ROST.O>: Telsey Advisory Group cuts target price to $150 from $175
+     * Ross Stores Inc <ROST.O>: UBS cuts target price to $163 from $168
+     * Ross Stores Inc <ROST.O>: Wells Fargo cuts target price to $140 from $165
+     * Saia Inc <SAIA.O>: BofA Global Research cuts target price to $484 from $565
+     * Saia Inc <SAIA.O>: Citigroup cuts target price to $498 from $544
+     * Sandisk Corp <SNDK.O>: Barclays initiates coverage with equal weight rating; PT $50
+     * Sandisk Corp <SNDK.O>: Morgan Stanley initiates coverage with overweight rating; PT $84
+     * Sionna Therapeutics Inc <SION.O>: TD Cowen initiates coverage with buy rating
+     * Six Flags Entertainment Corp <FUN.N>: Guggenheim cuts target price to $50 from $55
+     * Soleno Therapeutics Inc <SLNO.O>: Stifel resumes coverage with buy rating; PT $74
+     * Strawberry Fields REIT Inc <STRW.A>: Wedbush raises target price to $14 from $12
+     * Sunnova Energy International Inc <NOVA.N>: Mizuho cuts target price to $1 from $11
+     * Sunnova Energy International Inc <NOVA.N>: Mizuho cuts to neutral from outperform
+     * Sunnova Energy International Inc <NOVA.N>: Morgan Stanley cuts PT to $0.85 from $6.00
+     * Surgery Partners Inc <SGRY.O>: TD Cowen cuts target price to $28 from $32
+                 * Tandem Diabetes Care Inc <TNDM.O>: Morgan Stanley cuts target price to $22.00
+ from $45.00
+ 
+                 * Tandem Diabetes Care Inc <TNDM.O>: Morgan Stanley cuts to equal-weight from
+ overweight
+ 
+     * Target <TGT.N>: Deutsche Bank cuts target price to $126 from $134
+     * Target Corp <TGT.N>: Bernstein cuts target price to $124 from $142 
+     * Target Corp <TGT.N>: BofA Global Research cuts price objective to $145 from $160
+     * Target Corp <TGT.N>: JP Morgan cuts target price to $140 from $146
+     * Target Corp <TGT.N>: Piper Sandler cuts target price to $124 from $132
+     * Target Corp <TGT.N>: RBC cuts target price to $151 from $153 
+     * Target Corp <TGT.N>: Stifel cuts target price to $130 from $145
+     * Target Corp <TGT.N>: Telsey Advisory Group cuts target price to $145 from $150 
+     * Target Corp <TGT.N>: Truist Securities cuts target price to $124 from $134
+     * Target Corp <TGT.N>: UBS cuts target price to $155 from $170
+     * Target Corporation <TGT.N>: Wells Fargo cuts target price to $135 from $150
+     * Teleflex Inc <TFX.N>: Morgan Stanley cuts target price to $191.00 from $275.00
+     * T-Mobile Us Inc <TMUS.O>: HSBC cuts to hold from buy 
+     * T-Mobile Us Inc <TMUS.O>: HSBC raises target price to $270 from $260 
+     * Tscan Therapeutics Inc <TCRX.O>: Needham cuts target price to $9 from $11
+     * Visteon Corp <VC.O>: Guggenheim cuts target price to $108 from $110
+     * Warner Bros Discovery Inc <WBD.O>: Citigroup raises target price to $15 from $13
+     * Waste Management Inc <WM.N>: CIBC raises target price to $247.00 from $227.00
+     * Wyndham Hotels & Resorts Inc <WH.N>: Morgan Stanley raises PT to $113.00 from $107.00
+     * XPO Inc <XPO.N>: BofA Global Research cuts price objective to $150 from $170
+     * Y-Mabs Therapeutics Inc <YMAB.O>: BofA Global Research cuts target price to $12 from $14
+     * Y-Mabs Therapeutics Inc <YMAB.O>: Truist Securities cuts target price to $18 from $21
+     * Y-Mabs Therapeutics Inc. <YMAB.O>: Morgan Stanley cuts target price to $7.00 from $11.00
+     * Yum Brands <YUM.N>: TD Cowen raises target price to $164 from $151
+     * Yum! Brands <YUM.N>: Deutsche Bank raises target price to $163 from $155
+     * Yum! Brands Inc <YUM.N>: Oppenheimer raises target price to $185 from $160
+     * Yum! Brands Inc <YUM.N>: UBS raises target price to $180 from $165
+     * Yum! Brands Inc <YUM.N>: Wells Fargo raises target price to $160 from $145
+     * Zevia Pbc <ZVIA.N>: Morgan Stanley raises target price to $2.75 from $0.95
+ 
+
+ (Compiled by Bengaluru Newsroom)
+ ((Diaries@thomsonreuters.com))"
+2025,WM.N,urn:newsml:reuters.com:20250305:nL3N3PO1J5:1,2025-03-05 16:48:54.000,"BUZZ-CIBC upgrades Republic Services to 'outperformer', raises PT","** CIBC Equity Research upgrades rating for garbage
+management firm Republic Services <RSG.N> to ""outperformer"" from
+""neutral""
+    ** Brokerage has a positive view of waste sector in general,
+and expects it to benefit from increasing uncertainty around
+trade policy
+    ** ""If tariffs prove to be inflationary, the waste sector
+has proven its ability to pass this along through higher
+pricing"" - brokerage
+    ** Raises PT on RSG to $264 from $237, a 12% upside to
+stock's last close
+    ** Also hikes PT for peer Waste Management <WM.N> to $247
+from $227, a 7% upside to stock's last close
+    ** YTD, S&P 500 Environmental and Facilities Services
+sub-index <.SPLRCPROP> up 12%
+
+ (Reporting by Anshuman Tripathy)
+ ((Anshuman.Tripathy@thomsonreuters.com))"
+2025,WM.N,urn:newsml:reuters.com:20250213:nL4N3P4217:1,2025-02-13 21:55:47.000,"Garbage management firm Republic Services beats profit estimate on strong pricing, demand","Feb 13 (Reuters) - Republic Services <RSG.N> beat
+fourth-quarter profit estimate on Thursday, helped by higher
+prices and steady demand for garbage collection and disposal.
+    Waste Management <WM.N> and Republic Services are two
+publicly traded companies, which provide garbage collection and
+disposal services across the United States.
+    Republic Services posted adjusted profit of $1.58 per share
+for the quarter, compared with analysts' average estimate of
+$1.40 per share, according to data compiled by LSEG.
+    Revenue for the quarter ended December 31 rose 5.5% to $4.05
+billion.
+    The company said it expects to invest about $1 billion in
+acquisitions in 2025.
+
+ (Reporting by Nathan Gomes and Anshuman Tripathy in Bengaluru;
+Editing by Shilpi Majumdar)
+ ((Anshuman.Tripathy@thomsonreuters.com))"
+2025,WM.N,urn:newsml:reuters.com:20250210:nPLXBF45FA:1,2025-02-10 14:45:03.686,CORRECTED-BRIEF-Waste Management Q4 EPS USD 1.48 (Jan. 29),"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Outlook FY revenue growth 16% (not 4-4.2%)
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million"
+2025,WM.N,urn:newsml:reuters.com:20250210:nPLXBF45FA:1,2025-02-10 14:42:12.585,CORRECTED-WASTE MANAGEMENT OUTLOOK FY REVENUE GROWTH 16% (NOT 4-4.2%) (JAN. 29),"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Outlook FY revenue growth 16% (not 4-4.2%)
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million"
+2025,WM.N,urn:newsml:reuters.com:20250131:nL3N3OR0DC:1,2025-01-31 06:15:43.000,PRESS DIGEST - Wall Street Journal - Jan 31,"Jan 31 (Reuters) - The following are the top stories in
+the Wall Street Journal. Reuters has not verified these stories
+and does not vouch for their accuracy.
+    
+    - OpenAI is in early talks to raise up to $40 billion in a
+funding round that would value the ChatGPT maker as high as $300
+billion.
+    
+    - Waste Management <WM.N> will shed 1,000 jobs this year,
+accelerating its automation efforts, which will reduce its
+headcount by thousands and move the company closer to its goal
+of $450 million in cost cuts.
+    
+    - Allstate <ALL.N> will sell its Group Health business to
+Nationwide for $1.25 billion in cash.
+    
+    - Amazon <AMZN.O> is ramping up ad spending on Elon Musk's
+X, a major shift after pulling much of its advertising more than
+a year ago.
+        
+  
+        - U.S. President Trump's advisers are considering
+several offramps to avoid enacting the universal tariffs on
+Mexico and Canada that he had pledged.
+        
+  
+        - A midair collision between an American Airlines
+<AAL.O> flight and an Army helicopter over the Potomac River
+killed all 67 people on the two aircraft, officials said
+Thursday, leaving investigators to piece together what caused
+the deadliest U.S. aviation disaster in 23 years.
+        
+  
+        
+  
+
+ (Compiled by Bengaluru newsroom)
+ ((globalnewsmonitoring@thomsonreuters.com))"
+2025,WM.N,urn:newsml:reuters.com:20250130:nFWN3OQ23V:1,2025-01-30 21:15:13.000,"BRIEF-Waste Management Targets $450 Mln In Savings From Automation Push & Will Shed 1,000 Jobs This Year - WSJ","Jan 30 (Reuters) - 
+  
+    * WASTE MANAGEMENT TARGETS $450 MILLION IN SAVINGS FROM
+AUTOMATION
+PUSH; WILL SHED 1,000 JOBS THIS YEAR - WSJ
+
+Source text: https://tinyurl.com/268msag2
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2025,WM.N,urn:newsml:reuters.com:20250130:nFWN3OQ23V:1,2025-01-30 21:14:22.275,"WASTE MANAGEMENT TARGETS $450 MLN IN SAVINGS FROM AUTOMATION PUSH; WILL SHED 1,000 JOBS THIS YEAR - WSJ","Jan 30 (Reuters) - 
+  
+    * WASTE MANAGEMENT TARGETS $450 MILLION IN SAVINGS FROM
+AUTOMATION
+PUSH; WILL SHED 1,000 JOBS THIS YEAR - WSJ
+
+Source text: https://tinyurl.com/268msag2
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2025,WM.N,urn:newsml:reuters.com:20250130:nL3N3OQ1MP:1,2025-01-30 16:31:27.000,BUZZ-Waste Management Inc gains after upbeat annual revenue forecast,"** Waste Management Inc's <WM.N> shares rise as much as 5.6% to
+$221.25 
+** Company forecast annual revenue above estimates on Wednesday,
+anticipating higher prices for garbage collection and disposal
+    ** Sees 2025 revenue between $25.55 billion and $25.8
+billion vs est $25.46 billion - LSEG
+    ** Company reported Q4 revenue of $5.89 billion vs est $5.77
+billion, adj EPS of $1.70 vs est $1.79
+    ** Waste Management's shares rose ~12% in 2024
+
+(Reporting by Neil J Kanatt in Bengaluru)
+((Neil.JKanatt@thomsonreuters.com))"
+2025,WM.N,urn:newsml:reuters.com:20250130:nL3N3OQ0PK:1,2025-01-30 13:33:48.000,Waste Management shares up after upbeat 2025 revenue forecast,"Jan 30 (Reuters) - Waste management Inc's <WM.N> shares
+rose about 2% premarket on Thursday,  a day after it forecast
+2025 revenue above Wall Street estimates, expecting to benefit
+from higher prices for garbage collection and disposal.
+    Waste Management is one of the two publicly traded
+companies, along with Republic Services <RSG.N>, which provide
+garbage collection and disposal services across the United
+States.
+        The Houston, Texas-based company expects 2025 revenue
+between $25.55 billion and $25.8 billion, compared with
+analysts' estimates of $25.46 billion, according to data
+compiled by LSEG. 
+  
+    The company expects 2025 core prices, a key performance
+metric indicating price changes for garbage collection and
+disposal, to rise between 5.8% and 6.2%.
+    However, adjusted profit for the fourth quarter ended Dec 31
+came in at $1.70 per share, lower than analysts' estimates of
+$1.79 per share. 
+    Its total revenue for the quarter rose about 13% to $5.89
+billion. Analysts expected revenue of $5.77 billion.
+     
+
+ (Reporting by Anshuman Tripathy and Aishwarya Jain in
+Bengaluru; Editing by Alan Barona and Tasim Zahid)
+ ((Anshuman.Tripathy@thomsonreuters.com))"
+2025,WM.N,urn:newsml:reuters.com:20250130:nL5N3OQ0YE:1,2025-01-30 10:45:52.000,Waste Management Inc reports results for the quarter ended December 31 - Earnings Summary,"* Waste Management Inc <WM.N> reported quarterly adjusted
+earnings
+of $1.70​​ per share for the quarter ended December 31, lower
+than the same quarter last year, when the company reported EPS
+of $1.74.  The mean expectation of twenty one analysts for the
+quarter was for earnings of $1.79 per share. Wall Street
+expected results to range from $1.69  to $1.93 per share.
+    * Revenue rose 13% to $5.89 billion from a year ago;
+analysts
+expected $5.77 billion. 
+    * Waste Management Inc's reported EPS for the quarter was
+$1.48​.
+    * The company reported quarterly net income of $598 million.
+    * Waste Management Inc shares had risen by 3.8% this
+quarter.
+
+FORECAST CHANGES
+    * The mean earnings estimate of analysts had fallen by
+about 1.7%
+in the last three months.​ 
+    * In the last 30 days, nine analysts negatively revised
+earnings
+estimates
+
+RECOMMENDATIONS
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 13 ""strong buy"" or ""buy,"" 10
+""hold"" and no ""sell"" or ""strong sell."" 
+    * The average consensus recommendation for the environmental
+services & equipment peer group is also ""buy""
+
+Wall Street's median 12-month price target for Waste Management
+Inc is $231.50 
+This summary was machine generated from LSEG data January 30 at
+10:45 a.m. UTC. ​All figures in US dollars unless otherwise
+stated. (For questions concerning the data in this report,
+contact Estimates.Support@lseg.com. For any other questions or
+feedback, contact RefinitivNewsSupport@thomsonreuters.com) QUARTER ENDING    ESTIMATE       ACTUAL         BEAT, MET,
+                                                 MISSED
+ Dec. 31 2024      1.79           1.70           Missed
+ Sep. 30 2024      1.89           1.96           Beat
+ Jun. 30 2024      1.83           1.82           Missed
+ Mar. 31 2024      1.51           1.75           Beat"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:1,2025-01-30 00:04:46.741,BRIEF-Waste Management Q4 EPS USD 1.48,"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:8,2025-01-30 00:04:02.216,"WASTE MANAGEMENT Q4 REVENUE USD 5,893 MILLION VS. IBES ESTIMATE USD 5,768 MILLION","Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:7,2025-01-30 00:04:02.193,"WASTE MANAGEMENT Q4 ADJUSTED INCOME FROM OPERATIONS USD 1,054 MILLION","Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:6,2025-01-30 00:04:02.163,"WASTE MANAGEMENT Q4 EBITDA USD 1,571 MILLION","Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:5,2025-01-30 00:04:02.137,WASTE MANAGEMENT Q4 NET INCOME USD 598 MILLION,"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:4,2025-01-30 00:04:02.112,WASTE MANAGEMENT Q4 EPS USD 1.48,"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:3,2025-01-30 00:04:02.089,WASTE MANAGEMENT Q4 ADJUSTED EPS USD 1.7,"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:2,2025-01-30 00:04:02.085,WASTE MANAGEMENT Q4 EBITDA MARGIN 26.7%,"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"
+2025,WM.N,urn:newsml:reuters.com:20250130:nPLXBF45FA:1,2025-01-30 00:04:01.859,WASTE MANAGEMENT OUTLOOK FY REVENUE GROWTH 4-4.2%,"Jan 30 (Reuters) - Waste Management Q4 adjusted EPS USD 1.7.
+* Q4 EBITDA margin 26.7%
+* Q4 net income USD 598 million
+* Q4 revenue USD 5,893 million vs. IBES estimate USD 5,768 million
+* Q4 EBITDA USD 1,571 million
+* Q4 adjusted income from operations USD 1,054 million
+* outlook FY revenue growth 4-4.2%"

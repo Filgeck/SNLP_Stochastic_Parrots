@@ -1,0 +1,3169 @@
+year,company_ric,storyId,versionCreated,headline,newsText
+2024,WM.N,urn:newsml:reuters.com:20241219:nL4N3NK0JM:6,2024-12-19 21:24:48.000,"U.S. RESEARCH ROUNDUP-Amazon, Mastercard, Tesla","Dec 20 (Reuters) - Wall Street securities analysts revised their ratings and price targets on several
+U.S.-listed companies, including Amazon, Mastercard and Tesla, on Thursday.
+     
+      HIGHLIGHTS
+     * Amazon <AMZN.O>: Canaccord Genuity raises target price to $265 from $230
+     * Mastercard <MA.N>: Jefferies raises target price to $620 from $610
+     * Tesla Inc <TSLA.O>: HSBC raises target price to $140 from $126
+     * Visa Inc <V.N>: Jefferies raises target price to $370 from $360
+     * Zillow Group Inc <ZG.O>: Jefferies raises target price to $105 from $92
+     
+    Following is a summary of research actions on U.S. companies reported by Reuters on Thursday. Stock entries
+are in alphabetical order.    
+    
+     * ABM Industries Inc <ABM.N>: UBS raises target price to $56 from $55
+     * Acadia Healthcare Company Inc <ACHC.O>: Jefferies cuts target price to $78 from $80
+     * Aersale Corp <ASLE.O>: TD Cowen raises target price to $8 from $7
+     * Affirm Holdings Inc <AFRM.O>: Jefferies raises target price to $82 from $70
+     * Affirm Holdings Inc <AFRM.O>: Jefferies raises to buy from hold
+     * AGCO Corp <AGCO.N>: Truist Securities raises target price to $116 from $110
+     * Albany International Corp <AIN.N>: TD Cowen raises target price to $91 from $81
+     * ALX Oncology Holdings Inc <ALXO.O>: Jefferies cuts target price to $2 from $12
+     * ALX Oncology Holdings Inc <ALXO.O>: Jefferies cuts to hold from buy
+     * Amazon <AMZN.O>: Canaccord Genuity raises target price to $265 from $230
+     * Amazon <AMZN.O>: Telsey Advisory Group raises target price to $275 from $235
+     * Anaptysbio Inc <ANAB.O>: JP Morgan cuts target price to $36 from $66
+     * Anaptysbio Inc <ANAB.O>: Truist Securities cuts target price to $20 from $30
+     * Apollo <APO.N>: BMO raises target price to $186 from $157
+     * AT&T Inc <T.N>: UBS raises target price to $30 from $25
+     * Avalo Therapeutics Inc <AVTX.O>: BTIG initiates coverage with buy rating; PT $40
+     * Axalta <AXTA.N>: Deutsche Bank cuts target price to $42 from $44
+     * Azenta Inc <AZTA.O>: Stephens raises target price to $60 from $50
+     * Azenta Inc <AZTA.O>: Stephens raises to overweight from equal weight
+     * Blackstone <BX.N>: BMO raises target price to $157 from $134
+     * Block Inc <SQ.N>: Oppenheimer raises to outperform from perform
+     * Boeing <BA.N>: TD Cowen raises target price to $200 from $190
+     * Booking Holdings Inc <BKNG.O>: Mizuho raises target price to $6000 from $5400
+     * Brilliant Earth Group <BRLT.O>: Telsey Advisory Group cuts target price to $2 from $3
+     * Brilliant Earth Group <BRLT.O>: Telsey Advisory Group cuts to market perform from outperform
+     * Brinker International Inc <EAT.N>: JP Morgan raises target price to $140 from $100
+     * Bruker Corp <BRKR.O>: Guggenheim initiates coverage with buy rating; target price $72
+     * Burlington Stores Inc <BURL.N>: Telsey Advisory Group raises PT to $340 from $320
+     * Business First Bancshares <BFST.O>: Raymond James raises to outperform from market perform
+     * C3.Ai Inc <AI.N>: KeyBanc cuts to underweight from sector weight
+     * Camping World Holdings Inc <CWH.N>: BofA Global Research initiates coverage with buy rating
+     * Camping World Holdings Inc <CWH.N>: BofA Global Research initiates coverage with PO $30
+     * Caterpillar Inc <CAT.N>: Truist Securities raises target price to $471 from $454
+     * Cleveland-Cliffs Inc <CLF.N>: Citigroup cuts target price to $11 from $12.5
+     * Cloudflare <NET.N>: Baird raises target price to $120 from $100
+     * Cloudflare <NET.N>: Jefferies raises target price to $125 from $100
+     * Cognex Corp <CGNX.O>: Truist Securities cuts target price to $42 from $43
+     * Cognition Therapeutics, Inc. <CGTX.O>: H.C. Wainwright raises target price to $6 from $5
+     * Coinbase Global Inc <COIN.O>: Jefferies raises target price to $310 from $220
+     * Commerce Bancshares Inc <CBSH.O>: Raymond James cuts to market perform from outperform
+     * Cormedix Inc <CRMD.O>: RBC raises target price to $12 from $11
+     * Costco Wholesale Corp <COST.O>: Telsey Advisory Group raises PT to $1100 from $1050
+     * Crowdstrike <CRWD.O>: Jefferies raises target price to $450 from $415
+     * Cummins <CMI.N>: Truist Securities raises target price to $424 from $369
+     * Deckers Brands <DECK.N>: Telsey Advisory Group raises target price to $240 from $190
+     * Deere & Co <DE.N>: Truist Securities raises target price to $550 from $538
+     * DT Midstream Inc <DTM.N>: Stifel raises to buy from hold; raises PT to $106 from $89
+     * Duolingo Inc <DUOL.O>: Needham raises target price to $385 from $370
+     * Dutch Bros Inc <BROS.N>: JP Morgan raises target price to $58 from $48
+     * Edgewise Therapeutics Inc <EWTX.O>: JP Morgan raises target price to $44 from $42
+     * Edison International <EIX.N>: UBS cuts target price to $87 from $96
+     * Enova International Inc <ENVA.N>: Jefferies raises target price to $130 from $110
+     * Euronet Worldwide Inc. <EEFT.O>: Oppenheimer cuts target price to $128 from $135
+     * European Wax Center <EWCZ.O>: Telsey Advisory Group cuts target price to $6 from $8
+     * European Wax Center <EWCZ.O>: Telsey Advisory Group cuts to market perform from outperform
+     * First Financial Corp <THFF.O>: Raymond James raises to outperform from market perform
+     * First Horizon Corp <FHN.N>: KBW raises target price to $24 from $23
+     * Fiserv Inc <FI.N>: Jefferies raises target price to $210 from $200
+     * Fiserv Inc <FI.N>: Stephens raises target price to $255 from $220
+     * Fiserv Inc <FI.N>: Stephens raises to overweight from equal-weight
+     * Fiserv Inc <FI.N>: Oppenheimer raises target price to $239 from $214
+     * Five Star Bancorp <FSBC.O>: Raymond James initiates coverage with outperform rating; PT $38
+     * Fluor <FLR.N>: Truist Securities raises target price to $66 from $62
+     * Fortinet Inc <FTNT.O>: Baird raises target price to $105 from $100
+     * Fortinet Inc <FTNT.O>: Jefferies raises target price to $105 from $95
+     * Fortinet Inc <FTNT.O>: KeyBanc raises to overweight from sector weight
+     * Fortive Corp <FTV.N>: Truist Securities raises target price to $90 from $89
+     * General Dynamics Corp <GD.N>: RBC cuts target price to $290 from $330
+     * General Dynamics Corp <GD.N>: RBC cuts to sector perform from outperform
+     * General Mills <GIS.N>: Citigroup cuts target price to $67 from $71
+     * General Mills <GIS.N>: Deutsche Bank cuts target price to $68 from $72
+     * General Mills <GIS.N>: Jefferies cuts target price to $66 from $67
+     * General Mills <GIS.N>: JP Morgan cuts target price to $62 from $67
+     * General Mills <GIS.N>: Stifel cuts target price to $78 from $82
+     * General Mills <GIS.N>: TD Cowen cuts target price to $64 from $75
+     * Hancock Whitney Corp <HWC.O>: Raymond James raises to strong buy from outperform
+     * Hancock Whitney Corp <HWC.O>: Raymond James raises target price to $64 from $59
+     * Hanover Insurance Group Inc <THG.N>: BMO raises target price to $180 from $161
+     * Heico Corp <HEI.N>: RBC cuts target price to $275 from $285
+     * Heico Corporation <HEI.N>: Deutsche Bank cuts target price to $266 from $271
+     * Hexcel Corp <HXL.N>: RBC raises target price to $74 from $68
+     * Hexcel Corp <HXL.N>: RBC raises to outperform from sector perform
+     * Hexcel Corp <HXL.N>: TD Cowen raises target price to $71 from $70
+     * Hilltop Holdings Inc <HTH.N>: Raymond James cuts to underperform from market perform
+     * Illinois Tool Works Inc <ITW.N>: Truist Securities raises target price to $318 from $312
+     * Jabil Inc <JBL.N>: JP Morgan raises target price to $160 from $144
+     * Jabil Inc <JBL.N>: Raymond James raises target price to $170 from $160
+     * Jabil Inc <JBL.N>: Stifel raises target price to $160 from $150
+     * Jabil Inc <JBL.N>: UBS raises target price to $152 from $128
+     * Jacobs Solutions Inc <J.N>: Truist Securities raises target price to $142 from $137
+     * Kroger Co <KR.N>: Telsey Advisory Group raises target price to $70 from $65
+     * Kulr Technology Group Inc <KULR.A>: Benchmark raises target price to $5 from $1
+     * Kulr Technology Group Inc <KULR.A>: Benchmark raises to buy from speculative buy
+     * Live Nation Entertainment Inc <LYV.N>: Benchmark raises target price to $160 from $144
+     * Liveone Inc <LVO.O>: Alliance Global Partners raises target price to $3 from $1.75
+     * LPL Financial Holdings Inc <LPLA.O>: TD Cowen raises target price to $413 from $277
+     * LPL Financial Holdings Inc <LPLA.O>: TD Cowen raises to buy from hold
+     * Mannkind Corp <MNKD.O>: RBC raises target price to $10 from $7
+     * Mannkind Corp <MNKD.O>: RBC raises to outperform from sector perform
+     * Marvell Technology Inc <MRVL.O>: Raymond James raises target price to $130 from $120
+     * Mastec Inc <MTZ.N>: Truist Securities raises target price to $189 from $173
+     * Mastercard <MA.N>: Jefferies raises target price to $620 from $610
+     * Mastercard Incorporated <MA.N>: Oppenheimer cuts target price to $588 from $591
+     * Matador Resources Co <MTDR.N>: TD Cowen raises target price to $75 from $74
+     * Medical Properties Trust Inc <MPW.N>: Truist Securities cuts target price to $4 from $6
+     * Meta <META.O>: Canaccord Genuity raises target price to $730 from $700
+     * Micron Technology Inc <MU.O>: BofA Global Research cuts PO to $110 from $125
+     * Micron Technology Inc <MU.O>: BofA Global Research cuts to neutral from buy
+     * Micron Technology Inc <MU.O>: JP Morgan cuts target price to $145 from $180
+     * Micron Technology Inc <MU.O>: Mizuho cuts target price to $115 from $135
+     * Micron Technology Inc <MU.O>: Needham cuts target price to $120 from $140
+     * Micron Technology Inc <MU.O>: Piper Sandler cuts target price to $120 from $150
+     * Micron Technology Inc <MU.O>: Raymond James cuts target price to $120 from $140
+     * Micron Technology Inc <MU.O>: Stifel cuts target price to $130 from $135
+     * Micron Technology Inc <MU.O>: TD Cowen cuts target price to $125 from $135
+     * Micron Technology Inc <MU.O>: UBS cuts target price to $125 from $135
+     * Monro Inc <MNRO.O>: Wedbush initiates coverage with outperform rating; target price $31
+     * Montrose Environmental Group Inc <MEG.N>: Needham cuts target price to $39 from $44
+     * Moog Inc <MOGa.N>: TD Cowen raises target price to $230 from $222
+     * Neogen Corp <NEOG.O>: Guggenheim initiates coverage with buy rating; target price $15
+     * Netflix Inc <NFLX.O>: UBS raises target price to $1040 from $825
+     * Nice Ltd <NICE.O>: Jefferies cuts target price to $200 from $215
+     * Nucor Corp <NUE.N>: Citigroup cuts target price to $160 from $240
+     * Oceanfirst Financial Corp <OCFC.O>: Raymond James raises to strong buy from outperform
+     * Oceanfirst Financial Corp <OCFC.O>: Raymond James raises target price to $24 from $22
+     * Okta Inc <OKTA.O>: Jefferies cuts target price to $90 from $100
+     * Okta Inc <OKTA.O>: KeyBanc raises to overweight from sector weight
+     * Old Second Bancorp Inc <OSBC.O>: Raymond James raises to strong buy from outperform
+     * Old Second Bancorp Inc <OSBC.O>: Raymond James  raises target price to $22 from $19
+     * Origin Bancorp Inc <OBK.N>: Raymond James raises to strong buy from outperform
+     * Origin Bancorp Inc <OBK.N>: Raymond James raises target price to $40 from $35
+     * Oshkosh Corp <OSK.N>: Truist Securities raises target price to $116 from $113
+     * Paccar Inc <PCAR.O>: Truist Securities raises target price to $110 from $107
+     * Pactiv Evergreen Inc <PTVE.O>: RBC cuts to sector perform from outperform
+     * Palantir Technologies Inc <PLTR.O>: UBS initiates coverage with neutral rating and PT $80
+     * Palo Alto Networks Inc <PANW.O>: Jefferies raises target price to $240 from $225
+     * Parker-Hannifin Corp <PH.N>: Truist Securities raises target price to $842 from $788
+     * PayPal <PYPL.O>: Jefferies raises target price to $90 from $80
+     * Peloton <PTON.O>: Telsey Advisory Group raises target price to $11 from $9
+     * PG&E Corp <PCG.N>: UBS cuts target price to $24 from $26
+     * PPG Industries <PPG.N>: Deutsche Bank cuts target price to $145 from $150
+     * Qualys Inc <QLYS.O>: Baird raises target price to $150 from $145
+     * Quanta Services Inc <PWR.N>: Truist Securities raises target price to $399 from $358
+     * Ralph Lauren Corp <RL.N>: Telsey Advisory Group raises target price to $265 from $247
+     * RH <RH.N>: Telsey Advisory Group raises target price to $500 from $485
+     * RH <RH.N>: Telsey Advisory Group raises to outperform from market perform
+     * Rocket Lab USA Inc <RKLB.O>: TD Cowen raises target price to $29 from $25
+     * RPM International Inc <RPM.N>: UBS raises target price to $130 from $123
+     * RTX Corp <RTX.N>: RBC raises target price to $140 from $130
+     * RTX Corp <RTX.N>: RBC raises to outperform from sector perform
+     * Rubrik Inc <RBRK.N>: Baird raises target price to $77 from $65
+     * Sallie Mae <SLM.O>: Jefferies raises target price to $31 from $28
+     * Sentinelone Inc <S.N>: Jefferies raises to buy from hold; raises PT to $30 from $27
+     * Shake Shack Inc <SHAK.N>: Truist Securities raises target price to $147 from $144
+     * Shift4 Payments Inc. <FOUR.N>: Oppenheimer raises target price to $121 from $120
+     * SLB <SLB.N>: Citigroup cuts target price to $50 from $53
+     * Stanley Black & Decker <SWK.N>: Mizuho raises to outperform from neutral
+     * Steel Dynamics Inc <STLD.O>: Citigroup cuts target price to $145 from $160
+     * Sunnova Energy International Inc <NOVA.N>: TD Cowen initiates coverage with hold rating
+     * Sunnova Energy International Inc <NOVA.N>: TD Cowen initiates coverage, target price $5
+     * Tapestry Inc <TPR.N>: Jefferies raises to buy from hold; raises PT to $80 from $50
+     * Tapestry Inc <TPR.N>: Telsey Advisory Group raises target price to $74 from $67
+     * Tenable Holdings Inc <TENB.O>: Jefferies raises target price to $45 from $40
+     * Terex Corp <TEX.N>: Truist Securities cuts target price to $58 from $65
+     * Tesla Inc <TSLA.O>: HSBC raises target price to $140 from $126
+     * TJX Companies Inc <TJX.N>: Telsey Advisory Group raises target price to $145 from $134
+     * TKO Group <TKO.N>: Jefferies raises target price to $200 from $160
+     * TPG Inc <TPG.O>: BMO raises target price to $73 from $60
+     * Triumph Group Inc <TGI.N>: TD Cowen raises target price to $22 from $20
+     * United Community Banks Inc <UCB.N>: Raymond James raises to outperform from market perform
+     * United Rentals Inc <URI.N>: Truist Securities raises target price to $965 from $955
+     * Upwork Inc <UPWK.O>: Canaccord Genuity raises target price to $20 from $18
+     * US Bancorp <USB.N>: Raymond James raises to outperform from market perform
+     * USCB Financial Holdings Inc <USCB.O>: Raymond James cuts to outperform from strong buy
+     * USCB Financial Holdings Inc <USCB.O>: Raymond James raises target price to $21 from $19
+     * V2X Inc <VVX.N>: RBC cuts target price to $58 from $70
+     * V2X Inc <VVX.N>: RBC cuts to sector perform from outperform
+     * Varonis Systems Inc <VRNS.O>: Jefferies cuts target price to $50 from $60
+                 * Vertex Pharmaceuticals Inc <VRTX.O>: Scotiabank cuts target price to $426 from $486
+ 
+     * Viant Technology Inc <DSP.O>: Canaccord Genuity raises target price to $24 from $22
+     * Victory Capital Holdings Inc <VCTR.O>: BMO raises target price to $78 from $71
+     * Visa Inc <V.N>: Jefferies raises target price to $370 from $360
+     * Visa Inc <V.N>: Oppenheimer raises target price to $375 from $321
+     * Walmart <WMT.N>: Telsey Advisory Group raises target price to $105 from $100
+     * Warby Parker Inc <WRBY.N>: Telsey Advisory Group raises target price to $28 from $26
+     * Western Digital Corp <WDC.O>: Morgan Stanley cuts target price to $93 from $100
+     * Williams-Sonoma Inc <WSM.N>: Telsey Advisory Group raises target price to $230 from $190
+     * Worthington Enterprises Inc <WOR.N>: Canaccord Genuity raises PT to $49 from $46
+     * Zebra Technologies <ZBRA.O>: Truist Securities raises target price to $408 from $383
+     * Zevia Pbc <ZVIA.N>: Telsey Advisory Group raises target price to $4 from $2
+     * Zillow Group Inc <ZG.O>: Jefferies raises target price to $105 from $92
+     * Zoom Communications Inc <ZM.O>: Jefferies raises target price to $100 from $85
+ 
+ (Compiled by Bengaluru Newsroom)
+ ((Diaries@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20241218:nTUA5X6YT7:1,2024-12-18 22:20:39.000,BRIEF-Wm Sets Date For Fourth Quarter And Full-Year 2024 Earnings Release Conference Call,"Dec 18 (Reuters) - Waste Management Inc <WM.N>:
+    * WM SETS DATE FOR FOURTH QUARTER AND FULL-YEAR 2024
+EARNINGS
+RELEASE CONFERENCE CALL
+
+Source text: [ID:nBw9P7dgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241218:nTUA5X6YT7:1,2024-12-18 22:18:00.468,WM SETS DATE FOR FOURTH QUARTER AND FULL-YEAR 2024 EARNINGS RELEASE CONFERENCE CALL,"Dec 18 (Reuters) - Waste Management Inc <WM.N>:
+    * WM SETS DATE FOR FOURTH QUARTER AND FULL-YEAR 2024
+EARNINGS
+RELEASE CONFERENCE CALL
+
+Source text: [ID:nBw9P7dgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241216:nTUABSVVR8:1,2024-12-16 21:59:47.000,BRIEF-WM Announces 10% Dividend Rate Increase For 2025,"Dec 16 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES 10% DIVIDEND RATE INCREASE FOR 2025
+    * WASTE MANAGEMENT INC - ANNUAL DIVIDEND RATE INCREASED TO
+$3.30
+PER SHARE
+
+Source text: [ID:nBw2YMlzQa]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241216:nTUABSVVR8:2,2024-12-16 21:57:11.399,WASTE MANAGEMENT INC - ANNUAL DIVIDEND RATE INCREASED TO $3.30 PER SHARE,"Dec 16 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES 10% DIVIDEND RATE INCREASE FOR 2025
+    * WASTE MANAGEMENT INC - ANNUAL DIVIDEND RATE INCREASED TO
+$3.30
+PER SHARE
+
+Source text: [ID:nBw2YMlzQa]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241216:nTUABSVVR8:1,2024-12-16 21:57:00.462,WM ANNOUNCES 10% DIVIDEND RATE INCREASE FOR 2025,"Dec 16 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES 10% DIVIDEND RATE INCREASE FOR 2025
+    * WASTE MANAGEMENT INC - ANNUAL DIVIDEND RATE INCREASED TO
+$3.30
+PER SHARE
+
+Source text: [ID:nBw2YMlzQa]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241212:nL1N3NC12W:2,2024-12-12 11:00:00.000,Parnassus Investments launches its first sustainable ETFs,"By Suzanne McGee
+       Dec 12 (Reuters) - Parnassus, one of the largest asset
+managers to offer products tied to environmental, social or
+governance considerations, launched its first exchange-traded
+funds on Thursday amid a difficult environment for the strategy.
+    As performance of U.S. ESG funds lag broader indexes,
+investor interest is shrinking. According to data from
+Morningstar Inc. <MORN.O>, the average U.S. ESG-focused ETF has
+gained only 11% so far this year, compared to 27.6% for the
+Standard & Poor's 500 index. The number of ESG funds in the U.S.
+fell 8% in the first nine months of 2024 to only 595, with some
+closing and others abandoning their ESG mandate. 
+    Some segments are struggling more than others: Morningstar
+reported last month that U.S. climate funds are likely to see
+their first year of net outflows this year since it began
+tracking them as a separate category in 2018.
+    ""Clearly the environment is not favorable to this type of
+new offering, with closures exceeding launches,"" said Hortense
+Bioy, London-based global director of sustainability research
+for Morningstar. 
+    But Benjamin Allen, CEO of Parnassus, says the 40-year-old
+firm has ridden out other cycles and remains focused on picking
+high-quality companies that also consider the impact of their
+decisions on environmental and social issues on long-term
+returns. According to the Parnassus website, comparable mutual
+funds have posted gains of 17% to 22% so far this year. 
+    ""This is not virtue-signaling; this has a material impact on
+returns,"" he told Reuters.
+    Information on the holdings of the new ETFs, the Parnassus
+Core Select ETF <PRCS.N> and the Parnassus Value Select ETF
+<PRVS.N> will not be available until after their launch. Allen
+said he expects there to be overlap between each ETF and similar
+long-established mutual funds, although the ETFs will have no
+more than 25 holdings.
+    The $30 billion Parnassus Core Equity Fund mutual fund
+includes positions in stocks like Nvidia <NVDA.O> and Microsoft
+<MSFT.O>, as well as Intercontinental Exchange <ICE.N> and Waste
+Management <WM.N>. The $5.1 billion Parnassus Value Equity Fund
+owns stakes in Bank of America <BAC.N> and Deere & Co. <DE.N>.
+     
+
+ (Reporting by Suzanne McGee, editing by Deepa Babington)
+ ((Suzanne.McGee@thomsonreuters.com; 917-285-4385;))"
+2024,WM.N,urn:newsml:reuters.com:20241109:nL1N3MG015:1,2024-11-09 06:28:24.000,UPDATE 1-California approves tighter rules for low carbon fuels policy,"(Adds results of vote, board member quote in paragraphs 3-5)
+       Nov 8 (Reuters) - California regulators voted on Friday
+to toughen a policy aimed at boosting low-carbon fuels to slash
+greenhouse gas emissions from the transportation sector and meet
+state climate change goals, despite criticism it would increase
+retail fuel prices.
+    The 14-member California Air Resources Board voted 12 to 2
+to approve changes to the state's influential Low Carbon Fuel
+Standard (LCFS). The vote followed nearly eight hours of
+testimony from supporters and opponents of the program, as well
+as a lengthy debate among board members. 
+    Several members said the changes were essential to
+preserving Democrat-led California's climate leadership
+following Donald Trump's presidential victory. Trump, a
+Republican, has pledged to rescind California's ability to set
+its own vehicle emission rules, as he did during his first term
+as U.S. president.
+    ""The world is watching California to see if we will maintain
+leadership or fracture under internal pressure for
+perfectionism,"" state Senator Henry Stern, a non-voting board
+member, said in a statement read at the meeting by fellow board
+member Hector De La Torre.
+    ""California has a long history of enacting visionary and
+affordable climate policies that are durable enough to endure
+major shifts in national politics like we just witnessed.""
+    The amendments to the LCFS, which has been in place since
+2011, would require a deeper reduction in the carbon intensity
+of transportation fuels by 2030 in order for fuel producers to
+earn the program's tradable credits.
+    Transportation accounts for about 50% of the state's
+greenhouse gas emissions.
+    While biofuel producers and some state climate advocates
+backed the changes, critics including oil companies and consumer
+advocates said the change would increase gasoline costs for
+Californians. Environmental groups also argued that the policy
+would extend the production of oil and gas and prioritize fuels
+made from food crops and large dairy operations instead of
+encouraging a transition to electric vehicles.
+    The LCFS requires fuel makers to buy tradable credits if
+their products generate more carbon emissions than a baseline
+set by regulators at the air resources board. Refiners that
+produce low-carbon fuels and gases can generate the credits to
+sell.
+    The policy set off a boom in renewable diesel and biogas
+production in recent years that has sent credit prices down to
+around $70 from above $200 in 2020. The policy revisions are
+meant to prop up credit prices and encourage more low-carbon
+fuel production.   
+    As a result of the board's vote, the LCFS will require a 30%
+reduction in the carbon intensity of transportation fuels by
+2030, up from 20%. The revisions will add a 90% carbon intensity
+reduction goal by 2045.
+    Developers of projects that produce renewable fuels from
+organic waste supported the measures.
+    Opponents voiced concern, however, about the potential for
+higher gasoline prices.
+    In an analysis released last year, the board said the
+changes could increase the price of gasoline by 37 cents a
+gallon, on average, from 2024 through 2030. But the board has
+since said models cannot accurately predict future fuel prices.
+    The board's internal environmental justice advisory
+committee had urged it to reject the revisions, citing an
+exemption for jet fuel producers and large subsidies for dairy
+methane projects, among other concerns.
+
+ (Reporting by Nichola Groom; Editing by Leslie Adler and
+William Mallard)
+ ((nichola.groom@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241104:nTUA5WYV1B:1,2024-11-04 14:36:15.000,BRIEF-WM Completes Acquisition Of Stericycle,"Nov 4 (Reuters) - Waste Management Inc <WM.N>:
+    * WM COMPLETES ACQUISITION OF STERICYCLE
+    * WASTE MANAGEMENT INC - STERICYCLE STOCK TO CEASE TRADING
+ON
+NASDAQ FROM NOV 4, 2024
+
+Source text: [ID:nBwb0PRv8a]
+Further company coverage: [WM.N]
+
+ (Reuters.Briefs@thomsonreuters.com)"
+2024,WM.N,urn:newsml:reuters.com:20241104:nTUA5WYV1B:2,2024-11-04 13:47:21.334,"WASTE MANAGEMENT INC - STERICYCLE STOCK TO CEASE TRADING ON NASDAQ FROM NOV 4, 2024","Nov 4 (Reuters) - Waste Management Inc <WM.N>:
+    * WM COMPLETES ACQUISITION OF STERICYCLE
+    * WASTE MANAGEMENT INC - STERICYCLE STOCK TO CEASE TRADING
+ON
+NASDAQ FROM NOV 4, 2024
+
+Source text: [ID:nBwb0PRv8a]
+Further company coverage: [WM.N]
+
+ (Reuters.Briefs@thomsonreuters.com)"
+2024,WM.N,urn:newsml:reuters.com:20241104:nTUA5WYV1B:1,2024-11-04 13:47:00.333,WM COMPLETES ACQUISITION OF STERICYCLE,"Nov 4 (Reuters) - Waste Management Inc <WM.N>:
+    * WM COMPLETES ACQUISITION OF STERICYCLE
+    * WASTE MANAGEMENT INC - STERICYCLE STOCK TO CEASE TRADING
+ON
+NASDAQ FROM NOV 4, 2024
+
+Source text: [ID:nBwb0PRv8a]
+Further company coverage: [WM.N]
+
+ (Reuters.Briefs@thomsonreuters.com)"
+2024,WM.N,urn:newsml:reuters.com:20241101:nL4N3M82A3:1,2024-11-01 21:49:06.000,BUZZ-Chewy rises as company set to join S&P MidCap 400,"** Shares of pet products retailer Chewy <CHWY.N> rise 5.5%
+to $28.60 after the bell  
+        ** Company will replace Stericycle <SRCL.O> in the S&P
+MidCap 400 index prior to the opening of trading on Nov. 6 - S&P
+Dow Jones Indices
+    ** Waste Management <WM.N> said in June that it will take
+Stericycle private in a deal valued at $7.2 bln
+    ** Up to last close, CHWY up 14.8% YTD 
+
+ (Reporting by Sneha S K)
+ ((Sneha.SK@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nFWN3M71OO:1,2024-10-31 22:31:57.000,BRIEF-WM Announces Further Extension Of Private Exchange Offer And Consent Solicitation For Any And All Of Stericycle's $500 Mln Outstanding 3.875% Senior Notes Due 2029,"Oct 31 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES FURTHER EXTENSION OF PRIVATE EXCHANGE OFFER
+AND
+CONSENT SOLICITATION FOR ANY AND ALL OF STERICYCLE, INC.'S
+$500 MILLION OUTSTANDING 3.875% SENIOR NOTES DUE 2029
+
+Source text: [ID:nBwjGpvxa]
+Further company coverage: [WM.N]
+
+ ((reuters.briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nFWN3M71OO:1,2024-10-31 22:10:22.176,"WM ANNOUNCES FURTHER EXTENSION OF PRIVATE EXCHANGE OFFER AND CONSENT SOLICITATION FOR ANY AND ALL OF STERICYCLE, INC.'S $500 MILLION OUTSTANDING 3.875% SENIOR NOTES DUE 2029","Oct 31 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES FURTHER EXTENSION OF PRIVATE EXCHANGE OFFER
+AND
+CONSENT SOLICITATION FOR ANY AND ALL OF STERICYCLE, INC.'S
+$500 MILLION OUTSTANDING 3.875% SENIOR NOTES DUE 2029
+
+Source text: [ID:nBwjGpvxa]
+Further company coverage: [WM.N]
+
+ ((reuters.briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:1,2024-10-31 00:02:42.000,BRIEF-WM Announces Pricing Of $5.2 Billion Senior Notes,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:7,2024-10-31 00:00:59.206,WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR NOTES DUE 2035,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:6,2024-10-31 00:00:59.030,WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR NOTES DUE 2054,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:5,2024-10-31 00:00:52.498,WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR NOTES DUE 2030,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:4,2024-10-31 00:00:52.366,WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR NOTES DUE 2032,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:3,2024-10-31 00:00:41.784,WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR NOTES DUE 2028,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:2,2024-10-31 00:00:38.011,WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES OFFERING,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241031:nTUACDYDJF:1,2024-10-31 00:00:00.320,WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $5.2 BILLION SENIOR NOTES
+    * WASTE MANAGEMENT INC - PRICES $5.2 BILLION SENIOR NOTES
+OFFERING
+    * WASTE MANAGEMENT INC - PRICES $1 BILLION 4.500% SENIOR
+NOTES DUE
+2028
+    * WASTE MANAGEMENT INC - PRICES $750 MILLION 4.800% SENIOR
+NOTES
+DUE 2032
+    * WASTE MANAGEMENT INC - PRICES $700 MILLION 4.650% SENIOR
+NOTES
+DUE 2030
+    * WASTE MANAGEMENT INC - PRICES $1.25 BILLION 5.350% SENIOR
+NOTES
+DUE 2054
+    * WASTE MANAGEMENT INC - PRICES $1.5 BILLION 4.950% SENIOR
+NOTES
+DUE 2035
+
+Source text: [ID:nBw7hWWgma]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241030:nFWN3M61HI:1,2024-10-30 13:16:49.000,BRIEF-Waste Management Inc Files For Five-Part Senior Notes Offering Size Not Disclosed - SEC Filing,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC FILES FOR FIVE-PART SENIOR NOTES
+OFFERING;
+SIZE NOT DISCLOSED - SEC FILING
+
+Source text: [ID:n0001104659-24-112445]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241030:nFWN3M61HI:1,2024-10-30 12:44:47.452,WASTE MANAGEMENT INC FILES FOR FIVE-PART SENIOR NOTES OFFERING; SIZE NOT DISCLOSED - SEC FILING,"Oct 30 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC FILES FOR FIVE-PART SENIOR NOTES
+OFFERING;
+SIZE NOT DISCLOSED - SEC FILING
+
+Source text: [ID:n0001104659-24-112445]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241029:nL8N3M502V:1,2024-10-29 02:27:28.000,Waste Management Inc reports results for the quarter ended in September 30 - Earnings Summary,"* Waste Management Inc <WM.N> reported quarterly adjusted
+earnings
+of $1.96​​ per share for the quarter ended September 30, higher
+than the same quarter last year, when the company reported EPS
+of $1.63.  The mean expectation of twenty one analysts for the
+quarter was for earnings of $1.89 per share. Wall Street
+expected results to range from $1.78  to $1.98 per share.
+    * Revenue rose 7.9% to $5.61 billion from a year ago;
+analysts
+expected $5.51 billion. 
+    * Waste Management Inc's reported EPS for the quarter was
+$1.88​.
+    * The company reported quarterly net income of $760 million.
+    * Waste Management Inc shares had fallen by 0.4% this
+quarter and
+gained 15.5% so far this year.
+
+FORECAST CHANGES
+    * The mean earnings estimate of analysts had risen by
+about 0.1%
+in the last three months.​ 
+    * In the last 30 days, one analyst negatively revised an
+earnings
+estimate
+
+RECOMMENDATIONS
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 12 ""strong buy"" or ""buy,"" 12
+""hold"" and no ""sell"" or ""strong sell."" 
+    * The average consensus recommendation for the environmental
+services & equipment peer group is also ""buy""
+
+Wall Street's median 12-month price target for Waste Management
+Inc is $224.00 
+This summary was machine generated from LSEG data October 29 at
+02:27 a.m. UTC. ​All figures in US dollars unless otherwise
+stated. (For questions concerning the data in this report,
+contact Estimates.Support@lseg.com. For any other questions or
+feedback, contact RefinitivNewsSupport@thomsonreuters.com) QUARTER ENDING    ESTIMATE       ACTUAL         BEAT, MET,
+                                                 MISSED
+ Sep. 30 2024      1.89           1.96           Beat
+ Jun. 30 2024      1.83           1.82           Missed
+ Mar. 31 2024      1.51           1.75           Beat
+ Dec. 31 2023      1.53           1.74           Beat"
+2024,WM.N,urn:newsml:reuters.com:20241028:nL4N3M41NZ:2,2024-10-28 22:20:28.000,Waste Management lifts annual revenue view on higher prices for recyclable goods,"Oct 28 (Reuters) - Waste Management <WM.N> raised its
+annual revenue forecast on Monday following upbeat third-quarter
+results, driven by higher market prices for its recyclable
+commodities and increased landfill volumes.
+    Shares of the company rose by 2% after the bell.   
+    The company now sees its revenue growth for 2024 at 6%,
+surpassing the high end of its previous projection of 5.75%.    
+    Its total revenue for the quarter ended September 30 rose
+about 7.9% to $5.61 billion and was driven by a core price
+increase of 6.5%, a key performance metric that reflects changes
+in pricing.
+    WM, which collects and transfers trash to company landfills
+and recycles it into clean, renewable energy, was able to
+maintain high prices due to the essential nature of its waste
+management services.
+    The Houston, Texas-based company posted a quarterly adjusted
+profit of $1.96 per share, ahead of analysts' average
+expectation of $1.89 per share, according to data compiled by
+LSEG.    
+    The company has benefited from the use of automation, which
+has cut labor costs and boosted efficiency.
+    ""Our investments in technology, our fleet, and our asset
+network, combined with our disciplined pricing programs, are
+expanding the spread between price growth and our cost to
+serve,"" CEO Jim Fish said.
+    Waste Management and Republic Services <RSG.N> are two major
+companies that lead garbage collection across significant
+regions of the United States, alongside municipal waste
+departments.  
+
+ (Reporting by Pratyush Thakur and Aatreyee Dasgupta in
+Bengaluru; Editing by Mohammed Safi Shamsi)
+ ((pratyush.thakur@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:1,2024-10-28 21:21:46.529,BRIEF-Waste Management Q3 EPS USD 1.88,"Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:7,2024-10-28 21:21:01.703,"WASTE MANAGEMENT Q3 REVENUE USD 5,609 MILLION VS. IBES ESTIMATE USD 5,514 MILLION","Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:6,2024-10-28 21:21:01.676,WASTE MANAGEMENT Q3 EBITDA MARGIN 29.9%,"Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:5,2024-10-28 21:21:01.656,WASTE MANAGEMENT Q3 NET INCOME USD 760 MILLION,"Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:4,2024-10-28 21:21:01.650,WASTE MANAGEMENT Q3 EPS USD 1.88,"Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:3,2024-10-28 21:21:01.630,WASTE MANAGEMENT Q3 ADJUSTED EPS USD 1.96,"Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:2,2024-10-28 21:21:01.624,"WASTE MANAGEMENT Q3 EBITDA USD 1,677 MILLION","Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241028:nPLXEBA8CA:1,2024-10-28 21:21:01.580,WASTE MANAGEMENT OUTLOOK FY REVENUE GROWTH 6%,"Oct 28 (Reuters) - Waste Management Q3 adjusted EPS USD 1.96.
+* Q3 EBITDA margin 29.9%
+* Q3 revenue USD 5,609 million vs. IBES estimate USD 5,514 million
+* Q3 EBITDA USD 1,677 million
+* Q3 net income USD 760 million
+* outlook FY revenue growth 6%"
+2024,WM.N,urn:newsml:reuters.com:20241027:nL8N3M307O:1,2024-10-27 14:47:10.000,Waste Management Inc <WM.N> expected to post earnings of $1.89 a share - Earnings Preview,"* Waste Management Inc <WM.N> <WM> is expected to show a
+rise in
+quarterly revenue when it reports  results on October 28 for the
+period ending September 30 2024
+    * The Houston Texas-based  company is expected to report a
+6.1% increase in revenue to $5.514 billion from $5.2 billion a
+year ago, according to the mean estimate from 18 analysts, based
+on LSEG data.
+    * ​LSEG's mean analyst estimate for Waste Management Inc is
+for
+earnings of $1.89 per share. 
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 12 ""strong buy"" or ""buy,"" 12
+""hold"" and no ""sell"" or ""strong sell.""  
+    * The mean earnings estimate of analysts was unchanged in
+the last
+three months. ​
+    * Wall Street's median 12-month price target for Waste
+Management
+Inc is $224.00​, above​ its last closing price of $206.80. ​​​
+
+Previous quarterly performance (using preferred earnings measure
+in US dollars). ​
+ QUARTER       STARMINESM  LSEG IBES  ACTUAL    BEAT,   SURPRI
+ ENDING        ARTESTIMAT  ESTIMATE             MET,    SE %
+               E®                               MISSED  
+ Jan. 1 0001   1.85        1.83       1.82      Missed  -0.3
+ Mar. 31 0001  1.51        1.51       1.75      Beat    16.3
+ Jan. 1 0001   1.54        1.53       1.74      Beat    13.6​
+ Sep. 30 2023  1.61        1.61       1.63      Beat    0.9
+ ​​Jun.        1.54        1.54       1.51      Missed  -2
+ 30 2023                                                
+ Mar. 31 2023  1.28        1.29       1.31      Beat    1.9​
+ Dec. 31 2022  1.40        1.41       1.30      Missed  -7.7
+ Jan. 1 0001   1.51        1.51       1.56      Beat    3.2
+ This summary was machine generated October 27 at 14:46 GMT.  All
+figures in US dollars unless otherwise stated. (For questions
+concerning the data in this report, contact
+Estimates.Support@lseg.com. For any other questions or feedback,
+contact RefinitivNewsSupport@thomsonreuters.com)"
+2024,WM.N,urn:newsml:reuters.com:20241004:nL8N3LG05A:5,2024-10-04 17:51:34.000,"U.S. RESEARCH ROUNDUP-Constellation Brands, Ge Vernova, Republic Services","Oct 4 (Reuters) - Wall Street securities analysts revised their ratings and price
+targets on several U.S.-listed companies, including Constellation Brands, Ge Vernova and
+Republic Services, on Friday.   
+    
+  HIGHLIGHTS  
+     * Constellation Brands Inc <STZ.N>: JP Morgan cuts target price to $293 from $307
+     * Diamondback Energy Inc <FANG.O>: Gerdes Energy Research cuts to neutral from buy
+     * Ge Vernova <GEV.N>: HSBC cuts to hold from buy
+     * Republic Services Inc <RSG.N>: Scotiabank resumes coverage with sector perform rating
+     * Waste Management Inc <WM.N>: Scotiabank resumes coverage with sector perform rating
+ 
+Following is a summary of research actions on U.S. companies reported by Reuters on Friday.
+Stock entries are in alphabetical order.     
+    
+     * Abercrombie & Fitch Co <ANF.N>: JP Morgan raises target price to $195 from $194 
+     * Aecom <ACM.N>: Truist Securities raises target price to $119 from $108 
+     * AIG <AIG.N>: BMO raises target price $90 from $87 
+     * Albany International Corp <AIN.N>: Truist Securities cuts PT to $91 from $101 
+                 * Alcoa Corp <AA.N>: Jefferies cuts target price to $50 from $55
+ 
+     * Alliant Energy Corp <LNT.O>: Mizuho raises target price to $61 from $52 
+                 * American Axle & Manufacturing Holdings Inc <AXL.N>: UBS cuts PT to $7 from $8
+ 
+     * American Electric Power Company Inc <AEP.O>: BMO cuts target price to $111 from $114 
+                 * AMN Healthcare Services Inc <AMN.N>: UBS cuts target price to $43 from $65
+ 
+                 * Antero Resources Corp <AR.N>: BMO raises target price to $34 from $33
+ 
+                 * Arch Resources Inc <ARCH.N>: Jefferies cuts target price to $155 from $170
+ 
+     * Array Technologies Inc <ARRY.O>: Guggenheim cuts target price to $12 from $14 
+                 * ASP Isotopes Inc <ASPI.O>: Canaccord Genuity initiates coverage with buy rating; PT $4.50
+ 
+     * Atyr Pharma <ATYR.O>: Wells Fargo initiates coverage with overweight rating and PT $17
+     * Biomarin Pharmaceutical <BMRN.O>: Barclays cuts target price to $86 from $110 
+     * Blacksky Technology Inc <BKSY.N>: Craig-Hallum raises to buy from hold 
+                 * Cargurus Inc <CARG.O>: UBS raises target price to $30 from $27
+ 
+                 * Cars.Com Inc <CARS.N>: UBS cuts target price to $17 from $19
+ 
+     * Carvana <CVNA.N>: Citigroup raises target price to $195 from $125 
+                 * CBOE Global Markets Inc <CBOE.Z>: UBS raises target price to $220 from $200
+ 
+     * Certara Inc <CERT.O>: Leerink Partners cuts target price to $13 from $15 
+                 * Ch Robinson Worldwide Inc <CHRW.O>: UBS raises target price to $140 from $100
+ 
+                 * Ch Robinson Worldwide Inc <CHRW.O>: UBS raises to buy from neutral
+ 
+                 * Charles Schwab Corp <SCHW.N>: Jefferies cuts target price to $73 from $79
+ 
+     * Cheesecake Factory Inc <CAKE.O>: Citigroup raises target price to $51 from $46
+                 * Cheniere Energy Inc <LNG.N>: UBS raises target price to $232 from $226
+ 
+                 * Chord Energy Corp <CHRD.O>: BMO cuts target price to $175 from $205
+ 
+     * Clene Inc <CLNN.O>: Canaccord Genuity cuts target price to $86 from $94 
+                 * Cleveland-Cliffs Inc <CLF.N>: Jefferies cuts target price to $18 from $20
+ 
+                 * CNX Resources Corp <CNX.N>: BMO raises target price to $29 from $26
+ 
+                 * Comstock Resources Inc <CRK.N>: BMO raises target price to $11 from $10
+ 
+                 * Conocophillips <COP.N>: BMO raises target price to $125 from $123
+ 
+     * Constellation Brands <STZ.N>: Deutsche Bank raises target price to $259 from $256
+     * Constellation Brands <STZ.N>: JP Morgan cuts target price to $293 from $307
+     * Constellation Brands <STZ.N>: Truist Securities cuts PT to $255 from $265
+                 * Constellation Brands <STZ.N>: UBS cuts target price to $288 from $295
+ 
+     * Curbline Properties Corp <CURB.N>: JP Morgan initiates coverage with overweight rating
+     * Curbline Properties Corp <CURB.N>: JP Morgan initiates coverage with target price $25 
+                 * CVS Health Corp <CVS.N>: TD Cowen raises target price to $85 from $59
+ 
+                 * CVS Health Corp <CVS.N>: TD Cowen raises to buy from hold
+ 
+                 * Dana Inc <DAN.N>: UBS cuts target price to $11 from $13
+ 
+                 * Devon Energy Corp <DVN.N>: BMO cuts target price to $48 from $52
+ 
+     * Diamondback Energy Inc <FANG.O>: BMO raises target price to $215 from $205
+     * Diamondback Energy Inc <FANG.O>: BMO raises to outperform from market perform
+     * Diamondback Energy Inc <FANG.O>: Gerdes Energy Research cuts to neutral from buy
+     * Digitalocean Holdings Inc <DOCN.N>: Canaccord Genuity raises PT to $48 from $42 
+     * Dine Brands Global Inc <DIN.N>: Truist Securities cuts target price to $37 from $66
+     * Dine Brands Global Inc <DIN.N>: Truist Securities cuts to hold from buy
+     * Domino's Pizza Inc <DPZ.N>: BofA Global Research raises PT to $582 from $577 
+     * Domino's Pizza Inc <DPZ.N>: Wedbush cuts target price to $470 from $510
+     * Doordash <DASH.O>: Wells Fargo raises target price to $142 from $127 
+     * Draftkings Inc <DKNG.O>: Barclays raises target price to $45 from $43 
+     * DT Midstream Inc <DTM.N>: JP Morgan raises target price to $83 from $78
+     * Edison International <EIX.N>: RBC raises target price to $100 from $94 
+     * Enact Holdings Inc <ACT.O>: KBW raises target price to $43 from $40
+     * Enphase Energy Inc <ENPH.O>: Guggenheim cuts target price to $90 from $93
+                 * EQT Corp <EQT.N>: BMO raises target price to $40 from $39
+ 
+     * EQT Corp <EQT.N>: Mizuho cuts target price to $41 from $43
+     * Eton Pharmaceuticals Inc <ETON.O>: Craig-Hallum raises target price to $10 from $8
+     * Eton Pharmaceuticals Inc <ETON.O>: H.C. Wainwright raises PT to $11 from $9
+     * EVgo Inc <EVGO.O>: TD Cowen raises target price to $7 from $5
+                 * Expand Energy Corp <EXE.O>: BMO raises target price to $98 from $94
+ 
+                 * Extra Space Storage Inc <EXR.N>: Morgan Stanley raises PT to $156 from $146
+ 
+                 * Exxon Mobil <XOM.N>: BMO raises target price to $130 from $127
+ 
+     * First Watch Restaurant Group Inc <FWRG.O>: Guggenheim cuts PT to $20 from $24
+                 * Ford Motor Co <F.N>: UBS cuts target price to $11 from $13
+ 
+     * Ge Vernova <GEV.N>: HSBC cuts to hold from buy
+     * Ge Vernova <GEV.N>: HSBC raises target price to $255 from $240
+                 * General Motors Co <GM.N>: UBS cuts target price to $58 from $64
+ 
+                 * Gentex Corp <GNTX.O>: UBS cuts target price to $32 from $34
+ 
+     * Global Payments Inc <GPN.N>: RBC cuts target price to $143 from $158
+     * Goosehead Insurance Inc <GSHD.O>: Truist Securities raises PT to $80 from $65
+     * Green Dot Corporation <GDOT.N>: Craig-Hallum raises target price to $11 from $10
+     * Guidewire Software Inc <GWRE.N>: Oppenheimer raises target price to $200 from $185 
+     * Harrow Inc <HROW.O>: Craig-Hallum raises target price to $65 from $45
+                 * Hartford Financial Services Group Inc <HIG.N>: BofA Global Research cuts to neutral from buy
+ 
+                 * Hartford Financial Services Group Inc <HIG.N>: BofA Global Research raises PT to $121 from $113
+ 
+                 * Hess <HES.N>: BMO raises target price to $160 from $155
+ 
+                 * HF Sinclair Corp <DINO.N>: BMO cuts target price to $53 from $57
+ 
+     * Hologic Inc <HOLX.O>: Mizuho raises target price to $90 from $85
+     * Home Depot Inc <HD.N>: Guggenheim raises target price to $450 from $390
+                 * Humana Inc <HUM.N>: UBS cuts target price to $250 from $380
+ 
+                 * Interactive Brokers Group Inc <IBKR.O>: Jefferies raises PT to $165 from $152
+ 
+     * Intercontinental Exchange Inc <ICE.N>: Citigroup raises target price to $190 from $180
+                 * Intercontinental Exchange Inc <ICE.N>: UBS raises target price to $190 from $175
+ 
+                 * Jack In the Box Inc <JACK.O>: UBS cuts target price to $50 from $55
+ 
+                 * Lam Research Corp <LRCX.O>: Morgan Stanley cuts target price to $77.00 from $77.40
+ 
+     * Lamb Weston Holdings Inc <LW.N>: Barclays raises target price to $74 from $70 
+                 * Lear Corp <LEA.N>: UBS cuts target price to $119 from $128
+ 
+                 * Levi Strauss & Co <LEVI.N>: Morgan Stanley cuts target price to $19 from $20
+ 
+                 * LPL Financial Holdings Inc <LPLA.O>: Jefferies cuts target price to $282 from $309
+ 
+                 * Marathon Petroleum Corp <MPC.N>: BMO cuts target price to $190 from $200
+ 
+     * Marketaxess Holdings Inc <MKTX.O>: Citigroup raises target price to $325 from $310
+                 * Marketaxess Holdings Inc <MKTX.O>: UBS raises target price to $330 from $300
+ 
+                 * Matador Resources Co <MTDR.N>: BMO raises target price to $78 from $75
+ 
+     * MGIC Investment Corp <MTG.N>: KBW raises target price to $29 from $27.50
+     * Mr Cooper Group Inc <COOP.O>: KBW raises target price to $107 from $105
+                 * Murphy Oil Corp <MUR.N>: BMO cuts target price to $40 from $42
+ 
+                 * Newmont <NEM.N>: Jefferies raises target price to $63 from $54
+ 
+     * Nexstar Media Group Inc <NXST.O>: Guggenheim cuts target price to $198 from $200
+     * NMI Holdings Inc <NMIH.O>: KBW raises target price to $43 from $40
+     * Northern Oil and Gas Inc <NOG.N>: Jefferies cuts target price to $46 from $53
+     * Norwegian Cruise Line <NCLH.N>: Stifel raises target price to $29 from $27
+     * Nuvalent Inc <NUVL.O>: JP Morgan raises target price to $125 from $100
+                 * Occidental Petroleum Corp <OXY.N>: BMO cuts target price to $65 from $70
+ 
+     * Old Republic International Corp <ORI.N>: Piper Sandler raises PT to $36 from $35 
+     * PBF Energy Inc <PBF.N>: BMO cuts target price to $35 from $42
+     * PBF Energy Inc <PBF.N>: BMO cuts to market perform from outperform
+                 * Peabody Energy Corp <BTU.N>: Jefferies raises target price to $29 from $27
+ 
+     * Peoples Bancorp Inc <PEBO.O>: Piper Sandler assumes coverage with overweight rating 
+     * Peoples Bancorp Inc <PEBO.O>: Piper Sandler assumes coverage with target price $39 
+     * Pepsico <PEP.O>: Barclays cuts target price to $186 from $187 
+     * Pepsico <PEP.O>: RBC cuts target price to $176 from $177 
+     * Quanta Services Inc <PWR.N>: Citigroup raises target price to $348 from $302
+     * Quest Diagnostics Inc <DGX.N>: Leerink Partners raises target price to $160 from $154
+     * Radian Group Inc <RDN.N>: KBW raises target price to $41 from $39
+                 * Raymond James Financial Inc <RJF.N>: Jefferies raises target price to $126 from $123
+ 
+     * Republic Services Inc <RSG.N>: Scotiabank resumes coverage with sector perform rating
+     * Republic Services Inc <RSG.N>: Scotiabank resumes coverage with target price $224
+     * Roku Inc <ROKU.O>: Macquarie raises target price to $90 from $72
+                 * Royal Gold Inc <RGLD.O>: Jefferies raises target price to $154 from $141
+ 
+     * RPM International Inc <RPM.N>: Morgan Stanley raises target price to $125 from $107 
+     * Sensata Technologies Holding Plc <ST.N>: JP Morgan cuts target price to $34 from $35
+     * Shoals Technologies Group Inc <SHLS.O>: Citigroup raises target price to $5.50 from $5
+     * Shoals Technologies Group Inc <SHLS.O>: Citigroup raises to neutral from sell
+     * Six Flags Entertainment <FUN.N>: Deutsche Bank cuts target price to $58 from $65
+     * Six Flags Entertainment Corp <FUN.N>: Deutsche Bank cuts target price to $58 from $65 
+                 * SM Energy Co <SM.N>: BMO cuts target price to $48 from $50
+ 
+     * Snap Inc <SNAP.N>: Wells Fargo cuts target price to $14 from $15
+                 * Talos Energy Inc <TALO.N>: BMO cuts target price to $13 from $14
+ 
+     * UWM Holdings Corp <UWMC.N>: KBW cuts target price to $9 from $9.25
+                 * Valero Energy Corp <VLO.N>: BMO cuts target price to $165 from $175
+ 
+                 * Vestis Corp <VSTS.N>: Jefferies raises target price to $18 from $14
+ 
+                 * Visteon Corp <VC.O>: UBS cuts target price to $116 from $131
+ 
+     * Vistra Corp <VST.N>: BMO raises target price to $146 from $125
+                 * Vital Energy Inc <VTLE.N>: BMO cuts target price to $40 from $48
+ 
+                 * Warner Music Group Corp <WMG.O>: BofA Global Research cuts PT to $30 from $33
+ 
+                 * Warner Music Group Corp <WMG.O>: BofA Global Research cuts to underperform from neutral
+ 
+                 * Warrior Met Coal Inc <HCC.N>: Jefferies cuts target price to $75 from $78
+ 
+     * Waste Management Inc <WM.N>: Scotiabank resumes coverage with sector perform rating
+     * Waste Management Inc <WM.N>: Scotiabank resumes coverage with target price $220
+     * Williams Companies Inc <WMB.N>: Morgan Stanley raises target price to $58 from $52 
+                 * Williams Companies Inc <WMB.N>: Morgan Stanley raises to overweight
+ 
+     * Williams Companies Inc <WMB.N>: Morgan Stanley raises to overweight from equal-weight
+     * Wingstop Inc <WING.O>: Citigroup raises target price to $440 from $417
+                 * Woodward Inc <WWD.O>: TD Cowen cuts target price to $160 from $186
+ 
+                 * Woodward Inc <WWD.O>: TD Cowen cuts to hold from buy
+ 
+                 * WP Carey Inc <WPC.N>: JP Morgan raises target price to $70 from $68
+ 
+     * Zscaler Inc <ZS.O>: Citigroup cuts target price to $230 from $240
+ 
+ (Compiled by Bengaluru Newsroom)
+ ((Diaries@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240924:nFWN3L60WF:1,2024-09-24 21:16:26.000,BRIEF-Waste Management And Stericycle Get Supplementary Information Request On Deal From Canada's Competition Bureau,"Sept 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT: CO AND STERICYCLE RECEIVED A SUPPLEMENTARY INFORMATION
+REQUEST
+ON DEAL FROM COMPETITION BUREAU OF CANADA
+    * WASTE MANAGEMENT: WILL CONTINUE TO WORK COOPERATIVELY WITH COMPETITION
+BUREAU
+
+Source text for Eikon: [ID:n0001104659-24-102483]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;;))"
+2024,WM.N,urn:newsml:reuters.com:20240924:nFWN3L60WF:2,2024-09-24 21:14:20.512,WASTE MANAGEMENT: WILL CONTINUE TO WORK COOPERATIVELY WITH COMPETITION BUREAU,"Sept 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT: CO AND STERICYCLE RECEIVED A SUPPLEMENTARY INFORMATION
+REQUEST
+ON DEAL FROM COMPETITION BUREAU OF CANADA
+    * WASTE MANAGEMENT: WILL CONTINUE TO WORK COOPERATIVELY WITH COMPETITION
+BUREAU
+
+Source text for Eikon: [ID:n0001104659-24-102483]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;;))"
+2024,WM.N,urn:newsml:reuters.com:20240924:nFWN3L60WF:1,2024-09-24 21:13:32.336,WASTE MANAGEMENT: CO AND STERICYCLE RECEIVED A SUPPLEMENTARY INFORMATION REQUEST ON DEAL FROM COMPETITION BUREAU OF CANADA,"Sept 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT: CO AND STERICYCLE RECEIVED A SUPPLEMENTARY INFORMATION
+REQUEST
+ON DEAL FROM COMPETITION BUREAU OF CANADA
+    * WASTE MANAGEMENT: WILL CONTINUE TO WORK COOPERATIVELY WITH COMPETITION
+BUREAU
+
+Source text for Eikon: [ID:n0001104659-24-102483]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;;))"
+2024,WM.N,urn:newsml:reuters.com:20240924:nTUA7ZVWGR:1,2024-09-24 12:45:25.000,"BRIEF-Wm Announces Successful Early Tender Results In Private Exchange Offer And Consent Solicitation For Any And All Of Stericycle, Inc.’S $500 Million Outstanding 3.875% Senior Notes Due 2029","Sept 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES SUCCESSFUL EARLY TENDER RESULTS IN PRIVATE
+EXCHANGE
+OFFER AND CONSENT SOLICITATION FOR ANY AND ALL OF STERICYCLE,
+INC.’S $500 MILLION OUTSTANDING 3.875% SENIOR NOTES DUE 2029
+
+Source text for Eikon: [ID:nBw8yJ4GKa]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240924:nTUA7ZVWGR:1,2024-09-24 12:00:05.426,"WM ANNOUNCES SUCCESSFUL EARLY TENDER RESULTS IN PRIVATE EXCHANGE OFFER AND CONSENT SOLICITATION FOR ANY AND ALL OF STERICYCLE, INC.’S $500 MILLION OUTSTANDING 3.875% SENIOR NOTES DUE 2029","Sept 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES SUCCESSFUL EARLY TENDER RESULTS IN PRIVATE
+EXCHANGE
+OFFER AND CONSENT SOLICITATION FOR ANY AND ALL OF STERICYCLE,
+INC.’S $500 MILLION OUTSTANDING 3.875% SENIOR NOTES DUE 2029
+
+Source text for Eikon: [ID:nBw8yJ4GKa]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240918:nL4N3L01K8:1,2024-09-18 19:17:10.000,MEDIA-Stericycle bondholders seek more cash from exchange offer- Bloomberg News,"-- Source link: https://tinyurl.com/36nmddy8
+    -- Note: Reuters has not verified this story and does not
+vouch for its accuracy
+
+ ((Bengaluru newsroom, globalnewsmonitoring@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240906:nL4N3KO157:1,2024-09-06 15:57:54.000,BUZZ-Stericycle rises after receiving clearance from UK authorities on Waste Management merger,"** Shares of medical waste disposal company Stericycle
+<SRCL.O> rise 4.4% to $61.51
+    ** SRCL says merger with Waste Management Inc. <WM.N> has
+received antitrust clearance from the Competition Authority of
+Portugal and confirmation from the UK Competition and Markets
+Authority
+    ** Waste Management, in June, had said that it will take
+Stericycle private in a deal valued at $7.2 bln
+    ** The merger has also received foreign investment approval
+from the UK Investment Security Unit within the Cabinet Office
+and Stericycle now anticipates completing the merger as early as
+the fourth quarter of 2024
+    ** Including session's move stock is up 24.1%, YTD
+
+ (Reporting by Jaiveer Singh Shekhawat in Bengaluru)
+ ((JaiveerSingh.Shekhawat@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240906:nFWN3KO0SN:1,2024-09-06 11:09:58.000,BRIEF-Stericycle Anticipates Completing Merger With Waste Management As Early As Q4 Of 2024,"Sept 6 (Reuters) - Stericycle Inc <SRCL.O>:
+    * STERICYCLE INC -  ANTICIPATES COMPLETING MERGER WITH WASTE
+MANAGEMENT INC AS EARLY AS Q4 OF 2024
+    * STERICYCLE - MERGER HAS RECEIVED FOREIGN INVESTMENT
+APPROVAL
+FROM UK INVESTMENT SECURITY UNIT WITHIN CABINET OFFICE
+    * STERICYCLE INC - CONDITION TO MERGER RELATING TO
+EXPIRATION OR
+TERMINATION OF WAITING PERIOD UNDER HART-SCOTT-RODINO ACT HAS
+BEEN SATISFIED
+
+Source text for Eikon: [ID:n0001193125-24-214684]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240906:nFWN3KO0SN:3,2024-09-06 11:07:27.853,STERICYCLE INC - CONDITION TO MERGER RELATING TO EXPIRATION OR TERMINATION OF WAITING PERIOD UNDER HSR ACT HAS BEEN SATISFIED,"Sept 6 (Reuters) - Stericycle Inc <SRCL.O>:
+    * STERICYCLE INC -  ANTICIPATES COMPLETING MERGER WITH WASTE
+MANAGEMENT INC AS EARLY AS Q4 OF 2024
+    * STERICYCLE - MERGER HAS RECEIVED FOREIGN INVESTMENT
+APPROVAL
+FROM UK INVESTMENT SECURITY UNIT WITHIN CABINET OFFICE
+    * STERICYCLE INC - CONDITION TO MERGER RELATING TO
+EXPIRATION OR
+TERMINATION OF WAITING PERIOD UNDER HART-SCOTT-RODINO ACT HAS
+BEEN SATISFIED
+
+Source text for Eikon: [ID:n0001193125-24-214684]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240906:nFWN3KO0SN:2,2024-09-06 11:07:05.910,STERICYCLE - MERGER HAS RECEIVED FOREIGN INVESTMENT APPROVAL FROM UK INVESTMENT SECURITY UNIT WITHIN CABINET OFFICE,"Sept 6 (Reuters) - Stericycle Inc <SRCL.O>:
+    * STERICYCLE INC -  ANTICIPATES COMPLETING MERGER WITH WASTE
+MANAGEMENT INC AS EARLY AS Q4 OF 2024
+    * STERICYCLE - MERGER HAS RECEIVED FOREIGN INVESTMENT
+APPROVAL
+FROM UK INVESTMENT SECURITY UNIT WITHIN CABINET OFFICE
+    * STERICYCLE INC - CONDITION TO MERGER RELATING TO
+EXPIRATION OR
+TERMINATION OF WAITING PERIOD UNDER HART-SCOTT-RODINO ACT HAS
+BEEN SATISFIED
+
+Source text for Eikon: [ID:n0001193125-24-214684]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240906:nFWN3KO0SN:1,2024-09-06 11:06:52.237,STERICYCLE INC -  ANTICIPATES COMPLETING MERGER WITH WASTE MANAGEMENT INC AS EARLY AS Q4 OF 2024,"Sept 6 (Reuters) - Stericycle Inc <SRCL.O>:
+    * STERICYCLE INC -  ANTICIPATES COMPLETING MERGER WITH WASTE
+MANAGEMENT INC AS EARLY AS Q4 OF 2024
+    * STERICYCLE - MERGER HAS RECEIVED FOREIGN INVESTMENT
+APPROVAL
+FROM UK INVESTMENT SECURITY UNIT WITHIN CABINET OFFICE
+    * STERICYCLE INC - CONDITION TO MERGER RELATING TO
+EXPIRATION OR
+TERMINATION OF WAITING PERIOD UNDER HART-SCOTT-RODINO ACT HAS
+BEEN SATISFIED
+
+Source text for Eikon: [ID:n0001193125-24-214684]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240725:nL4N3JH27L:1,2024-07-25 15:51:35.000,BUZZ-Waste Management hits over one-month low after second-quarter results miss,"** Shares of Waste Management <WM.N> fall 6.8% to $202.61 in
+day trading, its lowest since June 14
+    ** Company posts Q2 revenue of $5.40 bln, below analysts'
+estimates of $5.43 bln - LSEG data
+    ** Reports adj. earnings of $1.82​​/shr vs expectations of
+$1.83/shr
+    ** Quarterly expenses rose 5.2% y-o-y, while volume in WM's
+largest segment, collection and disposal, declined 0.3%
+    ** Eleven of 23 brokerages rate stock ""buy"" or higher and 12
+""hold""; their median PT is $226 - LSEG
+    ** Including session's moves, WM up 13.16% YTD, compared
+with a 14.14% increase in S&P 500 index <.SPX>
+
+ (Reporting by Nikhil Sharma in Bengaluru)
+ ((Nikhil.Sharma@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240725:nL8N3JH02F:1,2024-07-25 00:58:39.000,Waste Management Inc reports results for the quarter ended in June - Earnings Summary,"* Waste Management Inc <WM.N> reported quarterly adjusted
+earnings
+of $1.82​​ per share for the quarter ended in June, higher than
+the same quarter last year, when the company reported EPS of
+$1.51.  The mean expectation of nineteen analysts for the
+quarter was for earnings of $1.83 per share. Wall Street
+expected results to range from $1.70  to $1.92 per share.
+    * Revenue rose 5.5% to $5.40 billion from a year ago;
+analysts
+expected $5.43 billion. 
+    * Waste Management Inc's reported EPS for the quarter was
+$1.69​.
+    * The company reported quarterly net income of $680 million.
+    * Waste Management Inc shares had risen by 2.5% this
+quarter and
+gained 22.1% so far this year.
+
+FORECAST CHANGES
+    * The mean earnings estimate of analysts had risen by
+about 2.1%
+in the last three months.​ 
+    * In the last 30 days, there have been no negative revisions
+of
+earnings estimates
+
+RECOMMENDATIONS
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 11 ""strong buy"" or ""buy,"" 12
+""hold"" and no ""sell"" or ""strong sell."" 
+    * The average consensus recommendation for the environmental
+services & equipment peer group is also ""buy""
+
+Wall Street's median 12-month price target for Waste Management
+Inc is $226.00 
+This summary was machine generated from LSEG data July 25 at
+12:58 a.m. UTC. ​All figures in US dollars unless otherwise
+stated. (For questions concerning the data in this report,
+contact Estimates.Support@lseg.com. For any other questions or
+feedback, contact RefinitivNewsSupport@thomsonreuters.com) QUARTER ENDING    ESTIMATE       ACTUAL         BEAT, MET,
+                                                 MISSED
+ Jun. 30 2024      1.83           1.82           Missed
+ Mar. 31 2024      1.51           1.75           Beat
+ Dec. 31 2023      1.53           1.74           Beat
+ Sep. 30 2023      1.61           1.63           Beat"
+2024,WM.N,urn:newsml:reuters.com:20240724:nL4N3JG1XC:3,2024-07-24 21:17:06.000,Waste Management narrowly misses Q2 results on higher expenses,"July 24 (Reuters) - Waste management firm WM <WM.N>
+narrowly missed quarterly profit and revenue estimates on
+Wednesday as higher expenses and marginally lower volumes offset
+gains from higher prices for garbage collection and disposal.
+    WM - which collects, transfers and recycles trash into
+clean, renewable energy - was able to sustain high prices due to
+the essential nature of its waste management services.
+    Expenses in the quarter rose 5.2% year-over-year for the
+company. 
+    Meanwhile, volume in the WM's largest segment, collection
+and disposal, which accounted for 92% of the company's revenue
+in 2023, declined 0.3%.
+    The Texas-based company posted a quarterly adjusted profit
+of $1.82 per share, compared to analysts' average expectation of
+$1.83 per share, according to LSEG data.
+    WM and Republic Services <RSG.N> are two major companies —
+apart from municipal waste departments — that dominate garbage
+collection in large parts of the United States.
+    Its total revenue in the quarter ended June 30 rose about
+5.5% to $5.40 billion. Analysts expected a revenue of $5.43
+billion. 
+    Shares of the company were down 5% in extended trading. 
+
+ (Reporting by Pratyush Thakur and Aishwarya Jain in Bengaluru;
+editing by Tasim Zahid and Alan Barona)
+ ((pratyush.thakur@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240724:nPLXFDBC88:1,2024-07-24 20:30:46.534,BRIEF-Waste Management Q2 EPS USD 1.69,"Jul 24 (Reuters) - Waste Management Q2 revenue USD 5,402 million vs. IBES
+estimate USD 5,427 million.
+* Q2 EBITDA margin 28.7%
+* Q2 EBITDA USD 1,552 million
+* Q2 net income USD 680 million
+* outlook FY adjusted EBITDA USD 6,375-6,525 million"
+2024,WM.N,urn:newsml:reuters.com:20240724:nPLXFDBC88:6,2024-07-24 20:30:01.704,"WASTE MANAGEMENT Q2 EBITDA USD 1,552 MILLION","Jul 24 (Reuters) - Waste Management Q2 revenue USD 5,402 million vs. IBES
+estimate USD 5,427 million.
+* Q2 EBITDA margin 28.7%
+* Q2 EBITDA USD 1,552 million
+* Q2 net income USD 680 million
+* outlook FY adjusted EBITDA USD 6,375-6,525 million"
+2024,WM.N,urn:newsml:reuters.com:20240724:nPLXFDBC88:5,2024-07-24 20:30:01.687,WASTE MANAGEMENT Q2 EBITDA MARGIN 28.7%,"Jul 24 (Reuters) - Waste Management Q2 revenue USD 5,402 million vs. IBES
+estimate USD 5,427 million.
+* Q2 EBITDA margin 28.7%
+* Q2 EBITDA USD 1,552 million
+* Q2 net income USD 680 million
+* outlook FY adjusted EBITDA USD 6,375-6,525 million"
+2024,WM.N,urn:newsml:reuters.com:20240724:nPLXFDBC88:4,2024-07-24 20:30:01.680,WASTE MANAGEMENT Q2 NET INCOME USD 680 MILLION,"Jul 24 (Reuters) - Waste Management Q2 revenue USD 5,402 million vs. IBES
+estimate USD 5,427 million.
+* Q2 EBITDA margin 28.7%
+* Q2 EBITDA USD 1,552 million
+* Q2 net income USD 680 million
+* outlook FY adjusted EBITDA USD 6,375-6,525 million"
+2024,WM.N,urn:newsml:reuters.com:20240724:nPLXFDBC88:3,2024-07-24 20:30:01.665,WASTE MANAGEMENT Q2 EPS USD 1.69,"Jul 24 (Reuters) - Waste Management Q2 revenue USD 5,402 million vs. IBES
+estimate USD 5,427 million.
+* Q2 EBITDA margin 28.7%
+* Q2 EBITDA USD 1,552 million
+* Q2 net income USD 680 million
+* outlook FY adjusted EBITDA USD 6,375-6,525 million"
+2024,WM.N,urn:newsml:reuters.com:20240724:nPLXFDBC88:2,2024-07-24 20:30:01.653,"WASTE MANAGEMENT Q2 REVENUE USD 5,402 MILLION VS. IBES ESTIMATE USD 5,427 MILLION","Jul 24 (Reuters) - Waste Management Q2 revenue USD 5,402 million vs. IBES
+estimate USD 5,427 million.
+* Q2 EBITDA margin 28.7%
+* Q2 EBITDA USD 1,552 million
+* Q2 net income USD 680 million
+* outlook FY adjusted EBITDA USD 6,375-6,525 million"
+2024,WM.N,urn:newsml:reuters.com:20240724:nPLXFDBC88:1,2024-07-24 20:30:01.622,"WASTE MANAGEMENT OUTLOOK FY ADJUSTED EBITDA USD 6,375-6,525 MILLION","Jul 24 (Reuters) - Waste Management Q2 revenue USD 5,402 million vs. IBES
+estimate USD 5,427 million.
+* Q2 EBITDA margin 28.7%
+* Q2 EBITDA USD 1,552 million
+* Q2 net income USD 680 million
+* outlook FY adjusted EBITDA USD 6,375-6,525 million"
+2024,WM.N,urn:newsml:reuters.com:20240722:nL8N3JE21S:1,2024-07-22 20:17:08.000,Waste Management Inc <WM.N> expected to post earnings of $1.83 a share - Earnings Preview,"* Waste Management Inc <WM.N> <WM> is expected to show a
+rise in
+quarterly revenue when it reports  results on July 24 for the
+period ending June 30 2024
+    * The Houston Texas-based  company is expected to report a
+6.0% increase in revenue to $5.426 billion from $5.12 billion a
+year ago, according to the mean estimate from 18 analysts, based
+on LSEG data.
+    * ​LSEG's mean analyst estimate for Waste Management Inc is
+for
+earnings of $1.83 per share. 
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 11 ""strong buy"" or ""buy,"" 12
+""hold"" and no ""sell"" or ""strong sell.""  
+    * The mean earnings estimate of analysts had risen by
+about 0.0%
+in the last three months. ​
+    * Wall Street's median 12-month price target for Waste
+Management
+Inc is $223.00​, above​ its last closing price of $222.80. ​​​
+
+Previous quarterly performance (using preferred earnings measure
+in US dollars). ​
+ QUARTER       STARMINESM  LSEG IBES  ACTUAL    BEAT,   SURPRI
+ ENDING        ARTESTIMAT  ESTIMATE             MET,    SE %
+               E®                               MISSED  
+ Mar. 31 2024  1.51        1.51       1.75      Beat    16.3
+ Dec. 31 2024  1.54        1.53       1.74      Beat    13.6
+ Sep. 30 2023  1.61        1.61       1.63      Beat    0.9​
+ Jun. 30 2023  1.54        1.54       1.51      Missed  -2
+ ​​Mar.        1.28        1.29       1.31      Beat    1.9
+ 31 2023                                                
+ Dec. 31 2022  1.40        1.41       1.30      Missed  -7.7​
+ Sep. 30 2022  1.51        1.51       1.56      Beat    3.2
+ Jun. 30 2022  1.39        1.40       1.44      Beat    2.8
+ This summary was machine generated July 22 at 20:17 GMT.  All
+figures in US dollars unless otherwise stated. (For questions
+concerning the data in this report, contact
+Estimates.Support@lseg.com. For any other questions or feedback,
+contact RefinitivNewsSupport@thomsonreuters.com)"
+2024,WM.N,urn:newsml:reuters.com:20240711:nL4N3J30YR:1,2024-07-11 11:53:56.000,BUZZ-Truist cuts Waste Management PT on Stericycle acquisition,"** Truist cuts PT for Waste Management <WM.N> to $235 from
+$240, keeps rating ""buy""
+    ** The new price target represents a 11.27% upside to the
+stock's last close
+    ** Says acquisition of Stericycle <SRCL.O> looks like a
+""strategy pivot""
+    ** ""Skepticism around the SRCL acquisition may weigh on the
+stock over the next 12 months"" - Truist
+    ** WM bought SRCL for $7.2 billion in June
+    ** 11 of 23 brokerages rate WM ""buy"" or higher, 12 ""hold"";
+their median PT is $223
+    ** WM up 17.91% YTD
+
+ (Reporting by Aishwarya Jain in Bengaluru)
+ ((Aishwarya.Jain@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240624:nTUA9WF8NQ:1,2024-06-24 22:02:53.000,BRIEF-WM Announces Pricing Of $1.5 Billion Senior Notes,"June 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $1.5 BILLION SENIOR NOTES
+
+Source text for Eikon: [ID:nBw6xQwkba]
+Further company coverage: [WM.N]
+
+ ((reuters.briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240624:nTUA9WF8NQ:1,2024-06-24 21:55:00.356,WM ANNOUNCES PRICING OF $1.5 BILLION SENIOR NOTES,"June 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WM ANNOUNCES PRICING OF $1.5 BILLION SENIOR NOTES
+
+Source text for Eikon: [ID:nBw6xQwkba]
+Further company coverage: [WM.N]
+
+ ((reuters.briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240624:nFWN3IM0HT:1,2024-06-24 14:39:52.000,"BRIEF-Waste Management Files For Offering Of Senior Notes Due 2027, Senior Notes Due 2031 Size Not Disclosed - SEC Filing","June 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT FILES FOR OFFERING OF SENIOR NOTES DUE
+2027,
+SENIOR NOTES DUE 2031; SIZE NOT DISCLOSED - SEC FILING
+
+Source text for Eikon: [ID:n0001104659-24-074173]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240624:nFWN3IM0HT:1,2024-06-24 12:57:32.612,"WASTE MANAGEMENT FILES FOR OFFERING OF SENIOR NOTES DUE 2027, SENIOR NOTES DUE 2031; SIZE NOT DISCLOSED - SEC FILING","June 24 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT FILES FOR OFFERING OF SENIOR NOTES DUE
+2027,
+SENIOR NOTES DUE 2031; SIZE NOT DISCLOSED - SEC FILING
+
+Source text for Eikon: [ID:n0001104659-24-074173]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240606:nFWN3I41CH:1,2024-06-06 19:31:54.000,BRIEF-Teamsters Says Local 50 Members At Waste Management Win Immediate 18% Pay Increase,"June 6 (Reuters) - 
+  
+    * TEAMSTERS :LOCAL 50 MEMBERS AT WASTE MANAGEMENT WIN
+IMMEDIATE
+18% PAY INCREASE
+
+Source text: [https://tinyurl.com/25fxtrnl]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;;))"
+2024,WM.N,urn:newsml:reuters.com:20240606:nFWN3I41CH:1,2024-06-06 19:28:53.746,TEAMSTERS :LOCAL 50 MEMBERS AT WASTE MANAGEMENT WIN IMMEDIATE 18% PAY INCREASE,"June 6 (Reuters) - 
+  
+    * TEAMSTERS :LOCAL 50 MEMBERS AT WASTE MANAGEMENT WIN
+IMMEDIATE
+18% PAY INCREASE
+
+Source text: [https://tinyurl.com/25fxtrnl]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;;))"
+2024,WM.N,urn:newsml:reuters.com:20240604:nL4N3I22N2:1,2024-06-04 11:41:29.000,BUZZ-Street View: Waste Management's $7.2 bln buyout deal for Stericycle raises questions,"** Waste Management <WM.N> said on Monday it will take
+Stericycle <SRCL.O> private in a deal valued at $7.2 billion
+    ** WM will acquire Stericycle for $62 per share in cash, an
+about 20% premium to the stock's Friday close
+        
+    DEAL RATIONALE UNCLEAR
+    ** TD Cowen (""buy"", PT: $235) says many investors felt the
+valuation was too rich, Stericycle's profitability too low and 
+WM's pitch to investors/analysts too skimpy for such a large
+acquisition 
+    ** ""We think the industrial logic of the combination could
+make a lot of sense, but WM has a lot of questions that need to
+be answered"" - TD Cowen 
+    ** J.P. Morgan (""neutral"", PT: $201.3) says the rationale
+for acquiring SRCL a bit unclear. It is not obvious whether
+there is great overlap between Stericycle's medical waste
+customer base and WM's solid waste customer base for
+cross-selling opportunities
+    ** Truist Security (""buy"", PT: $240) says the sale price
+should be received well by SRCL shareholders. WM shareholders
+may be surprised by the deal announcement; we see real synergies
+with the SRCL RWCS (Regulated Medical Waste Disposal Solution)
+business, but are less clear on Shred-It's fit with the existing
+portfolio
+
+ (Reporting by Kannaki Deka)
+ ((kannaki.deka@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I12YF:6,2024-06-03 17:18:58.000,BREAKINGVIEWS-Medical trash turns into less valuable treasure,"(The author is a Reuters Breakingviews columnist.  The opinions
+expressed are his own.)
+    By Robert Cyran
+       NEW YORK, June 3 (Reuters Breakingviews) - One company’s
+trash may be another company’s treasure, but Waste Management
+<WM.N> is overestimating its haul from a dumpster dive. The
+garbage collector agreed on Monday to buy Stericycle <SRCL.O>, a
+biowaste disposal and document destruction company, for $7.2
+billion, including net debt. Unless the buyer can use its market
+size to sweep up some pricing power, the deal amounts mostly to
+scraps.
+    Covid-19 delivered mixed results for Stericycle. Discarded
+vaccination needles and drugs injected profit into the medical
+business, which accounted for two-thirds of revenue last year.
+Volume should keep growing from a post-pandemic reversion as
+populations age and safety regulations become more stringent.
+The top line’s other one-third comes from making tatters of
+personal and private papers, following the 2015 acquisition of
+Shred-It International. Increased work from home and use of
+electronic documents probably means a steady decline for the
+service.
+    Stericycle is selling itself for $62 a share, about where
+the stock was trading in early 2020 and nearly a 60% discount to
+its late 2015 peak. Even then, however, Waste Management isn’t
+exactly cleaning up. Its target is projected to generate about
+$380 million of operating profit in 2025, according to estimates
+gathered by LSEG. After adding $125 million of projected deal
+synergies and taxing the sum at the statutory rate, there should
+be roughly $400 million of net operating profit after tax.
+Divided by the price tag being paid for the enterprise implies a
+5.5% return on investment, below the 8.2% weighted average cost
+of capital that Morningstar analysts tabulate for Stericycle.
+    By taking over a peer, Waste Management might be able to
+charge customers more, which would help justify the 39% premium
+to Stericycle’s undisturbed price on May 23 when news first
+surfaced about a possible sale. If it’s part of the strategy,
+however, it probably will attract the attention of trustbusters.
+The U.S. Department of Justice forced Waste Management to divest
+assets in 2020 when it bought Advanced Disposal Services because
+of its already sprawling portfolio of landfills and transfer
+stations. Stericycle’s medical specialty could ease any
+regulatory concerns, too, but a nearly 5% drop in Waste
+Management’s stock price – or about $4 billion of market value –
+suggests investors consider the deal less treasure than trash.
+
+    Follow @rob_cyran on X
+         
+    CONTEXT NEWS 
+    Waste Management said on June 3 it had agreed to buy
+Stericycle for $5.8 billion, or $62 a share, a 20% premium to
+the closing price on May 31. The value of the deal, including
+$1.4 billion of net debt, is $7.2 billion.
+    Two-thirds of Stericycle’s $2.7 billion of revenue in 2023
+came from its medical waste division, and the rest from
+shredding and recycling confidential documents.
+    Waste Management expects to generate more than $125 million
+of annual synergies by cutting costs and improving Stericycle’s
+logistics.
+    Centerview Partners is advising Waste Management while BofA
+Securities is advising Stericycle.
+
+ (Editing by Jeffrey Goldfarb and Pranav Kiran)
+ ((For previous columns by the author, Reuters customers can
+click on [CYRAN/]
+robert.cyran@thomsonreuters.com; Reuters Messaging:
+robert.cyran.thomsonreuters.com@reuters.net))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I13GL:3,2024-06-03 15:49:31.000,"BUZZ-U.S. STOCKS ON THE MOVE-Arrowhead, Novavax, Precigen","* 
+      Eikon search string for individual stock moves: [STXBZ]
+    
+
+        * 
+      The Day Ahead newsletter: https://refini.tv/3LI4BU7
+    
+
+        * 
+      The Morning News Call newsletter: https://refini.tv/3dKUyB8
+    
+
+  
+The Nasdaq and the S&P 500 inched up on Monday as falling U.S. Treasury yields
+boosted megacap growth stocks, while investors assessed data that showed local
+manufacturing activity had eased for the second consecutive month in May. [.N]
+    
+    At 11:32 ET, the Dow Jones Industrial Average <.DJI> was down 0.64% at
+38,438.31. The S&P 500 <.SPX> was down 0.13% at 5,270.7 and the Nasdaq Composite
+<.IXIC> was up 0.38% at 16,799.115.
+ 
+ The top three S&P 500 <.PG.INX> percentage gainers:
+ ** Paramount Global <PARA.O>, up 7.4%
+ ** Autodesk <ADSK.O>, up 7.2%
+ ** Becton Dickinson <BDX.N>, up 3.9%
+ 
+ The top three S&P 500 <.PL.INX> percentage losers:
+ ** Tractor Supply <TSCO.O>, down 6.3%
+ ** Vistra <VST.N>, down 5.3%
+ ** Diamondback Energy <FANG.O>, down 4.7%
+ 
+ The top three NYSE <.PG.N> percentage gainers:
+ ** GameStop <GME.N>, up 30.7%
+ ** MarineMax <HZO.N>, up 22.2%
+ ** MAIA Biotechnology <MAIA.N>, up 17%
+ 
+ The top NYSE <.PL.N> percentage loser:
+ ** Wheels Up Experience <UP.N>, down 10.4%
+ 
+ The top two Nasdaq <.PG.O> percentage gainers:
+ ** Bio-Path Holdings <BPTH.O>, up 53.9%
+ ** Affimed N.V. <AFMD.O>, up 43.2%
+ 
+ The top three Nasdaq <.PL.O> percentage losers:
+ ** Plutonian Acquisition <PLTNU.O>, down 28.7%
+ ** Caribou Biosciences <CRBU.O>, down 25.3%
+ ** American Oncology Network <AONC.O>, down 25.1%
+ 
+ 
+ ** Paramount Global <PARA.O>: up 7.4%
+ BUZZ - Rises after report Skydance revises buyout offer to $15/shr [nL4N3I124T]
+ 
+
+ ** Gamestop <GME.N>: up 30.7%
+ BUZZ - Surges after Keith Gill's Reddit post shows $116 mln bet [nL4N3I1245]  
+    
+ ** Autodesk <ADSK.O>: up 7.1%
+ BUZZ - Rises after prelim Q1 results beat estimates [nL4N3I1291]  
+    
+ ** Edwards Lifesciences <EW.N>: up 1.8%
+ BUZZ - Rises; to sell critical care unit for $4.2 bln [nL4N3I12GS]  
+    
+ ** Spotify <SPOT.N>: up 4.3%
+ BUZZ - Up after it raises U.S. prices of premium plans [nL4N3I12KQ]  
+    
+ ** Pinnacle West Capital <PNW.N>: down 1.2%
+ BUZZ - Drops on convertible debt deal plans [nL1N3I10YI]  
+    
+ ** JetBlue Airways <JBLU.O>: up 3.0%
+ BUZZ - Rises on improved Q2 revenue forecast [nL4N3I12LF]  
+    
+ ** Waste Management <WM.N>: down 2.6%
+ BUZZ - Falls after $7.2 bln deal to buy Stericycle [nL4N3I1343]  
+    
+ ** Structure Therapeutics <GPCR.O>: up 60.2%
+ BUZZ - Rises as obesity drug meets main goal in mid-stage study [nL4N3I12R0]  
+    
+ ** Boston Beer Company <SAM.N>: down 3.9%
+ BUZZ - Falls after Suntory denies acquisition talks [nL4N3I12OL]
+    
+ ** Lattice Semiconductor <LSCC.O>: down 13.6%
+ BUZZ - CEO to step down; shares fall [nL4N3I1382]  
+    
+ ** MarineMax <HZO.N>: up 22.2%
+ BUZZ - Surges on reported buyout by OneWater Marine [nL1N3I116M]  
+    
+ ** Spirit Airlines <SAVE.N>: up 3.8%
+ BUZZ - Rises after announcing interim CFO [nL4N3I12XH]  
+ 
+ ** Caribou Biosciences <CRBU.O>: down 25.3%
+ BUZZ - Falls on early-stage cancer therapy data [nL4N3I12XW]  
+    
+ ** Coherent <COHR.N>: up 14.1%
+ BUZZ - Appoints new CEO; shares rise [nL4N3I12YH]  
+    
+** Coinbase Global <COIN.O>: up 1.2%
+ ** Riot Platforms <RIOT.O>: up 1.6%
+ ** Marathon Digital Holdings <MARA.O>: up 2.4%
+** Hut 8 Mining <HUT.O>: up 4.1%
+ BUZZ - Crypto stocks rise on bitcoin strength [nL4N3I1338]  
+
+ ** Arrowhead Pharmaceuticals <ARWR.O>: up 10.4%
+ BUZZ - Gains as genetic disorder treatment succeeds trial [nL4N3I136L]  
+    
+ ** Taseko Mines <TGB.N>: down 2.7%
+ BUZZ - Down after suspending Gibraltar mine operations [nL4N3I136N]   
+    
+ ** Babcock & Wilcox Enterprises <BW.N>: up 2.6%
+ BUZZ - To proceed with coal-to-biomass power plant conversion work, shares rise
+[nL4N3I13A0]   
+    
+ ** Novavax <NVAX.O>: up 16.0%
+ BUZZ - Gains as US FDA to consider JN.1 variant for updated COVID shots
+[nL4N3I139U]   
+    
+ ** Precigen <PGEN.O>: up 15.4%
+ BUZZ - Up as rare viral disease therapy meets main goal in early-stage study
+[nL4N3I13AY]   
+    
+ ** Exxon Mobil <XOM.N>: down 1.7%
+** Chevron <CVX.N>: down 1.8%
+** EOG Resources <EOG.N>: down 3.0%
+** Schlumberger NV <SLB.N>: down 3.2%
+ BUZZ - Energy sector falls as investors assess extended OPEC+ supply cut impact
+[nL4N3I13CJ]   
+    
+ ** Krispy Kreme <DNUT.O>: up 3.3%
+ BUZZ - Rises after J.P.Morgan upgrades to 'overweight' [nL4N3I13D4]   
+    
+ The 11 major S&P 500 sectors:
+ 
+ Communication Services  <.SPLRCL>              up 0.52%
+                                    
+ Consumer Discretionary  <.SPLRCD>              up 0.09%
+                                    
+ Consumer Staples        <.SPLRCS>              down 0.16%
+                                    
+ Energy                  <.SPNY>                down 2.02%
+                                    
+ Financial               <.SPSY>                down 1.14%
+                                    
+ Health                  <.SPXHC>               up 0.74%
+                                    
+ Industrial              <.SPLRCI>              down 1.60%
+                                    
+ Information Technology  <.SPLRCT>              up 0.50%
+                                    
+ Materials               <.SPLRCM>              down 1.05%
+                                    
+ Real Estate             <.SPLRCR>              down 0.15%
+                                    
+ Utilities               <.SPLRCU>              down 1.26%
+                                    
+ 
+ (Compiled by Rajarshi Roy and Anuja Bharat Mistry in Bengaluru)
+ ((Rajarshi.Roy@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I12IE:6,2024-06-03 14:12:38.000,UPDATE 4-Waste Management adds medical-waste portfolio with $7.2 bln Stericycle deal,"(Updates shares, adds analyst comment in paragraph 6)
+    By Nathan Gomes
+       June 3 (Reuters) - Waste Management said on Monday it
+will take Stericycle <SRCL.O> private in a deal valued at $7.2
+billion, as it looks to tap into the growing healthcare waste
+disposal market in the United States.
+    Shares of Stericycle jumped nearly 15% in early trade on
+Waste Management's $62 per share offer, which represents an
+equity value of $5.75 billion for Stericycle and an about 20%
+premium to the stock's Friday close.
+    Garbage disposal firms are riding a steady wave of demand
+spurred by an uptick in urbanization and industrialization. 
+    The North America waste management market size is expected
+to rise to $229.3 billion by 2027 from $208.0 billion in 2019,
+according to a data analysis from Allied Market Research.
+    WM, which dominates the garbage collection space in the
+United States, is looking to widen its horizons with Stericycle
+that helps clinics, surgery centers and hospitals dispose of
+their biohazardous and pharmaceutical waste.
+    Analysts at Oppenheimer expect Stericycle's assets to be an
+""appealing"" addition to WM, given the latter's limited footprint
+in the healthcare industry.
+    The Waste Management-Stericycle deal, expected to close by
+the fourth quarter of the year, will generate more than $125
+million in annual cost cuts, and be accretive to WM's earnings
+and cash flows within one year of its close.
+    In May, Reuters reported that WM, which collects trash and
+recycles it into clean, renewable energy, was also exploring a
+sale of its renewable natural gas business that could be worth
+about $3 billion, citing people familiar with the matter.
+    Shares on WM, which recently signed a sustainability
+partnership with Major League Baseball, fell about 2% on Monday,
+but have risen nearly 18% this year. 
+    The company beat analysts' estimates for first-quarter
+profit in April, aided by higher prices and steady demand.
+    Centerview Partners LLC served as WM's financial adviser,
+while Vinson & Elkins L.L.P and Baker Botts L.L.P served as its
+legal counsel. 
+
+ (Reporting by Nathan Gomes in Bengaluru; Editing by Krishna
+Chandra Eluri and Shinjini Ganguli)
+ ((Nathan.Gomes@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I1343:1,2024-06-03 14:01:05.000,BUZZ-Waste Management falls after $7.2 bln deal to buy Stericycle,"(Updates)
+    ** Shares of Waste Management <WM.N> fall 2.1% to $206.30
+    ** Co to buy medical waste disposal company Stericycle
+<SRCL.O> for $7.20 bln
+    ** WM to offer $62 per share in cash, which represents 20.3%
+premium to SRCL's closing price on Friday
+    ** Deal expected to close in Q4 2024
+    ** SRCL shares jump 15.2% to more than a two-year high of
+$59.30
+    ** YTD, WM stock is up 15.2%, while SRCL has gained 19.8%
+
+ (Reporting by Vallari Srivastava in Bengaluru)
+ ((Srivastava.Vallari@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I123U:2,2024-06-03 13:14:53.000,"BUZZ-U.S. STOCKS ON THE MOVE-MarineMax, JetBlue Airways, Boston Beer","* 
+      Eikon search string for individual stock moves: [STXBZ]
+    
+
+        * 
+      The Day Ahead newsletter: https://refini.tv/3LI4BU7
+    
+
+        * 
+      The Morning News Call newsletter: https://refini.tv/3dKUyB8
+    
+
+  
+Nasdaq and S&P 500 futures started the month on a positive note on Monday as
+falling U.S. Treasury yields boosted megacap growth stocks ahead of a
+data-packed week. [.N]
+    
+    At 9:02 ET, Dow e-minis <1YMc1> were down 0.03% at 38,779. S&P 500 e-minis
+<ESc1> were up 0.23% at 5,307.5, while Nasdaq 100 e-minis <NQc1> were up 0.55%
+at 18,692.75.
+ 
+ The top three NYSE percentage gainers premarket <.PRPG.NQ>:
+ ** GameStop <GME.N>, up 71.3%
+ ** AMC Entertainment Holdings <AMC.N>, up 22.9%
+ ** Barnes & Noble Education <BNED.N>, up 20.8%
+ 
+ The top three NYSE percentage losers premarket <.PRPL.NQ>:
+ ** Murphy USA <MUSA.N>, down 14.3%
+ ** Boston Beer <SAM.N>, down 10.7%
+ ** GSK plc <GSK.N>, down 8.2%
+ 
+ The top Nasdaq percentage gainer premarket <.PRPG.O>:
+ ** Bio-Path Holdings <BPTH.O>, up 91.7%
+ 
+ The top Nasdaq percentage loser premarket <.PRPL.O>:
+ ** CNS Pharmaceuticals <CNSP.O>, down 27.6%
+ 
+ 
+ ** Paramount Global <PARA.O>: up 5.2% premarket
+ BUZZ - Rises after report Skydance revises buyout offer to $15/shr [nL4N3I124T]
+ 
+
+ ** Gamestop <GME.N>: up 71.3% premarket
+ BUZZ - Surges after Keith Gill's Reddit post shows $116 mln bet [nL4N3I1245]  
+    
+ ** Autodesk <ADSK.O>: up 7.6% premarket
+ BUZZ - Rises after prelim Q1 results beat estimates [nL4N3I1291]  
+    
+ ** Edwards Lifesciences <EW.N>: up 1.1% premarket
+ BUZZ - Rises; to sell critical care unit for $4.2 bln [nL4N3I12GS]  
+    
+ ** Spotify <SPOT.N>: up 5.6% premarket
+ BUZZ - Up after it raises U.S. prices of premium plans [nL4N3I12KQ]  
+    
+ ** Pinnacle West Capital <PNW.N>: down 3.0% premarket
+ BUZZ - Drops on convertible debt deal plans [nL1N3I10YI]  
+    
+ ** JetBlue Airways <JBLU.O>: up 2.9% premarket
+ BUZZ - Rises on improved Q2 revenue forecast [nL4N3I12LF]  
+    
+ ** Waste Management <WM.N>: down 2.0% premarket
+ BUZZ - Falls after $7.2 bln deal to buy Stericycle [nL4N3I12NP]  
+    
+ ** Boston Beer <SAM.N>: down 10.7% premarket
+ BUZZ - Falls after Suntory denies acquisition talks [nL4N3I12OL]  
+    
+ ** Lattice Semiconductor <LSCC.O>: down 8.7% premarket
+ BUZZ - CEO to step down; shares fall [nL4N3I12V6]  
+    
+ ** MarineMax <HZO.N>: up 20.5% premarket
+ BUZZ - Surges on reported buyout by OneWater Marine [nL1N3I116M]  
+
+ (Compiled by Rajarshi Roy and Anuja Bharat Mistry in Bengaluru)
+ ((Rajarshi.Roy@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nTUA2GN6LT:1,2024-06-03 12:28:42.000,BRIEF-WM To Acquire Stericycle In $7.2 Bln Deal,"June 3 (Reuters) - Waste Management and Stericycle:
+    * WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE
+SERVICES,
+FOR $7.2 BILLION
+    * STERICYCLE INC: PROPOSED DEAL FOR $62.00 PER SHARE
+    * STERICYCLE INC: DEAL EXPECTED TO BE ACCRETIVE TO WM'S
+EARNINGS
+AND CASH FLOW WITHIN ONE YEAR OF CLOSE
+    * STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN
+A
+POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT
+TRADING MULTIPLE
+    * STERICYCLE INC: WM INTENDS TO FINANCE TRANSACTION USING A
+COMBINATION OF BANK DEBT AND SENIOR NOTES
+    * STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING
+CONDITION
+    * STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY
+AS Q4
+OF 2024
+    * STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE
+THAN
+$125 MILLION IN ANNUAL RUN-RATE SYNERGIES
+    * STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE
+REPURCHASES
+
+Source text for Eikon: [ID:nBw3rdG8sa]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I12NP:1,2024-06-03 11:41:13.000,BUZZ-Waste Management falls after $7.2 bln deal to buy Stericycle,"** Shares of Waste Management <WM.N> fall 1.7% to $207.06
+premarket
+    ** Co to buy medical waste disposal company Stericycle
+<SRCL.O> for $7.2 bln
+    ** WM to offer $62 per share in cash, which represents a
+20.3% premium to SRCL's closing price on Friday
+    ** Deal expected to close in Q4 of 2024
+    ** Up to last close, WM stock is down 17.7% YTD
+
+ (Reporting by Vallari Srivastava in Bengaluru)
+ ((Srivastava.Vallari@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nTUA2GN6LT:9,2024-06-03 11:08:32.773,STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE REPURCHASES,"June 3 (Reuters) - Waste Management and Stericycle:
+    * WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE
+SERVICES,
+FOR $7.2 BILLION
+    * STERICYCLE INC: PROPOSED DEAL FOR $62.00 PER SHARE
+    * STERICYCLE INC: DEAL EXPECTED TO BE ACCRETIVE TO WM'S
+EARNINGS
+AND CASH FLOW WITHIN ONE YEAR OF CLOSE
+    * STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN
+A
+POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT
+TRADING MULTIPLE
+    * STERICYCLE INC: WM INTENDS TO FINANCE TRANSACTION USING A
+COMBINATION OF BANK DEBT AND SENIOR NOTES
+    * STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING
+CONDITION
+    * STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY
+AS Q4
+OF 2024
+    * STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE
+THAN
+$125 MILLION IN ANNUAL RUN-RATE SYNERGIES
+    * STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE
+REPURCHASES
+
+Source text for Eikon: [ID:nBw3rdG8sa]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I12HY:2,2024-06-03 11:06:51.000,Waste Management to buy Stericycle in $7.2 bln deal,"June 3 (Reuters) - Waste Management <WM.N> will buy
+medical waste disposal company Stericycle <SRCL.O> in a deal
+valued at $7.2 billion, the companies said on Monday.
+
+ (Reporting by Nathan Gomes in Bengaluru; Editing by Krishna
+Chandra Eluri)
+ ((Nathan.Gomes@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nTUA2GN6LT:8,2024-06-03 11:06:29.175,STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE THAN $125 MLN IN ANNUAL RUN-RATE SYNERGIES,"June 3 (Reuters) - Waste Management and Stericycle:
+    * WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE
+SERVICES,
+FOR $7.2 BILLION
+    * STERICYCLE INC: PROPOSED DEAL FOR $62.00 PER SHARE
+    * STERICYCLE INC: DEAL EXPECTED TO BE ACCRETIVE TO WM'S
+EARNINGS
+AND CASH FLOW WITHIN ONE YEAR OF CLOSE
+    * STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN
+A
+POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT
+TRADING MULTIPLE
+    * STERICYCLE INC: WM INTENDS TO FINANCE TRANSACTION USING A
+COMBINATION OF BANK DEBT AND SENIOR NOTES
+    * STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING
+CONDITION
+    * STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY
+AS Q4
+OF 2024
+    * STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE
+THAN
+$125 MILLION IN ANNUAL RUN-RATE SYNERGIES
+    * STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE
+REPURCHASES
+
+Source text for Eikon: [ID:nBw3rdG8sa]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nTUA2GN6LT:7,2024-06-03 11:05:50.375,STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY AS Q4 OF 2024,"June 3 (Reuters) - Waste Management and Stericycle:
+    * WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE
+SERVICES,
+FOR $7.2 BILLION
+    * STERICYCLE INC: PROPOSED DEAL FOR $62.00 PER SHARE
+    * STERICYCLE INC: DEAL EXPECTED TO BE ACCRETIVE TO WM'S
+EARNINGS
+AND CASH FLOW WITHIN ONE YEAR OF CLOSE
+    * STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN
+A
+POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT
+TRADING MULTIPLE
+    * STERICYCLE INC: WM INTENDS TO FINANCE TRANSACTION USING A
+COMBINATION OF BANK DEBT AND SENIOR NOTES
+    * STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING
+CONDITION
+    * STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY
+AS Q4
+OF 2024
+    * STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE
+THAN
+$125 MILLION IN ANNUAL RUN-RATE SYNERGIES
+    * STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE
+REPURCHASES
+
+Source text for Eikon: [ID:nBw3rdG8sa]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nTUA2GN6LT:6,2024-06-03 11:05:40.368,STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING CONDITION,"June 3 (Reuters) - Waste Management and Stericycle:
+    * WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE
+SERVICES,
+FOR $7.2 BILLION
+    * STERICYCLE INC: PROPOSED DEAL FOR $62.00 PER SHARE
+    * STERICYCLE INC: DEAL EXPECTED TO BE ACCRETIVE TO WM'S
+EARNINGS
+AND CASH FLOW WITHIN ONE YEAR OF CLOSE
+    * STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN
+A
+POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT
+TRADING MULTIPLE
+    * STERICYCLE INC: WM INTENDS TO FINANCE TRANSACTION USING A
+COMBINATION OF BANK DEBT AND SENIOR NOTES
+    * STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING
+CONDITION
+    * STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY
+AS Q4
+OF 2024
+    * STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE
+THAN
+$125 MILLION IN ANNUAL RUN-RATE SYNERGIES
+    * STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE
+REPURCHASES
+
+Source text for Eikon: [ID:nBw3rdG8sa]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nTUA2GN6LT:4,2024-06-03 11:05:36.033,STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN A POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT TRADING MULTIPLE,"June 3 (Reuters) - Waste Management and Stericycle:
+    * WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE
+SERVICES,
+FOR $7.2 BILLION
+    * STERICYCLE INC: PROPOSED DEAL FOR $62.00 PER SHARE
+    * STERICYCLE INC: DEAL EXPECTED TO BE ACCRETIVE TO WM'S
+EARNINGS
+AND CASH FLOW WITHIN ONE YEAR OF CLOSE
+    * STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN
+A
+POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT
+TRADING MULTIPLE
+    * STERICYCLE INC: WM INTENDS TO FINANCE TRANSACTION USING A
+COMBINATION OF BANK DEBT AND SENIOR NOTES
+    * STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING
+CONDITION
+    * STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY
+AS Q4
+OF 2024
+    * STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE
+THAN
+$125 MILLION IN ANNUAL RUN-RATE SYNERGIES
+    * STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE
+REPURCHASES
+
+Source text for Eikon: [ID:nBw3rdG8sa]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nTUA2GN6LT:1,2024-06-03 11:05:00.395,"WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE SERVICES, FOR $7.2 BILLION","June 3 (Reuters) - Waste Management and Stericycle:
+    * WM TO ACQUIRE STERICYCLE, A LEADER IN MEDICAL WASTE
+SERVICES,
+FOR $7.2 BILLION
+    * STERICYCLE INC: PROPOSED DEAL FOR $62.00 PER SHARE
+    * STERICYCLE INC: DEAL EXPECTED TO BE ACCRETIVE TO WM'S
+EARNINGS
+AND CASH FLOW WITHIN ONE YEAR OF CLOSE
+    * STERICYCLE INC: SYNERGY REALIZATION EXPECTED TO RESULT IN
+A
+POST-SYNERGY TRANSACTION MULTIPLE WELL BELOW WM'S CURRENT
+TRADING MULTIPLE
+    * STERICYCLE INC: WM INTENDS TO FINANCE TRANSACTION USING A
+COMBINATION OF BANK DEBT AND SENIOR NOTES
+    * STERICYCLE INC: TRANSACTION IS NOT SUBJECT TO A FINANCING
+CONDITION
+    * STERICYCLE INC: PROPOSED DEAL EXPECTED TO CLOSE AS EARLY
+AS Q4
+OF 2024
+    * STERICYCLE INC: WM EXPECTS TRANSACTION TO GENERATE MORE
+THAN
+$125 MILLION IN ANNUAL RUN-RATE SYNERGIES
+    * STERICYCLE INC: WM EXPECTS TO TEMPORARILY SUSPEND SHARE
+REPURCHASES
+
+Source text for Eikon: [ID:nBw3rdG8sa]
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nL4N3I11ID:1,2024-06-03 06:26:09.000,PRESS DIGEST - Wall Street Journal - June 3,"June 3 (Reuters) - The following are the top stories in
+the Wall Street Journal. Reuters has not verified these stories
+and does not vouch for their accuracy.
+    
+    -David Ellison's Skydance Media made a sweetened offer to
+buy up to a certain number of non-voting Paramount Global
+<PARA.O> shares at roughly $15 each.
+    
+    -Washington Post executive editor Sally Buzbee is stepping
+down, the latest leadership change at the Jeff Bezos-owned news
+organization as it contends with declining traffic and continued
+losses.
+    
+    - Waste Management <WM.N> is nearing a deal to buy
+medical-waste-disposal company Stericycle <SRCL.O> for roughly
+$7 billion including debt. 
+    
+    - French IT firm Atos <ATOS.PA> said it received two revised
+financial restructuring proposals as part of its refinancing
+process, aimed to cut debt and restore profitability.
+    
+    - Toyota Motor <7203.T> suspended shipments and sales of
+three models produced in Japan, saying they were tested using
+methods that differed from the Japanese government's standards.
+    
+    - OPEC+ on Sunday agreed to extend all production curbs into
+next year, a deal that likely signals oil prices will remain
+elevated through the U.S. presidential election. 
+        
+  
+
+ (Compiled by Bengaluru newsroom)
+ ((globalnewsmonitoring@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240603:nFWN3HZ03H:1,2024-06-03 03:28:39.000,BRIEF-Waste Management Near Deal To Buy Stericycle; Would Value Co At About $7 Bln Including Debt- WSJ,"June 2 (Reuters) - 
+  
+    * WASTE MANAGEMENT NEAR DEAL TO BUY STERICYCLE WHICH WOULD
+VALUE
+MEDICAL-WASTE-MANAGEMENT COMPANY AT ABOUT $7 BILLION INCLUDING
+DEBT- WSJ
+
+Source text: https://tinyurl.com/2jte8wph
+Further company coverage: [SRCL.O WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240602:nL1N3I00MM:5,2024-06-02 23:10:17.000,"UPDATE 1-Waste Management nears deal to buy Stericycle for $7 billion, WSJ reports","(Adds details and background)
+       June 2 (Reuters) - Waste Management <WM.N> is nearing a
+deal to buy medical waste disposal company Stericycle <SRCL.O>
+for roughly $7 billion, including debt, the Wall Street Journal
+reported on Sunday. 
+    The acquisition of Bannockburn, Illinois-based Stericycle
+which has more than $1 billion of debt, could be announced as
+soon as Monday, the report added, citing people familiar with
+the matter.   
+    Bloomberg reported last month that Stericycle was exploring
+a potential sale after receiving takeover interest, sending its
+shares up by more than 13%. 
+    Stericycle and Waste Management did not immediately respond
+to Reuters' requests for comment on the report. 
+    Stericycle helps local clinics, surgery centers and
+hospitals dispose their biohazardous and pharmaceutical waste
+while Houston, Texas-based Waste Management is one of the
+largest U.S. trash and recycling collection companies.  
+
+ (Reporting by Angela Christy in Bengaluru; Editing by Lisa
+Shumaker and Lincoln Feast.)
+ ((AngelaChristy.M@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240602:nFWN3HY127:2,2024-06-02 22:51:37.000,BRIEF-Waste Management Near Deal To Buy Stericycle - WSJ,"June 2 (Reuters) - 
+  
+    * WASTE MANAGEMENT NEAR DEAL TO BUY STERICYCLE - WSJ
+    * WASTE MANAGEMENT NEAR DEAL TO BUY STERICYCLE WHICH WOULD
+VALUE
+MEDICAL-WASTE-MANAGEMENT COMPANY AT ABOUT $7 BILLION INCLUDING
+DEBT- WSJ
+
+Source text: https://tinyurl.com/278rcnlm
+Further company coverage: [SRCL.O]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240602:nFWN3HZ03H:1,2024-06-02 22:42:24.043,WASTE MANAGEMENT NEAR DEAL TO BUY STERICYCLE WHICH WOULD VALUE MEDICAL-WASTE-MANAGEMENT COMPANY AT ABOUT $7 BILLION INCLUDING DEBT- WSJ,"June 2 (Reuters) - 
+  
+    * WASTE MANAGEMENT NEAR DEAL TO BUY STERICYCLE WHICH WOULD
+VALUE
+MEDICAL-WASTE-MANAGEMENT COMPANY AT ABOUT $7 BILLION INCLUDING
+DEBT- WSJ
+
+Source text: https://tinyurl.com/2jte8wph
+Further company coverage: [SRCL.O WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240528:nFWN3HV1B0:1,2024-05-28 21:57:56.000,"BRIEF-Unifor Unifor Members At Waste Management Canada Corp. (Wm) Have Ratified A New Three-Year Contract Today, Ending A Nearly Month-Long Strike","Waste Management Inc <WM.N>:
+    * UNIFOR: UNIFOR MEMBERS AT WASTE MANAGEMENT CANADA CORP.
+(WM)
+HAVE RATIFIED A NEW THREE-YEAR CONTRACT TODAY, ENDING A NEARLY
+MONTH-LONG STRIKE
+    * UNIFOR: CONTRACT INCLUDES WAGE INCREASES OF $1.90 PER HOUR
+IN
+FIRST YEAR, $1.25 PER HOUR IN YEAR TWO AND $1.15 PER HOUR IN
+YEAR THREE
+    * UNIFOR: WASTE MANAGEMENT CANADA AGREED TO MEET WITH UNION
+WITHIN
+6 MONTHS TO DISCUSS BRINGING IN FOUR-DAY WORKWEEK
+    * UNIFOR: ALL WASTE MANAGEMENT CANADA MEMBERS WILL RECEIVE A
+$300
+SIGNING BONUS
+
+Source text for Eikon: [ID:]
+Further company coverage: [WM.N]"
+2024,WM.N,urn:newsml:reuters.com:20240528:nFWN3HV1B0:4,2024-05-28 21:46:33.454,UNIFOR: ALL WASTE MANAGEMENT CANADA MEMBERS WILL RECEIVE A $300 SIGNING BONUS,"Waste Management Inc <WM.N>:
+    * UNIFOR: UNIFOR MEMBERS AT WASTE MANAGEMENT CANADA CORP.
+(WM)
+HAVE RATIFIED A NEW THREE-YEAR CONTRACT TODAY, ENDING A NEARLY
+MONTH-LONG STRIKE
+    * UNIFOR: CONTRACT INCLUDES WAGE INCREASES OF $1.90 PER HOUR
+IN
+FIRST YEAR, $1.25 PER HOUR IN YEAR TWO AND $1.15 PER HOUR IN
+YEAR THREE
+    * UNIFOR: WASTE MANAGEMENT CANADA AGREED TO MEET WITH UNION
+WITHIN
+6 MONTHS TO DISCUSS BRINGING IN FOUR-DAY WORKWEEK
+    * UNIFOR: ALL WASTE MANAGEMENT CANADA MEMBERS WILL RECEIVE A
+$300
+SIGNING BONUS
+
+Source text for Eikon: [ID:]
+Further company coverage: [WM.N]"
+2024,WM.N,urn:newsml:reuters.com:20240528:nFWN3HV1B0:2,2024-05-28 21:46:02.701,"UNIFOR: CONTRACT INCLUDES WAGE INCREASES OF $1.90 PER HOUR IN FIRST YEAR, $1.25 PER HOUR IN YEAR TWO AND $1.15 PER HOUR IN YEAR THREE","Waste Management Inc <WM.N>:
+    * UNIFOR: UNIFOR MEMBERS AT WASTE MANAGEMENT CANADA CORP.
+(WM)
+HAVE RATIFIED A NEW THREE-YEAR CONTRACT TODAY, ENDING A NEARLY
+MONTH-LONG STRIKE
+    * UNIFOR: CONTRACT INCLUDES WAGE INCREASES OF $1.90 PER HOUR
+IN
+FIRST YEAR, $1.25 PER HOUR IN YEAR TWO AND $1.15 PER HOUR IN
+YEAR THREE
+    * UNIFOR: WASTE MANAGEMENT CANADA AGREED TO MEET WITH UNION
+WITHIN
+6 MONTHS TO DISCUSS BRINGING IN FOUR-DAY WORKWEEK
+    * UNIFOR: ALL WASTE MANAGEMENT CANADA MEMBERS WILL RECEIVE A
+$300
+SIGNING BONUS
+
+Source text for Eikon: [ID:]
+Further company coverage: [WM.N]"
+2024,WM.N,urn:newsml:reuters.com:20240528:nFWN3HV1B0:1,2024-05-28 21:44:27.816,"UNIFOR: UNIFOR MEMBERS AT WASTE MANAGEMENT CANADA CORP. (WM) HAVE RATIFIED A NEW THREE-YEAR CONTRACT TODAY, ENDING A NEARLY MONTH-LONG STRIKE","Waste Management Inc <WM.N>:
+    * UNIFOR: UNIFOR MEMBERS AT WASTE MANAGEMENT CANADA CORP.
+(WM)
+HAVE RATIFIED A NEW THREE-YEAR CONTRACT TODAY, ENDING A NEARLY
+MONTH-LONG STRIKE
+    * UNIFOR: CONTRACT INCLUDES WAGE INCREASES OF $1.90 PER HOUR
+IN
+FIRST YEAR, $1.25 PER HOUR IN YEAR TWO AND $1.15 PER HOUR IN
+YEAR THREE
+    * UNIFOR: WASTE MANAGEMENT CANADA AGREED TO MEET WITH UNION
+WITHIN
+6 MONTHS TO DISCUSS BRINGING IN FOUR-DAY WORKWEEK
+    * UNIFOR: ALL WASTE MANAGEMENT CANADA MEMBERS WILL RECEIVE A
+$300
+SIGNING BONUS
+
+Source text for Eikon: [ID:]
+Further company coverage: [WM.N]"
+2024,WM.N,urn:newsml:reuters.com:20240523:nFWN3HQ1SA:1,2024-05-23 15:47:51.000,BRIEF-Teamsters Ratifies A New Five-Year Collective Bargaining Agreement With Waste Management,"May 23 (Reuters) - Waste Management Inc <WM.N>:
+    * TEAMSTERS: RATIFIED A NEW FIVE-YEAR COLLECTIVE BARGAINING
+AGREEMENT WITH WASTE MANAGEMENT
+    * TEAMSTERS: NEW AGREEMENT PROVIDES IMMEDIATE $4 WAGE
+INCREASE
+UPFRONT & ADDITIONAL $1.25 PER YEAR OVER THE LENGTH OF CONTRACT
+    * TEAMSTERS: CONTRACT INCREASES PENSION CONTRIBUTIONS BY
+$1.25,
+SECURES A FAIR BIDDING PROCESS THAT IS BASED ON SENIORITY
+
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240523:nFWN3HQ1SA:3,2024-05-23 15:47:08.492,"TEAMSTERS: CONTRACT INCREASES PENSION CONTRIBUTIONS BY $1.25, SECURES A FAIR BIDDING PROCESS THAT IS BASED ON SENIORITY","May 23 (Reuters) - Waste Management Inc <WM.N>:
+    * TEAMSTERS: RATIFIED A NEW FIVE-YEAR COLLECTIVE BARGAINING
+AGREEMENT WITH WASTE MANAGEMENT
+    * TEAMSTERS: NEW AGREEMENT PROVIDES IMMEDIATE $4 WAGE
+INCREASE
+UPFRONT & ADDITIONAL $1.25 PER YEAR OVER THE LENGTH OF CONTRACT
+    * TEAMSTERS: CONTRACT INCREASES PENSION CONTRIBUTIONS BY
+$1.25,
+SECURES A FAIR BIDDING PROCESS THAT IS BASED ON SENIORITY
+
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240523:nFWN3HQ1SA:2,2024-05-23 15:46:44.149,TEAMSTERS: NEW AGREEMENT PROVIDES IMMEDIATE $4 WAGE INCREASE UPFRONT & ADDITIONAL $1.25 PER YEAR OVER THE LENGTH OF CONTRACT,"May 23 (Reuters) - Waste Management Inc <WM.N>:
+    * TEAMSTERS: RATIFIED A NEW FIVE-YEAR COLLECTIVE BARGAINING
+AGREEMENT WITH WASTE MANAGEMENT
+    * TEAMSTERS: NEW AGREEMENT PROVIDES IMMEDIATE $4 WAGE
+INCREASE
+UPFRONT & ADDITIONAL $1.25 PER YEAR OVER THE LENGTH OF CONTRACT
+    * TEAMSTERS: CONTRACT INCREASES PENSION CONTRIBUTIONS BY
+$1.25,
+SECURES A FAIR BIDDING PROCESS THAT IS BASED ON SENIORITY
+
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240523:nFWN3HQ1SA:1,2024-05-23 15:46:27.316,TEAMSTERS: RATIFIED A NEW FIVE-YEAR COLLECTIVE BARGAINING AGREEMENT WITH WASTE MANAGEMENT,"May 23 (Reuters) - Waste Management Inc <WM.N>:
+    * TEAMSTERS: RATIFIED A NEW FIVE-YEAR COLLECTIVE BARGAINING
+AGREEMENT WITH WASTE MANAGEMENT
+    * TEAMSTERS: NEW AGREEMENT PROVIDES IMMEDIATE $4 WAGE
+INCREASE
+UPFRONT & ADDITIONAL $1.25 PER YEAR OVER THE LENGTH OF CONTRACT
+    * TEAMSTERS: CONTRACT INCREASES PENSION CONTRIBUTIONS BY
+$1.25,
+SECURES A FAIR BIDDING PROCESS THAT IS BASED ON SENIORITY
+
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240522:nL1N3HO25P:1,2024-05-22 17:13:35.000,Sustainable Finance Newsletter - A deal-within-a-deal turns heads,"By Ross Kerber
+       May 22 (Reuters) - In past newsletters I cited a review
+by the top U.S. energy regulator about whether asset managers
+have gotten too big, but that review is almost philosophical in
+the questions it is raising about the power of BlackRock and
+other big fund firms.
+
+But now a different matter before the U.S. Federal Energy
+Regulatory Commission (FERC) has drawn some practical questions
+about a deal BlackRock put together in January.
+    
+You can read about these objections in my main story below. Also
+please connect with me on LinkedIn. If you have a news tip,
+potential content, or general thoughts you can email me at
+ross.kerber@thomsonreuters.com
+
+This week's most-read 
+    US Supreme Court backs consumer finance watchdog's funding
+  
+    Silver lining: lower EU industrial output + mild weather
+help lower GHG emissions
+  
+    A memo to McKinsey on avoiding Arthur Andersen's fate
+  
+    
+A deal-within-a-deal turns heads
+BlackRock says its planned $12.5 billion deal to buy Global
+Infrastructure Partners (GIP) will make the fund firm a major
+player in energy development. But it has also fueled concerns
+about BlackRock's reach given its role as the world's biggest
+asset manager running some $10.5 trillion at the end of March.
+    
+BlackRock says the deal won't close until the third quarter.
+Meanwhile an agreement that GIP struck on May 6 has caught the
+attention of consumer groups. GIP joined another investor to
+take Minnesota-based energy company ALLETE <ALE.N> private at a
+$6.2 billion valuation to help it raise money for renewables.
+
+    Advocacy group Public Citizen
+     has said in filings to FERC that the deal for ALLETE  puts
+BlackRock in a position to exercise active control over power
+market assets, giving it a say on matters like rate-setting, and
+a change from its traditional role as a passive investor.
+  
+        
+  
+For instance, the group noted how BlackRock controls around 9%
+of both Cleveland Cliffs <CLF.N> and U.S. Steel. <X.N> Both
+operate mining facilities that together represent 70% of
+industrial demand for ALLETE's Minnesota Power division, and
+BlackRock itself controls some 13% of ALLETE's voting shares. 
+    
+    That ownership pattern raises potential conflicts that
+deserve scrutiny from FERC, said Tyson Slocum, a Public Citizen
+director in an interview. An example, he said, is whether
+BlackRock would be able to vote on a shareholder resolution
+calling on either steelmaker to 
+    decarbonize production
+    , which might reduce ALLETE's power sales.
+  
+
+    While Slocum said it was not clear FERC should block either
+deal, the body should review the authorizations it 
+    previously granted BlackRock
+     to own major shares of utilities as a passive investor.
+  
+    
+""What's coming to a head here is whether BlackRock can exist as
+the world's largest investment manager and as an owner and
+controller of physical infrastructure assets,"" Slocum said. ""I
+don't see how BlackRock can navigate both of those
+simultaneously.""
+    
+    GIP and ALLETE declined to comment. FERC representatives did
+not respond to questions. Cleveland Cliffs and U.S. Steel did
+not immediately comment. 
+  
+    
+    In a May 10 filing to FERC, attorneys representing GIP said
+they would submit a separate application ""at some point in the
+future"" where questions about the competitive impact of the
+ALLETE deal belong. They asked FERC to authorize the GIP deal
+with BlackRock by June 10, as previously requested.    
+    
+BlackRock declined to comment on its pending acquisition.
+BlackRock says it has policies to ""mitigate perceived or
+potential conflicts"" such as  maintaining proxy voting
+guidelines and where needed, hiring an independent voting
+service.     
+    
+    At its annual shareholder meeting on March 15 CEO Larry Fink
+said the GIP deal ""will propel our leadership in the
+fast-growing market for hard asset infrastructure."" 
+  
+        
+Company News - Finance Edition 
+New news on ""debanking"" - A conservative shareholder pulled a
+resolution from JPMorgan's <JPM.N> annual meeting, with his
+representative saying it reflected changes the Wall Street bank
+has made to take more account of diverse viewpoints. 
+
+    As its next CEO Vanguard brought in Salim Ramji, a former
+executive of its archrival BlackRock.<BLK.N> Look for Ramji to
+try to grow the Pennsylvania firm's assets, now some $9
+trillion, to become more than those of BlackRock, which ran
+$10.5 trillion at the end of March.
+    
+A 35-year-old Bank of America <BAC.N> investment banker who died
+from a blood clot wanted to leave because he was working more
+than 100 hours a week, according to an executive recruiter who
+spoke with him about seeking a new job.
+    
+On my radar  
+I've said before that Exxon's <XOM.N> May 29 annual meeting
+looks like  a test of how much support small investors can
+expect from top asset managers. On Tuesday a group of state
+financial officers  called for big fund firms to vote against
+Exxon directors over the energy giant's suit against activist
+investors. 
+
+Speaking of oil company meetings, May 29 is also the day of
+Chevron's <CVX.N> AGM. Listen to see if it provides an update on
+its arbitration with Exxon over its proposed Hess acquisition.
+     
+Houston-based waste management firm WM <WM.N> is exploring a $3
+billion-ish sale of its renewable natural gas business that
+would include rights to develop operations for producing energy
+from biological waste. 
+
+ (Reporting by Ross Kerber in Boston; Editing by David Gregorio)
+ ((ross.kerber@thomsonreuters.com; (617) 412 0093;))"
+2024,WM.N,urn:newsml:reuters.com:20240516:nL8N3HH962:2,2024-05-16 18:21:38.000,"Waste manager WM explores $3 billion sale of renewable natural gas unit, sources say","By David French and Isla Binnie
+       May 16 (Reuters) - Waste management firm WM <WM.N> is
+exploring a sale of its renewable natural gas business that
+could be worth about $3 billion, according to people familiar
+with the matter.
+    The Houston-based company is working with JPMorgan Chase &
+Co <JPM.N> to gauge interest from potential buyers, which could
+include energy companies and private equity firms, the sources
+said, requesting anonymity as the discussions are confidential. 
+    WM is planning to offload the rights to develop RNG
+operations on 115 landfills that it owns, the sources said,
+adding the company would retain ownership of the landfills. RNG
+is methane captured from biological waste and converted into
+electricity or fuel. 
+    If the deal talks conclude successfully, it would mark one
+of the biggest-ever asset sales in the nascent U.S. RNG
+industry. The largest sale was BP's <BP.L> $4.1 billion takeover
+of Archaea Energy in 2022.
+    ""We are always looking for ways to maximize the value of our
+renewable energy business for our shareholders, which may range
+from organic growth initiatives to partnerships or monetization
+through a sale,"" WM said in a statement. 
+    JPMorgan declined to comment.  
+    WM had planned to invest about $1.2 billion between 2022 and
+2025 to grow the RNG business. The firm now wants to spend that
+capital in other areas, the sources said. 
+    The company had forecast the RNG unit would contribute more
+than $500 million of adjusted earnings before interest, tax,
+depreciation and amortization (EBITDA) by 2026. It currently
+generates about $150 million of EBITDA, according to the
+sources. 
+    WM is hoping the unit's valuation would be comparable to, or
+exceed, the earnings multiple at which Morrow Renewables sold
+RNG operations at landfills to Enbridge <ENB.TO> in late 2023,
+the sources added. Should it meet that valuation, WM will get in
+the ballpark of $3 billion, the sources said.
+    RNG's environmental benefits include the reduction of
+natural gas usage and capturing climate-warming emissions that
+would otherwise escape into the atmosphere. However, it is more
+expensive than natural gas, which is also experiencing a period
+of prolonged low prices.
+    WM, whose shares have risen by about 25% over the past year,
+is one of the largest U.S. trash and recycling collection
+companies. The firm's fleet includes more than 12,000 trucks
+running on compressed natural gas and it recently signed a
+sustainability partnership with Major League Baseball. 
+
+ (Reporting by David French and Isla Binnie in New York; Editing
+by Anirban Sen and Lisa Shumaker)
+ ((davidj.french@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240516:nL8N3HH962:1,2024-05-16 18:21:33.000,"WASTE MANAGEMENT FIRM WM <WM.N> EXPLORING $3 BILLION SALE OF ITS RENEWABLE NATURAL GAS UNIT, SOURCES SAY","By David French and Isla Binnie
+       May 16 (Reuters) - Waste management firm WM <WM.N> is
+exploring a sale of its renewable natural gas business that
+could be worth about $3 billion, according to people familiar
+with the matter.
+    The Houston-based company is working with JPMorgan Chase &
+Co <JPM.N> to gauge interest from potential buyers, which could
+include energy companies and private equity firms, the sources
+said, requesting anonymity as the discussions are confidential. 
+    WM is planning to offload the rights to develop RNG
+operations on 115 landfills that it owns, the sources said,
+adding the company would retain ownership of the landfills. RNG
+is methane captured from biological waste and converted into
+electricity or fuel. 
+    If the deal talks conclude successfully, it would mark one
+of the biggest-ever asset sales in the nascent U.S. RNG
+industry. The largest sale was BP's <BP.L> $4.1 billion takeover
+of Archaea Energy in 2022.
+    ""We are always looking for ways to maximize the value of our
+renewable energy business for our shareholders, which may range
+from organic growth initiatives to partnerships or monetization
+through a sale,"" WM said in a statement. 
+    JPMorgan declined to comment.  
+    WM had planned to invest about $1.2 billion between 2022 and
+2025 to grow the RNG business. The firm now wants to spend that
+capital in other areas, the sources said. 
+    The company had forecast the RNG unit would contribute more
+than $500 million of adjusted earnings before interest, tax,
+depreciation and amortization (EBITDA) by 2026. It currently
+generates about $150 million of EBITDA, according to the
+sources. 
+    WM is hoping the unit's valuation would be comparable to, or
+exceed, the earnings multiple at which Morrow Renewables sold
+RNG operations at landfills to Enbridge <ENB.TO> in late 2023,
+the sources added. Should it meet that valuation, WM will get in
+the ballpark of $3 billion, the sources said.
+    RNG's environmental benefits include the reduction of
+natural gas usage and capturing climate-warming emissions that
+would otherwise escape into the atmosphere. However, it is more
+expensive than natural gas, which is also experiencing a period
+of prolonged low prices.
+    WM, whose shares have risen by about 25% over the past year,
+is one of the largest U.S. trash and recycling collection
+companies. The firm's fleet includes more than 12,000 trucks
+running on compressed natural gas and it recently signed a
+sustainability partnership with Major League Baseball. 
+
+ (Reporting by David French and Isla Binnie in New York; Editing
+by Anirban Sen and Lisa Shumaker)
+ ((davidj.french@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240510:nFWN3HD101:1,2024-05-10 20:39:54.000,"BRIEF-Waste Management Says Co Amended, Restated Its Revolving Credit Agreement With A Syndicate Of Banks","May 10 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC - ON MAY 8, CO AMENDED AND RESTATED
+ITS
+REVOLVING CREDIT AGREEMENT WITH A SYNDICATE OF BANKS
+    * WASTE MANAGEMENT: AMENDEDMENT TO EXTEND TERM AND MAINTAIN
+AVAILABLE REVOLVING CREDIT TO SERVE U.S. AND CANADIAN NEEDS OF
+COMPANY AND ITS SUBSIDIARIES
+    * WASTE MANAGEMENT INC: TOTAL COMMITMENT UNDER CREDIT
+AGREEMENT IS
+$3.5 BILLION (PLUS $1 BILLION ACCORDION FEATURE), MATURITY DATE
+IS MAY 8, 2029
+
+Source text for Eikon: [ID:n0001104659-24-059949]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240510:nFWN3HD101:3,2024-05-10 20:38:26.302,"WASTE MANAGEMENT INC: TOTAL COMMITMENT UNDER CREDIT AGREEMENT IS $3.5 BLN (PLUS $1 BLN ACCORDION FEATURE), MATURITY DATE IS MAY 8, 2029","May 10 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC - ON MAY 8, CO AMENDED AND RESTATED
+ITS
+REVOLVING CREDIT AGREEMENT WITH A SYNDICATE OF BANKS
+    * WASTE MANAGEMENT: AMENDEDMENT TO EXTEND TERM AND MAINTAIN
+AVAILABLE REVOLVING CREDIT TO SERVE U.S. AND CANADIAN NEEDS OF
+COMPANY AND ITS SUBSIDIARIES
+    * WASTE MANAGEMENT INC: TOTAL COMMITMENT UNDER CREDIT
+AGREEMENT IS
+$3.5 BILLION (PLUS $1 BILLION ACCORDION FEATURE), MATURITY DATE
+IS MAY 8, 2029
+
+Source text for Eikon: [ID:n0001104659-24-059949]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240510:nFWN3HD101:2,2024-05-10 20:36:21.748,WASTE MANAGEMENT: AMENDEDMENT TO EXTEND TERM AND MAINTAIN AVAILABLE REVOLVING CREDIT TO SERVE U.S. AND CANADIAN NEEDS OF COMPANY AND ITS SUBSIDIARIES,"May 10 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC - ON MAY 8, CO AMENDED AND RESTATED
+ITS
+REVOLVING CREDIT AGREEMENT WITH A SYNDICATE OF BANKS
+    * WASTE MANAGEMENT: AMENDEDMENT TO EXTEND TERM AND MAINTAIN
+AVAILABLE REVOLVING CREDIT TO SERVE U.S. AND CANADIAN NEEDS OF
+COMPANY AND ITS SUBSIDIARIES
+    * WASTE MANAGEMENT INC: TOTAL COMMITMENT UNDER CREDIT
+AGREEMENT IS
+$3.5 BILLION (PLUS $1 BILLION ACCORDION FEATURE), MATURITY DATE
+IS MAY 8, 2029
+
+Source text for Eikon: [ID:n0001104659-24-059949]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240510:nFWN3HD101:1,2024-05-10 20:35:51.740,"WASTE MANAGEMENT INC - ON MAY 8, CO AMENDED AND RESTATED ITS REVOLVING CREDIT AGREEMENT WITH A SYNDICATE OF BANKS","May 10 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC - ON MAY 8, CO AMENDED AND RESTATED
+ITS
+REVOLVING CREDIT AGREEMENT WITH A SYNDICATE OF BANKS
+    * WASTE MANAGEMENT: AMENDEDMENT TO EXTEND TERM AND MAINTAIN
+AVAILABLE REVOLVING CREDIT TO SERVE U.S. AND CANADIAN NEEDS OF
+COMPANY AND ITS SUBSIDIARIES
+    * WASTE MANAGEMENT INC: TOTAL COMMITMENT UNDER CREDIT
+AGREEMENT IS
+$3.5 BILLION (PLUS $1 BILLION ACCORDION FEATURE), MATURITY DATE
+IS MAY 8, 2029
+
+Source text for Eikon: [ID:n0001104659-24-059949]
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240430:nL4N3H36LG:3,2024-04-30 22:35:27.000,REFILE-Waste management firm Republic Services beats profit estimates on price hikes,"(Adds dropped word ""share"" in paragraph 2)
+       April 30 (Reuters) - Republic Services <RSG.N> reported
+first-quarter profit above Wall Street estimates on Tuesday, as
+it benefited from price hikes amid sustained demand for waste
+collection and disposal.
+    The waste management firm reported a profit of $1.44 per
+share, 9 cents above analysts' estimates, according to LSEG
+data, due to ""continued pricing in excess of cost inflation.
+    First-quarter revenue of $3.86 billion was 7.8% higher than
+last year, with the company having raised prices by 7% on its
+services, even as volumes decreased by nearly 1% year-on-year. 
+    Republic Services and WM <WM.N> are the two leading
+companies in the U.S. waste services industry. Along with
+municipal waste departments, they dominate garbage collection
+from residences in the country.
+    Shares of the company were up about 1% in trading after the
+bell. 
+    
+    
+
+ (Reporting by Pratyush Thakur and Ananta Agarwal in Bengaluru;
+Editing by Mohammed Safi Shamsi)
+ ((pratyush.thakur@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240424:nL5N3GX9T4:1,2024-04-24 23:15:14.000,Waste Management Inc reports results for the quarter ended in March - Earnings Summary,"* Waste Management Inc <WM.N> reported quarterly adjusted
+earnings
+of $1.75​​ per share for the quarter ended in March, higher than
+the same quarter last year, when the company reported EPS of
+$1.31.  The mean expectation of nineteen analysts for the
+quarter was for earnings of $1.51 per share. Wall Street
+expected results to range from $1.41  to $1.62 per share.
+    * Revenue rose 5.5% to $5.16 billion from a year ago;
+analysts
+expected $5.21 billion. 
+    * Waste Management Inc's reported EPS for the quarter was
+$1.75​.
+    * The company reported quarterly net income of $708 million.
+    * Waste Management Inc shares had fallen by 2.1% this
+quarter and
+gained 16.6% so far this year.
+
+FORECAST CHANGES
+    * The mean earnings estimate of analysts had risen by
+about 2% in
+the last three months.​ 
+    * In the last 30 days, one analyst negatively revised an
+earnings
+estimate
+
+RECOMMENDATIONS
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 11 ""strong buy"" or ""buy,"" 11
+""hold"" and no ""sell"" or ""strong sell."" 
+    * The average consensus recommendation for the environmental
+services & equipment peer group is also ""buy""
+
+Wall Street's median 12-month price target for Waste Management
+Inc is $212.50 
+This summary was machine generated from LSEG data April 24 at
+11:15 p.m. UTC. ​All figures in US dollars unless otherwise
+stated. (For questions concerning the data in this report,
+contact Estimates.Support@lseg.com. For any other questions or
+feedback, contact RefinitivNewsSupport@thomsonreuters.com) QUARTER ENDING    ESTIMATE       ACTUAL         BEAT, MET,
+                                                 MISSED
+ Mar. 31 2024      1.51           1.75           Beat
+ Dec. 31 2023      1.53           1.74           Beat
+ Sep. 30 2023      1.61           1.63           Beat
+ Jun. 30 2023      1.54           1.51           Missed"
+2024,WM.N,urn:newsml:reuters.com:20240424:nL3N3GX4GA:2,2024-04-24 22:10:49.000,Waste management firm WM beats profit estimates on higher pricing,"April 24 (Reuters) - Waste management firm WM <WM.N>
+beat analysts' estimates for first-quarter profit on Wednesday,
+helped by higher prices and steady demand for garbage collection
+and disposal.
+    WM, which collects trash, transfers it to company landfills,
+and recycles it into clean, renewable energy, was able to
+sustain high prices due to the essential nature of its waste
+management services.
+    Core prices, a performance metric used by the company to
+signify price changes, increased 7.2% for the first quarter.
+    WM and Republic Services are two major companies — apart
+from municipal waste departments — that dominate garbage
+collection in large parts of the United States.
+    The Houston, Texas-based company posted adjusted quarterly
+profit of $1.75 per share, ahead of analysts' average
+expectation of $1.51 per share, according to LSEG data.
+    WM also benefited from the use of automation, which has
+reduced labor costs and increased efficiency.
+    The company said it expects 2024 free cash flow to be
+between $2 billion and $2.15 billion. It also expects annual
+revenue to increase 5% to 5.57% from prior year.
+    Its total revenue in the quarter ended March 31 rose 5.5% to
+$5.16 billion.
+
+
+ (Reporting by Pratyush Thakur and Anandita Mehrotra in
+Bengaluru; Editing by Shilpi Majumdar)
+ ((pratyush.thakur@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240424:nPlx9JHR8y:1,2024-04-24 21:23:46.134,BRIEF-Waste Management Q1 EPS USD 1.75,"Apr 24 (Reuters) - Waste Management Q1 EBITDA USD 1,530 million.
+* Q1 net income USD 708 million
+* Q1 EBITDA margin 29.7%
+* Q1 revenue USD 5,159 million vs. IBES estimate USD 5,208 million"
+2024,WM.N,urn:newsml:reuters.com:20240424:nPlx9JHR8y:5,2024-04-24 21:23:01.268,WASTE MANAGEMENT Q1 EBITDA MARGIN 29.7%,"Apr 24 (Reuters) - Waste Management Q1 EBITDA USD 1,530 million.
+* Q1 net income USD 708 million
+* Q1 EBITDA margin 29.7%
+* Q1 revenue USD 5,159 million vs. IBES estimate USD 5,208 million"
+2024,WM.N,urn:newsml:reuters.com:20240424:nPlx9JHR8y:4,2024-04-24 21:23:01.241,WASTE MANAGEMENT Q1 NET INCOME USD 708 MILLION,"Apr 24 (Reuters) - Waste Management Q1 EBITDA USD 1,530 million.
+* Q1 net income USD 708 million
+* Q1 EBITDA margin 29.7%
+* Q1 revenue USD 5,159 million vs. IBES estimate USD 5,208 million"
+2024,WM.N,urn:newsml:reuters.com:20240424:nPlx9JHR8y:3,2024-04-24 21:23:01.212,WASTE MANAGEMENT Q1 EPS USD 1.75,"Apr 24 (Reuters) - Waste Management Q1 EBITDA USD 1,530 million.
+* Q1 net income USD 708 million
+* Q1 EBITDA margin 29.7%
+* Q1 revenue USD 5,159 million vs. IBES estimate USD 5,208 million"
+2024,WM.N,urn:newsml:reuters.com:20240424:nPlx9JHR8y:2,2024-04-24 21:23:01.211,"WASTE MANAGEMENT Q1 REVENUE USD 5,159 MILLION VS. IBES ESTIMATE USD 5,208 MILLION","Apr 24 (Reuters) - Waste Management Q1 EBITDA USD 1,530 million.
+* Q1 net income USD 708 million
+* Q1 EBITDA margin 29.7%
+* Q1 revenue USD 5,159 million vs. IBES estimate USD 5,208 million"
+2024,WM.N,urn:newsml:reuters.com:20240424:nPlx9JHR8y:1,2024-04-24 21:23:01.183,"WASTE MANAGEMENT Q1 EBITDA USD 1,530 MILLION","Apr 24 (Reuters) - Waste Management Q1 EBITDA USD 1,530 million.
+* Q1 net income USD 708 million
+* Q1 EBITDA margin 29.7%
+* Q1 revenue USD 5,159 million vs. IBES estimate USD 5,208 million"
+2024,WM.N,urn:newsml:reuters.com:20240422:nL5N3GV714:1,2024-04-22 20:44:10.000,Waste Management Inc <WM.N> expected to post earnings of $1.50 a share - Earnings Preview,"* Waste Management Inc <WM.N> <WM> is expected to show a
+rise in
+quarterly revenue when it reports  results on April 24 for the
+period ending March 31 2024
+    * The Houston Texas-based  company is expected to report a
+6.4% increase in revenue to $5.205 billion from $4.89 billion a
+year ago, according to the mean estimate from 15 analysts, based
+on LSEG data.
+    * ​LSEG's mean analyst estimate for Waste Management Inc is
+for
+earnings of $1.50 per share. 
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 11 ""strong buy"" or ""buy,"" 11
+""hold"" and no ""sell"" or ""strong sell.""  
+    * The mean earnings estimate of analysts had risen by
+about 0.1%
+in the last three months. ​
+    * Wall Street's median 12-month price target for Waste
+Management
+Inc is $211.00​, above​ its last closing price of $207.07. ​​​
+
+Previous quarterly performance (using preferred earnings measure
+in US dollars). ​
+ QUARTER       STARMINESM  LSEG IBES  ACTUAL    BEAT,   SURPRI
+ ENDING        ARTESTIMAT  ESTIMATE             MET,    SE %
+               E®                               MISSED  
+ Dec. 31 2023  1.54        1.53       1.74      Beat    13.6
+ Sep. 30 2023  1.61        1.61       1.63      Beat    0.9
+ Jun. 30 2023  1.54        1.54       1.51      Missed  -2​
+ Mar. 31 2023  1.28        1.29       1.31      Beat    1.9
+ ​​Dec.        1.40        1.41       1.30      Missed  -7.7
+ 31 2022                                                
+ Sep. 30 2022  1.51        1.51       1.56      Beat    3.2​
+ Jun. 30 2022  1.39        1.40       1.44      Beat    2.8
+ Mar. 31 2022  1.12        1.14       1.29      Beat    13.2
+ This summary was machine generated April 22 at 20:44 GMT.  All
+figures in US dollars unless otherwise stated. (For questions
+concerning the data in this report, contact
+Estimates.Support@lseg.com. For any other questions or feedback,
+contact RefinitivNewsSupport@thomsonreuters.com)"
+2024,WM.N,urn:newsml:reuters.com:20240412:nL3N3GL2RE:1,2024-04-12 11:41:55.000,BUZZ-Citi raises Waste Management's PT on rising commodity prices,"** Citi raises Waste Management's <WM.N> PT by $10 to $236,
+citing rising commodity prices
+    ** Adds that it expects potential changes or delays to WM's
+2026 targets 
+    ** Co in Feb raised its 2026 capex target from ~$2.25 bln to
+~$2.85 bln and beat analyst estimates for Q4 profit, supported
+by higher prices and sustained demand for garbage collection and
+disposal
+    ** 11 of 22 brokerages rate the stock ""buy"" or higher, 11
+""hold""; their median PT is $211
+    ** YTD, WM up ~15%
+
+ (Reporting by Nathan Gomes in Bengaluru)
+ ((Nathan.Gomes@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240301:nFWN3FF3CM:1,2024-03-01 21:36:35.000,BRIEF-Waste Management Inc Board Increased Its Size To 10 Members And Elected Mr. Thomas L. Bené,"March 1 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC: BOARD INCREASED ITS SIZE TO 10
+MEMBERS AND
+ELECTED MR. THOMAS L. BENÉ
+
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240301:nFWN3FF3CM:1,2024-03-01 21:32:43.955,WASTE MANAGEMENT INC: BOARD INCREASED ITS SIZE TO 10 MEMBERS AND ELECTED MR. THOMAS L. BENÉ,"March 1 (Reuters) - Waste Management Inc <WM.N>:
+    * WASTE MANAGEMENT INC: BOARD INCREASED ITS SIZE TO 10
+MEMBERS AND
+ELECTED MR. THOMAS L. BENÉ
+
+Further company coverage: [WM.N]
+
+ ((Reuters.Briefs@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240227:nL3N3FC4JC:1,2024-02-27 23:09:30.000,Republic Services forecasts full-year revenue above estimates on high prices,"Feb 27 (Reuters) - Waste management company Republic
+Services <RSG.N> forecast full-year revenue above market
+estimates on Tuesday, banking on high prices amid sustained
+demand for garbage collection and disposal.
+    Shares of the company were up about 3% in aftermarket
+trading. 
+    The company expects its full-year 2024 revenue to be between
+$16.10 billion and $16.20 billion, above analysts' estimate of
+$15.85 billion, according to LSEG data. 
+    ""Our strong financial guidance is supported by pricing in
+excess of cost inflation,"" CEO of Republic Services Jon Vander
+MArk said.
+    It expects 2024 profit per share to be between $5.94 and
+$6.00, analysts' expected profit of $5.98 per share. 
+    Republic Services and WM <WM.N> are the two biggest
+companies in the U.S. waste services industry and, along with
+municipal waste departments, they dominate garbage collection
+from homes and apartments in large parts of the country.
+    Earlier this month, peer WM beat quarterly profit estimates,
+as waste management companies were able to sustain high prices
+due to the essential nature of its services.
+    The Arizona-based company posted an adjusted profit of $1.41
+per share in the final quarter of 2023, above expectations of
+$1.29 per share. 
+
+
+
+ (Reporting by Pratyush Thakur and Kannaki Deka in Bengaluru;
+Editing by Alan Barona)
+ ((pratyush.thakur@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240213:nL5N3EY6YX:1,2024-02-13 20:31:37.000,BUZZ - S&P 500 top and bottom performing stocks at about 03:31 p.m. EST,"S&P 500 <.SPX>
+ Top Performers                             Percent Change
+ Ecolab Inc <ECL.N>                         +8.4%
+ Waste Management Inc <WM.N>                +5.5%
+ Howmet Aerospace Inc <HWM.N>               +4.6%
+ Leidos Holdings Inc <LDOS.N>               +4.6%
+ Mckesson Corp <MCK.N>                      +1.9%
+ 
+ Bottom Performers                          Percent Change
+ Moody's Corp <MCO.N>                       -8.2%
+ Invesco Ltd <IVZ.N>                        -8.0%
+ Biogen Inc <BIIB.OQ>                       -7.6%
+ Franklin Resources Inc <BEN.N>             -7.2%
+ Epam Systems Inc <EPAM.N>                  -7.1%
+ 
+     * As of 03:31 p.m., the S&P 500 <.SPX> lost 94.88 points, or
+1.89%, to 4,926.96 and had posted 16 new 52-week highs and 6 new
+lows."
+2024,WM.N,urn:newsml:reuters.com:20240213:nL5N3EY68S:1,2024-02-13 17:00:35.000,BUZZ - S&P 500 top and bottom performing stocks at about 12:00 p.m. EST,"S&P 500 <.SPX>
+ Top Performers                             Percent Change
+ Ecolab Inc <ECL.N>                         +8.1%
+ Leidos Holdings Inc <LDOS.N>               +5.4%
+ Waste Management Inc <WM.N>                +4.7%
+ Howmet Aerospace Inc <HWM.N>               +4.3%
+ Incyte Corp <INCY.OQ>                      +3.1%
+ 
+ Bottom Performers                          Percent Change
+ VF Corp <VFC.N>                            -7.3%
+ Moody's Corp <MCO.N>                       -7.0%
+ Hasbro Inc <HAS.OQ>                        -6.9%
+ Invesco Ltd <IVZ.N>                        -6.5%
+ Biogen Inc <BIIB.OQ>                       -6.2%
+ 
+     * As of 12:00 p.m., the S&P 500 <.SPX> lost 57.70 points, or
+1.15%, to 4,964.14 and had posted 15 new 52-week highs and 6 new
+lows."
+2024,WM.N,urn:newsml:reuters.com:20240213:nL3N3EY2S3:1,2024-02-13 16:04:23.000,"BUZZ-U.S. STOCKS ON THE MOVE-Bicycle Therapeutics, Molson Coors, LianBio","* 
+      Eikon search string for individual stock moves: [STXBZ]
+    
+
+        * 
+      The Day Ahead newsletter: https://refini.tv/3LI4BU7
+    
+
+        * 
+      The Morning News Call newsletter: https://refini.tv/3dKUyB8
+    
+
+  
+Wall Street's main indexes slid on Tuesday, hitting one-week lows, after a
+hotter-than-expected consumer inflation reading drove U.S. Treasury yields
+higher, smashing market speculations for imminent interest rate cuts. [.N]
+    
+    At 10:35 ET, the Dow Jones Industrial Average <.DJI> was down 1.22% at
+38,324.59. The S&P 500 <.SPX> was down 1.20% at 4,961.54 and the Nasdaq
+Composite <.IXIC> was down 1.32% at 15,732.104.
+ 
+ The top three S&P 500 <.PG.INX> percentage gainers:
+ ** Ecolab Inc <ECL.N>, up 8.1%
+ ** Waste Management Inc <WM.N>, up 5.2%
+ ** Leidos Holdings Inc <LDOS.N>, up 4%
+ 
+ The top three S&P 500 <.PL.INX> percentage losers:
+ ** VF Corp <VFC.N>, down 9.3%
+ ** Albemarle Corp <ALB.N>, down 7%
+ ** Boston Property Inc <BXP.N>, down 7%
+ 
+ The top three NYSE <.PG.N> percentage gainers:
+ ** Gabelli Financial Services Opportunities ETF <GABF.N>, up 44.8%
+ ** iShares Blockchain and Tech ETF <IBLC.N>, up 28.2%
+ ** First Trust SkyBridge Crypto Ind and Digi Econ ETF <CRPT.N>, up 19.6%
+ 
+ The top three NYSE <.PL.N> percentage losers:
+ ** Delta Apparel Inc <DLA.N>, down 46.2%
+ ** Express Inc <EXPR.N>, down 39.2%
+ ** Trinseo Plc <TSE.N>, down 23.4%
+ 
+ The top three Nasdaq <.PG.O> percentage gainers:
+ ** Digital Brands Group Inc <DBGI.O>, up 246.5%
+ ** Ohmyhome Ltd <OMH.O>, up 209.3%
+ ** Beamr Imaging Ltd <BMR.O>, up 77.7%
+ 
+ The top three Nasdaq <.PL.O> percentage losers:
+ ** G1 Therapeutics Inc <GTHX.O>, down 52.9%
+ ** SSR Mining Inc <SSRM.O>, down 51.2%
+ ** Carbon Revolution Plc <CREV.O>, down 34%
+ 
+ 
+ ** Jetblue Airways Corp <JBLU.O>: up 13.7%
+ BUZZ - Soars as Icahn reveals near 10% stake, says stock is 'undervalued'
+[nL3N3EY18T] 
+
+ ** Tripadvisor Inc <TRIP.O>: up 12.8%
+ BUZZ - Jumps 13% as it evaluates potential deals [nL3N3EY1A9] 
+    
+ ** ZoomInfo Technologies Inc <ZI.O>: up 9.9%
+ BUZZ - Surges after Q4 results 'clear low bar' [nL3N3EY1AV] 
+
+ ** Arista Networks Inc <ANET.N>: down 4.9%
+ BUZZ - Tumbles on downbeat Q1 adjusted margin forecast [nL3N3EY1C2] 
+    
+ ** Beamr Imaging Ltd <BMR.O>: up 77.7%
+ BUZZ - Shares surge in meme-like rally [nL3N3EY2L5] 
+
+ ** Coca-Cola Co <KO.N>: up 0.5%
+ BUZZ - Rises as Q4 revenue beats expectations [nL3N3EY204] 
+    
+ ** Teradata Corp <TDC.N>: down 23.1%
+ BUZZ - Falls on downbeat FY profit forecast [nL3N3EY1CQ] 
+
+ ** Beyond Air Inc <XAIR.O>: down 16.9%
+ BUZZ - Falls after Q3 revenue misses [nL3N3EY1CD] 
+    
+ ** Children's Place Inc <PLCE.O>: down 24.6%
+ BUZZ - Falls after B.Riley downgrades to 'sell' [nL3N3EY1F4] 
+    
+ ** New York Community Bancorp Inc <NYCB.N>: down 5.4%
+ BUZZ - Drops as rate worries add to CRE exposure risk [nL3N3EY2KW] 
+    
+ ** G1 Therapeutics Inc <GTHX.O>: down 52.9%
+ BUZZ - Down after lead cancer therapy fails to meet study goal [nL3N3EY1GX] 
+    
+ ** Arm Holdings PLC <ARM.O>: down 12.9%
+ BUZZ - Stock dips after dizzying post-earnings ascent [nL2N3EY0K6] 
+    
+ ** Hasbro Inc <HAS.O>: down 5.5%
+ BUZZ - Falls as Q4 results miss estimates on weak demand [nL3N3EY2N2] 
+    
+ ** Cadence Design Systems Inc <CDNS.O>: down 3.5%
+ BUZZ - Falls after weak Q1 revenue outlook [nL3N3EY1FW] 
+
+ ** Waste Management Inc <WM.N>: up 5.2%
+ BUZZ - Rises after Q4 profit beat [nL3N3EY1IC] 
+    
+ ** Biogen Inc <BIIB.O>: down 6.7%
+ BUZZ - Falls after Q4 profit miss [nL3N3EY1FF] 
+
+ ** Marriott International Inc <MAR.O>: down 4.9%
+ BUZZ - Falls after downbeat annual profit forecast [nL3N3EY1WD] 
+    
+ ** GlobalFoundries Inc <GFS.O>: down 1.6%
+ BUZZ - Down after Q1 revenue forecast below estimates [nL3N3EY1WM] 
+    
+ ** Howmet Aerospace Inc <HWM.N>: up 2.6%
+ BUZZ - Rises on upbeat Q1 results forecast [nL3N3EY21O] 
+
+ ** Shopify Inc <SHOP.N>: down 10.0%
+ BUZZ - Shares slide as revenue forecast fails to impress [nL3N3EY234] 
+    
+ ** Express Inc <EXPR.N>: down 39.2%
+ BUZZ - Hits record low on report of possible debt restructuring, bankruptcy
+[nL3N3EY2JO] 
+    
+ ** Ecolab Inc <ECL.N>: up 8.1%
+ BUZZ - Rises after upbeat 2024 forecast [nL3N3EY1FS] 
+    
+ ** Candel Therapeutics Inc <CADL.O>: up 22.3%
+ BUZZ - Up on receiving fast track tag from FDA [nL3N3EY24M] 
+    
+ ** Bicycle Therapeutics PLC <BCYC.O>: up 15.6%
+ BUZZ - Jumps as Baker Bros boosts stake [nL2N3EY10L] 
+
+ ** Krispy Kreme Inc <DNUT.O>: down 6.6%
+ BUZZ - Falls on downbeat FY profit, revenue forecast [nL3N3EY26X] 
+ 
+** Coinbase Global Inc <COIN.O>: down 4.1%
+** Bitfarms Ltd <BITF.O>: down 1.3%
+ ** Riot Platforms Inc <RIOT.O>: down 3.4%
+** Hut 8 Mining Corp <HUT.O>: down 3.1%
+ BUZZ - Crypto shares down as bitcoin slides under $50,000 level [nL3N3EY2B1] 
+
+ ** LianBio <LIAN.O>: up 17.9%
+ BUZZ - Completes strategic review, cuts jobs; shares up [nL3N3EY2AE] 
+    
+ ** Gates Industrial Corporation PLC <GTES.N>: down 1.1%
+ BUZZ - Slips as Blackstone's stake sale prices [nL2N3EY163] 
+    
+ ** Brighthouse Financial Inc <BHF.O>: down 15.8%
+ BUZZ - Slides after Q4 profit miss [nL4N3ET4LF] 
+    
+** Goldman Sachs Group Inc <GS.N>: down 3.6%
+** JPMorgan Chase & Co <JPM.N>: down 0.7%
+** Morgan Stanley <MS.N>: down 3.1%
+** Citigroup Inc <C.N>: down 2.6%
+ BUZZ - Major US banks slide after hot inflation data smashes rate-cut
+expectations [nL3N3EY2KR] 
+    
+ ** Zoetis Inc <ZTS.N>: down 4.4%
+ BUZZ - Falls on downbeat annual profit forecast [nL3N3EY2KO] 
+    
+ **Paramount Global <PARA.O>: down 4.5%
+ BUZZ - Falls; CNBC reports co to cut jobs [nL3N3EY2LW] 
+    
+ ** Verde Clean Fuels Inc <VGAS.O>: up 41.1%
+ BUZZ - Soars on joint gasoline project with Diamondback unit [nL3N3EY293] 
+    
+ ** Moody's Corp <MCO.N>: down 6.6%
+ BUZZ - Dives after Q4 profit misses estimates [nL3N3EY2LN] 
+    
+ ** BioXcel Therapeutics Inc <BTAI.O>: up 13.0%
+ BUZZ - Rises after co scraps stock offering [nL2N3EY1BC] 
+    
+ The 11 major S&P 500 sectors:
+ 
+ Communication Services  <.SPLRCL>              down 0.65%
+                                    
+ Consumer Discretionary  <.SPLRCD>              down 1.46%
+                                    
+ Consumer Staples        <.SPLRCS>              down 0.73%
+                                    
+ Energy                  <.SPNY>                down 1.50%
+                                    
+ Financial               <.SPSY>                down 1.30%
+                                    
+ Health                  <.SPXHC>               down 0.64%
+                                    
+ Industrial              <.SPLRCI>              down 1.32%
+                                    
+ Information Technology  <.SPLRCT>              down 1.23%
+                                    
+ Materials               <.SPLRCM>              down 1.53%
+                                    
+ Real Estate             <.SPLRCR>              down 2.97%
+                                    
+ Utilities               <.SPLRCU>              down 2.60%
+                                    
+ 
+ (Reporting by Rajarshi Roy and Aatreyee Dasgupta)
+ ((Rajarshi.Roy@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240213:nL3N3EY1IC:1,2024-02-13 12:28:40.000,BUZZ-Waste Management Inc rises after Q4 profit beat,"** Shares of waste management firm WM <WM.N> up 3.0% at
+$194.00 premarket after Q4 results
+    ** Co beats Q4 profit estimates, supported by sustained
+demand and higher prices for garbage collection and disposal
+    ** WM reports adj. profit at $1.74/shr, beating estimates of
+$1.53/shr, as per LSEG data
+    ** Co's Q4 revenue rose 5.7% to $5.22 bln, also beating
+estimates of $5.19 bln
+    ** WM's results benefited from automation, which reduced
+labor costs and increased efficiency; core prices, a metric used
+to signify price changes, increased 7.3%
+    ** Co expects a rev. growth of 6% to 7% in FY 2024 and to
+repurchase $1 bln worth of shares in 2024
+    ** Short-term delays and capex inflation were not a surprise
+to investors, the magnitude of the revision might be and many
+investors may worry that additional negative revisions may recur
+- Brokerage TD Cowen
+    ** Stock rose about 15% in 2023 and is up 5.1% YTD as of
+last close
+
+ (Reporting by Pranav Kashyap in Bengaluru)
+ ((Pranav.Kashyap@thomsonreuters.com;))"
+2024,WM.N,urn:newsml:reuters.com:20240212:nL5N3EX6GA:1,2024-02-12 23:27:06.000,Waste Management Inc reports results for the quarter ended in December - Earnings Summary,"* Waste Management Inc <WM.N> reported quarterly adjusted
+earnings
+of $1.74​​ per share for the quarter ended in December, higher
+than the same quarter last year, when the company reported EPS
+of $1.30.  The mean expectation of twenty analysts for the
+quarter was for earnings of $1.53 per share. Wall Street
+expected results to range from $1.48  to $1.58 per share.
+    * Revenue rose 5.7% to $5.22 billion from a year ago;
+analysts
+expected $5.19 billion. 
+    * Waste Management Inc's reported EPS for the quarter was
+$1.22​.
+    * The company reported quarterly net income of $493 million.
+    * Waste Management Inc shares had risen by 5.4% this
+quarter.
+
+FORECAST CHANGES
+    * The mean earnings estimate of analysts had risen by
+about 0.1%
+in the last three months.​ 
+    * In the last 30 days, two analysts negatively revised
+earnings
+estimates
+
+RECOMMENDATIONS
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 12 ""strong buy"" or ""buy,"" 10
+""hold"" and no ""sell"" or ""strong sell."" 
+    * The average consensus recommendation for the environmental
+services & equipment peer group is also ""buy""
+
+Wall Street's median 12-month price target for Waste Management
+Inc is $188.00 
+This summary was machine generated from LSEG data February 12 at
+11:27 p.m. UTC. ​All figures in US dollars unless otherwise
+stated. (For questions concerning the data in this report,
+contact Estimates.Support@lseg.com. For any other questions or
+feedback, contact RefinitivNewsSupport@thomsonreuters.com) QUARTER ENDING    ESTIMATE       ACTUAL         BEAT, MET,
+                                                 MISSED
+ Dec. 31 2023      1.53           1.74           Beat
+ Sep. 30 2023      1.61           1.63           Beat
+ Jun. 30 2023      1.54           1.51           Missed
+ Mar. 31 2023      1.29           1.31           Beat"
+2024,WM.N,urn:newsml:reuters.com:20240212:nL3N3EX30F:1,2024-02-12 23:25:17.000,Waste management firm WM beats profit estimates on strong prices,"Feb 12 (Reuters) - Waste management firm WM <WM.N>
+reported fourth-quarter profit beating Wall Street estimates on
+Monday, supported by higher prices and sustained demand for
+garbage collection and disposal.
+    The Houston, Texas-based company posted an adjusted profit
+of $1.74 per share for the quarter, ahead of analysts'
+expectations of $1.53 per share, according to LSEG data.
+    WM, which collects trash, transfers it to company landfills
+and recycles it into clean, renewable energy, was able to
+sustain high prices due to the essential nature of its waste
+management services.
+    The company also benefited from automation, which has
+reduced labor costs and increased efficiency.
+    Core prices, a metric used by the company to signify price
+changes, increased 7.3% in the fourth quarter.
+    Waste Management, along with Republic Services, is one of
+the two major companies—apart from municipal waste
+departments—that dominate garbage collection in large parts of
+the United States. 
+    Its total revenue in the final quarter rose about 5.7% to
+$5.22 billion.
+    
+
+ (Reporting by Pratyush Thakur, Kannaki Deka in Bengaluru;
+Editing by Tasim Zahid)
+ ((pratyush.thakur@thomsonreuters.com))"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:1,2024-02-12 23:05:47.282,BRIEF-Waste Management Q4 EPS USD 1.22,"Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:8,2024-02-12 23:05:01.817,WASTE MANAGEMENT Q4 EBITDA MARGIN 25.1%,"Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:7,2024-02-12 23:05:01.794,WASTE MANAGEMENT Q4 EPS USD 1.22,"Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:6,2024-02-12 23:05:01.780,"WASTE MANAGEMENT OUTLOOK FY ADJUSTED EBITDA USD 6,275-6,425 MILLION","Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:5,2024-02-12 23:05:01.768,"WASTE MANAGEMENT Q4 REVENUE USD 5,217 MILLION VS. IBES ESTIMATE USD 5,194 MILLION","Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:4,2024-02-12 23:05:01.755,WASTE MANAGEMENT OUTLOOK FY REVENUE GROWTH 6-7%,"Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:3,2024-02-12 23:05:01.744,"WASTE MANAGEMENT Q4 EBITDA USD 1,311 MILLION","Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:2,2024-02-12 23:05:01.721,WASTE MANAGEMENT Q4 NET INCOME USD 493 MILLION,"Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240212:nPlx9hqgqq:1,2024-02-12 23:05:01.713,"WASTE MANAGEMENT OUTLOOK FY FREE CASH FLOW USD 1,900-2,050 MILLION","Feb 12 (Reuters) - Waste Management Q4 revenue USD 5,217 million vs. IBES
+estimate USD 5,194 million.
+* Q4 net income USD 493 million
+* Q4 EBITDA USD 1,311 million
+* Q4 EBITDA margin 25.1%
+* outlook FY free cash flow USD 1,900-2,050 million
+* outlook FY revenue growth 6-7%
+* outlook FY adjusted EBITDA USD 6,275-6,425 million"
+2024,WM.N,urn:newsml:reuters.com:20240209:nL8N3EU6MR:1,2024-02-09 21:49:12.000,Waste Management Inc <WM.N> expected to post earnings of $1.53 a share - Earnings Preview,"* Waste Management Inc <WM.N> <WM> is expected to show a
+rise in
+quarterly revenue when it reports  results on February 12 for
+the period ending December 31 2023
+    * The Houston Texas-based  company is expected to report a
+5.2% increase in revenue to $5.194 billion from $4.94 billion a
+year ago, according to the mean estimate from 18 analysts, based
+on LSEG data.
+    * ​LSEG's mean analyst estimate for Waste Management Inc is
+for
+earnings of $1.53 per share. 
+    * The current average analyst rating on the shares is ""buy""
+and
+the breakdown of recommendations is 12 ""strong buy"" or ""buy,"" 10
+""hold"" and no ""sell"" or ""strong sell.""  
+    * The mean earnings estimate of analysts was unchanged in
+the last
+three months. ​
+    * Wall Street's median 12-month price target for Waste
+Management
+Inc is $188.00​, below​ its last closing price of $189.49. ​​​
+
+Previous quarterly performance (using preferred earnings measure
+in US dollars). ​
+ QUARTER       STARMINESM  LSEG IBES  ACTUAL    BEAT,   SURPRI
+ ENDING        ARTESTIMAT  ESTIMATE             MET,    SE %
+               E®                               MISSED  
+ Sep. 30 2023  1.61        1.61       1.63      Beat    0.9
+ Jun. 30 2023  1.54        1.54       1.51      Missed  -2
+ Mar. 31 2023  1.28        1.29       1.31      Beat    1.9​
+ Dec. 31 2022  1.40        1.41       1.30      Missed  -7.7
+ ​​Sep.        1.51        1.51       1.56      Beat    3.2
+ 30 2022                                                
+ Jun. 30 2022  1.39        1.40       1.44      Beat    2.8​
+ Mar. 31 2022  1.12        1.14       1.29      Beat    13.2
+ Dec. 31 2021  1.27        1.26       1.26      Met     0.1
+ This summary was machine generated February 9 at 21:49 GMT.  All
+figures in US dollars unless otherwise stated. (For questions
+concerning the data in this report, contact
+Estimates.Support@lseg.com. For any other questions or feedback,
+contact RefinitivNewsSupport@thomsonreuters.com)"
