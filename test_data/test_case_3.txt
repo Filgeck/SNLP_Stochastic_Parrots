@@ -1,0 +1,3578 @@
+You will be provided with a partial code base and an issue statement explaining a problem to resolve.
+<issue>
+BlackBody bolometric flux is wrong if scale has units of dimensionless_unscaled
+The `astropy.modeling.models.BlackBody` class has the wrong bolometric flux if `scale` argument is passed as a Quantity with `dimensionless_unscaled` units, but the correct bolometric flux if `scale` is simply a float.
+
+
+
+### Description
+
+<!-- Provide a general description of the bug. -->
+
+
+
+### Expected behavior
+
+Expected output from sample code:
+
+
+
+```
+
+4.823870774433646e-16 erg / (cm2 s)
+
+4.823870774433646e-16 erg / (cm2 s)
+
+```
+
+
+
+### Actual behavior
+
+Actual output from sample code:
+
+
+
+```
+
+4.5930032795393893e+33 erg / (cm2 s)
+
+4.823870774433646e-16 erg / (cm2 s)
+
+```
+
+
+
+### Steps to Reproduce
+
+Sample code:
+
+
+
+```python
+
+from astropy.modeling.models import BlackBody
+
+from astropy import units as u
+
+import numpy as np
+
+
+
+T = 3000 * u.K
+
+r = 1e14 * u.cm
+
+DL = 100 * u.Mpc
+
+scale = np.pi * (r / DL)**2
+
+
+
+print(BlackBody(temperature=T, scale=scale).bolometric_flux)
+
+print(BlackBody(temperature=T, scale=scale.to_value(u.dimensionless_unscaled)).bolometric_flux)
+
+```
+
+
+
+### System Details
+
+```pycon
+
+>>> import numpy; print("Numpy", numpy.__version__)
+
+Numpy 1.20.2
+
+>>> import astropy; print("astropy", astropy.__version__)
+
+astropy 4.3.dev758+g1ed1d945a
+
+>>> import scipy; print("Scipy", scipy.__version__)
+
+Traceback (most recent call last):
+
+  File "<stdin>", line 1, in <module>
+
+ModuleNotFoundError: No module named 'scipy'
+
+>>> import matplotlib; print("Matplotlib", matplotlib.__version__)
+
+Traceback (most recent call last):
+
+  File "<stdin>", line 1, in <module>
+
+ModuleNotFoundError: No module named 'matplotlib'
+
+```
+
+</issue>
+<code>
+[start of README.rst]
+1 =======
+2 Astropy
+3 =======
+4 
+5 |Actions Status| |CircleCI Status| |Azure Status| |Coverage Status| |PyPI Status| |Documentation Status| |Zenodo|
+6 
+7 The Astropy Project (http://astropy.org/) is a community effort to develop a
+8 single core package for Astronomy in Python and foster interoperability between
+9 Python astronomy packages. This repository contains the core package which is
+10 intended to contain much of the core functionality and some common tools needed
+11 for performing astronomy and astrophysics with Python.
+12 
+13 Releases are `registered on PyPI <https://pypi.org/project/astropy>`_,
+14 and development is occurring at the
+15 `project's GitHub page <http://github.com/astropy/astropy>`_.
+16 
+17 For installation instructions, see the `online documentation <https://docs.astropy.org/>`_
+18 or  `docs/install.rst <docs/install.rst>`_ in this source distribution.
+19 
+20 Contributing Code, Documentation, or Feedback
+21 ---------------------------------------------
+22 
+23 The Astropy Project is made both by and for its users, so we welcome and
+24 encourage contributions of many kinds. Our goal is to keep this a positive,
+25 inclusive, successful, and growing community by abiding with the
+26 `Astropy Community Code of Conduct <http://www.astropy.org/about.html#codeofconduct>`_.
+27 
+28 More detailed information on contributing to the project or submitting feedback
+29 can be found on the `contributions <http://www.astropy.org/contribute.html>`_
+30 page. A `summary of contribution guidelines <CONTRIBUTING.md>`_ can also be
+31 used as a quick reference when you are ready to start writing or validating
+32 code for submission.
+33 
+34 Supporting the Project
+35 ----------------------
+36 
+37 |NumFOCUS| |Donate|
+38 
+39 The Astropy Project is sponsored by NumFOCUS, a 501(c)(3) nonprofit in the
+40 United States. You can donate to the project by using the link above, and this
+41 donation will support our mission to promote sustainable, high-level code base
+42 for the astronomy community, open code development, educational materials, and
+43 reproducible scientific research.
+44 
+45 License
+46 -------
+47 
+48 Astropy is licensed under a 3-clause BSD style license - see the
+49 `LICENSE.rst <LICENSE.rst>`_ file.
+50 
+51 .. |Actions Status| image:: https://github.com/astropy/astropy/workflows/CI/badge.svg
+52     :target: https://github.com/astropy/astropy/actions
+53     :alt: Astropy's GitHub Actions CI Status
+54 
+55 .. |CircleCI Status| image::  https://img.shields.io/circleci/build/github/astropy/astropy/main?logo=circleci&label=CircleCI
+56     :target: https://circleci.com/gh/astropy/astropy
+57     :alt: Astropy's CircleCI Status
+58 
+59 .. |Azure Status| image:: https://dev.azure.com/astropy-project/astropy/_apis/build/status/astropy.astropy?repoName=astropy%2Fastropy&branchName=main
+60     :target: https://dev.azure.com/astropy-project/astropy
+61     :alt: Astropy's Azure Pipelines Status
+62 
+63 .. |Coverage Status| image:: https://codecov.io/gh/astropy/astropy/branch/main/graph/badge.svg
+64     :target: https://codecov.io/gh/astropy/astropy
+65     :alt: Astropy's Coverage Status
+66 
+67 .. |PyPI Status| image:: https://img.shields.io/pypi/v/astropy.svg
+68     :target: https://pypi.org/project/astropy
+69     :alt: Astropy's PyPI Status
+70 
+71 .. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4670728.svg
+72    :target: https://doi.org/10.5281/zenodo.4670728
+73    :alt: Zenodo DOI
+74 
+75 .. |Documentation Status| image:: https://img.shields.io/readthedocs/astropy/latest.svg?logo=read%20the%20docs&logoColor=white&label=Docs&version=stable
+76     :target: https://docs.astropy.org/en/stable/?badge=stable
+77     :alt: Documentation Status
+78 
+79 .. |NumFOCUS| image:: https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A
+80     :target: http://numfocus.org
+81     :alt: Powered by NumFOCUS
+82 
+83 .. |Donate| image:: https://img.shields.io/badge/Donate-to%20Astropy-brightgreen.svg
+84     :target: https://numfocus.salsalabs.org/donate-to-astropy/index.html
+85 
+86 
+87 If you locally cloned this repo before 7 Apr 2021
+88 -------------------------------------------------
+89 
+90 The primary branch for this repo has been transitioned from ``master`` to
+91 ``main``.  If you have a local clone of this repository and want to keep your
+92 local branch in sync with this repo, you'll need to do the following in your
+93 local clone from your terminal::
+94 
+95    git fetch --all --prune
+96    # you can stop here if you don't use your local "master"/"main" branch
+97    git branch -m master main
+98    git branch -u origin/main main
+99 
+100 If you are using a GUI to manage your repos you'll have to find the equivalent
+101 commands as it's different for different programs. Alternatively, you can just
+102 delete your local clone and re-clone!
+103 
+[end of README.rst]
+[start of astropy/modeling/physical_models.py]
+1 # Licensed under a 3-clause BSD style license - see LICENSE.rst
+2 """
+3 Models that have physical origins.
+4 """
+5 # pylint: disable=invalid-name, no-member
+6 
+7 import warnings
+8 
+9 import numpy as np
+10 
+11 from astropy import constants as const
+12 from astropy import units as u
+13 from astropy.utils.exceptions import AstropyUserWarning
+14 from .core import Fittable1DModel
+15 from .parameters import Parameter, InputParameterError
+16 
+17 __all__ = ["BlackBody", "Drude1D", "Plummer1D", "NFW"]
+18 
+19 
+20 class BlackBody(Fittable1DModel):
+21     """
+22     Blackbody model using the Planck function.
+23 
+24     Parameters
+25     ----------
+26     temperature : `~astropy.units.Quantity` ['temperature']
+27         Blackbody temperature.
+28 
+29     scale : float or `~astropy.units.Quantity` ['dimensionless']
+30         Scale factor
+31 
+32     Notes
+33     -----
+34 
+35     Model formula:
+36 
+37         .. math:: B_{\\nu}(T) = A \\frac{2 h \\nu^{3} / c^{2}}{exp(h \\nu / k T) - 1}
+38 
+39     Examples
+40     --------
+41     >>> from astropy.modeling import models
+42     >>> from astropy import units as u
+43     >>> bb = models.BlackBody(temperature=5000*u.K)
+44     >>> bb(6000 * u.AA)  # doctest: +FLOAT_CMP
+45     <Quantity 1.53254685e-05 erg / (cm2 Hz s sr)>
+46 
+47     .. plot::
+48         :include-source:
+49 
+50         import numpy as np
+51         import matplotlib.pyplot as plt
+52 
+53         from astropy.modeling.models import BlackBody
+54         from astropy import units as u
+55         from astropy.visualization import quantity_support
+56 
+57         bb = BlackBody(temperature=5778*u.K)
+58         wav = np.arange(1000, 110000) * u.AA
+59         flux = bb(wav)
+60 
+61         with quantity_support():
+62             plt.figure()
+63             plt.semilogx(wav, flux)
+64             plt.axvline(bb.nu_max.to(u.AA, equivalencies=u.spectral()).value, ls='--')
+65             plt.show()
+66     """
+67 
+68     # We parametrize this model with a temperature and a scale.
+69     temperature = Parameter(default=5000.0, min=0, unit=u.K, description="Blackbody temperature")
+70     scale = Parameter(default=1.0, min=0, description="Scale factor")
+71 
+72     # We allow values without units to be passed when evaluating the model, and
+73     # in this case the input x values are assumed to be frequencies in Hz.
+74     _input_units_allow_dimensionless = True
+75 
+76     # We enable the spectral equivalency by default for the spectral axis
+77     input_units_equivalencies = {'x': u.spectral()}
+78 
+79     def evaluate(self, x, temperature, scale):
+80         """Evaluate the model.
+81 
+82         Parameters
+83         ----------
+84         x : float, `~numpy.ndarray`, or `~astropy.units.Quantity` ['frequency']
+85             Frequency at which to compute the blackbody. If no units are given,
+86             this defaults to Hz.
+87 
+88         temperature : float, `~numpy.ndarray`, or `~astropy.units.Quantity`
+89             Temperature of the blackbody. If no units are given, this defaults
+90             to Kelvin.
+91 
+92         scale : float, `~numpy.ndarray`, or `~astropy.units.Quantity` ['dimensionless']
+93             Desired scale for the blackbody.
+94 
+95         Returns
+96         -------
+97         y : number or ndarray
+98             Blackbody spectrum. The units are determined from the units of
+99             ``scale``.
+100 
+101         .. note::
+102 
+103             Use `numpy.errstate` to suppress Numpy warnings, if desired.
+104 
+105         .. warning::
+106 
+107             Output values might contain ``nan`` and ``inf``.
+108 
+109         Raises
+110         ------
+111         ValueError
+112             Invalid temperature.
+113 
+114         ZeroDivisionError
+115             Wavelength is zero (when converting to frequency).
+116         """
+117         if not isinstance(temperature, u.Quantity):
+118             in_temp = u.Quantity(temperature, u.K)
+119         else:
+120             in_temp = temperature
+121 
+122         # Convert to units for calculations, also force double precision
+123         with u.add_enabled_equivalencies(u.spectral() + u.temperature()):
+124             freq = u.Quantity(x, u.Hz, dtype=np.float64)
+125             temp = u.Quantity(in_temp, u.K)
+126 
+127         # check the units of scale and setup the output units
+128         bb_unit = u.erg / (u.cm ** 2 * u.s * u.Hz * u.sr)  # default unit
+129         # use the scale that was used at initialization for determining the units to return
+130         # to support returning the right units when fitting where units are stripped
+131         if hasattr(self.scale, "unit") and self.scale.unit is not None:
+132             # check that the units on scale are covertable to surface brightness units
+133             if not self.scale.unit.is_equivalent(bb_unit, u.spectral_density(x)):
+134                 raise ValueError(
+135                     f"scale units not surface brightness: {self.scale.unit}"
+136                 )
+137             # use the scale passed to get the value for scaling
+138             if hasattr(scale, "unit"):
+139                 mult_scale = scale.value
+140             else:
+141                 mult_scale = scale
+142             bb_unit = self.scale.unit
+143         else:
+144             mult_scale = scale
+145 
+146         # Check if input values are physically possible
+147         if np.any(temp < 0):
+148             raise ValueError(f"Temperature should be positive: {temp}")
+149         if not np.all(np.isfinite(freq)) or np.any(freq <= 0):
+150             warnings.warn(
+151                 "Input contains invalid wavelength/frequency value(s)",
+152                 AstropyUserWarning,
+153             )
+154 
+155         log_boltz = const.h * freq / (const.k_B * temp)
+156         boltzm1 = np.expm1(log_boltz)
+157 
+158         # Calculate blackbody flux
+159         bb_nu = 2.0 * const.h * freq ** 3 / (const.c ** 2 * boltzm1) / u.sr
+160 
+161         y = mult_scale * bb_nu.to(bb_unit, u.spectral_density(freq))
+162 
+163         # If the temperature parameter has no unit, we should return a unitless
+164         # value. This occurs for instance during fitting, since we drop the
+165         # units temporarily.
+166         if hasattr(temperature, "unit"):
+167             return y
+168         return y.value
+169 
+170     @property
+171     def input_units(self):
+172         # The input units are those of the 'x' value, which should always be
+173         # Hz. Because we do this, and because input_units_allow_dimensionless
+174         # is set to True, dimensionless values are assumed to be in Hz.
+175         return {self.inputs[0]: u.Hz}
+176 
+177     def _parameter_units_for_data_units(self, inputs_unit, outputs_unit):
+178         return {"temperature": u.K}
+179 
+180     @property
+181     def bolometric_flux(self):
+182         """Bolometric flux."""
+183         # bolometric flux in the native units of the planck function
+184         native_bolflux = (
+185             self.scale.value * const.sigma_sb * self.temperature ** 4 / np.pi
+186         )
+187         # return in more "astro" units
+188         return native_bolflux.to(u.erg / (u.cm ** 2 * u.s))
+189 
+190     @property
+191     def lambda_max(self):
+192         """Peak wavelength when the curve is expressed as power density."""
+193         return const.b_wien / self.temperature
+194 
+195     @property
+196     def nu_max(self):
+197         """Peak frequency when the curve is expressed as power density."""
+198         return 2.8214391 * const.k_B * self.temperature / const.h
+199 
+200 
+201 class Drude1D(Fittable1DModel):
+202     """
+203     Drude model based one the behavior of electons in materials (esp. metals).
+204 
+205     Parameters
+206     ----------
+207     amplitude : float
+208         Peak value
+209     x_0 : float
+210         Position of the peak
+211     fwhm : float
+212         Full width at half maximum
+213 
+214     Model formula:
+215 
+216         .. math:: f(x) = A \\frac{(fwhm/x_0)^2}{((x/x_0 - x_0/x)^2 + (fwhm/x_0)^2}
+217 
+218     Examples
+219     --------
+220 
+221     .. plot::
+222         :include-source:
+223 
+224         import numpy as np
+225         import matplotlib.pyplot as plt
+226 
+227         from astropy.modeling.models import Drude1D
+228 
+229         fig, ax = plt.subplots()
+230 
+231         # generate the curves and plot them
+232         x = np.arange(7.5 , 12.5 , 0.1)
+233 
+234         dmodel = Drude1D(amplitude=1.0, fwhm=1.0, x_0=10.0)
+235         ax.plot(x, dmodel(x))
+236 
+237         ax.set_xlabel('x')
+238         ax.set_ylabel('F(x)')
+239 
+240         plt.show()
+241     """
+242 
+243     amplitude = Parameter(default=1.0, description="Peak Value")
+244     x_0 = Parameter(default=1.0, description="Position of the peak")
+245     fwhm = Parameter(default=1.0, description="Full width at half maximum")
+246 
+247     @staticmethod
+248     def evaluate(x, amplitude, x_0, fwhm):
+249         """
+250         One dimensional Drude model function
+251         """
+252         return (
+253             amplitude
+254             * ((fwhm / x_0) ** 2)
+255             / ((x / x_0 - x_0 / x) ** 2 + (fwhm / x_0) ** 2)
+256         )
+257 
+258     @staticmethod
+259     def fit_deriv(x, amplitude, x_0, fwhm):
+260         """
+261         Drude1D model function derivatives.
+262         """
+263         d_amplitude = (fwhm / x_0) ** 2 / ((x / x_0 - x_0 / x) ** 2 + (fwhm / x_0) ** 2)
+264         d_x_0 = (
+265             -2
+266             * amplitude
+267             * d_amplitude
+268             * (
+269                 (1 / x_0)
+270                 + d_amplitude
+271                 * (x_0 ** 2 / fwhm ** 2)
+272                 * (
+273                     (-x / x_0 - 1 / x) * (x / x_0 - x_0 / x)
+274                     - (2 * fwhm ** 2 / x_0 ** 3)
+275                 )
+276             )
+277         )
+278         d_fwhm = (2 * amplitude * d_amplitude / fwhm) * (1 - d_amplitude)
+279         return [d_amplitude, d_x_0, d_fwhm]
+280 
+281     @property
+282     def input_units(self):
+283         if self.x_0.unit is None:
+284             return None
+285         return {self.inputs[0]: self.x_0.unit}
+286 
+287     def _parameter_units_for_data_units(self, inputs_unit, outputs_unit):
+288         return {
+289             "x_0": inputs_unit[self.inputs[0]],
+290             "fwhm": inputs_unit[self.inputs[0]],
+291             "amplitude": outputs_unit[self.outputs[0]],
+292         }
+293 
+294     @property
+295     def return_units(self):
+296         if self.amplitude.unit is None:
+297             return None
+298         return {self.outputs[0]: self.amplitude.unit}
+299 
+300     @x_0.validator
+301     def x_0(self, val):
+302         """ Ensure `x_0` is not 0."""
+303         if np.any(val == 0):
+304             raise InputParameterError("0 is not an allowed value for x_0")
+305 
+306     def bounding_box(self, factor=50):
+307         """Tuple defining the default ``bounding_box`` limits,
+308         ``(x_low, x_high)``.
+309 
+310         Parameters
+311         ----------
+312         factor : float
+313             The multiple of FWHM used to define the limits.
+314         """
+315         x0 = self.x_0
+316         dx = factor * self.fwhm
+317 
+318         return (x0 - dx, x0 + dx)
+319 
+320 
+321 class Plummer1D(Fittable1DModel):
+322     r"""One dimensional Plummer density profile model.
+323 
+324     Parameters
+325     ----------
+326     mass : float
+327         Total mass of cluster.
+328     r_plum : float
+329         Scale parameter which sets the size of the cluster core.
+330 
+331     Notes
+332     -----
+333     Model formula:
+334 
+335     .. math::
+336 
+337         \rho(r)=\frac{3M}{4\pi a^3}(1+\frac{r^2}{a^2})^{-5/2}
+338 
+339     References
+340     ----------
+341     .. [1] https://ui.adsabs.harvard.edu/abs/1911MNRAS..71..460P
+342     """
+343 
+344     mass = Parameter(default=1.0, description="Total mass of cluster")
+345     r_plum = Parameter(default=1.0, description="Scale parameter which sets the size of the cluster core")
+346 
+347     @staticmethod
+348     def evaluate(x, mass, r_plum):
+349         """
+350         Evaluate plummer density profile model.
+351         """
+352         return (3*mass)/(4 * np.pi * r_plum**3) * (1+(x/r_plum)**2)**(-5/2)
+353 
+354     @staticmethod
+355     def fit_deriv(x, mass, r_plum):
+356         """
+357         Plummer1D model derivatives.
+358         """
+359         d_mass = 3 / ((4*np.pi*r_plum**3) * (((x/r_plum)**2 + 1)**(5/2)))
+360         d_r_plum = (6*mass*x**2-9*mass*r_plum**2) / ((4*np.pi * r_plum**6) *
+361                                                      (1+(x/r_plum)**2)**(7/2))
+362         return [d_mass, d_r_plum]
+363 
+364     @property
+365     def input_units(self):
+366         if self.mass.unit is None and self.r_plum.unit is None:
+367             return None
+368         else:
+369             return {self.inputs[0]: self.r_plum.unit}
+370 
+371     def _parameter_units_for_data_units(self, inputs_unit, outputs_unit):
+372         return {'mass': outputs_unit[self.outputs[0]] * inputs_unit[self.inputs[0]] ** 3,
+373                 'r_plum': inputs_unit[self.inputs[0]]}
+374 
+375 
+376 class NFW(Fittable1DModel):
+377     r"""
+378     Navarro–Frenk–White (NFW) profile - model for radial distribution of dark matter.
+379 
+380     Parameters
+381     ----------
+382     mass : float or `~astropy.units.Quantity` ['mass']
+383         Mass of NFW peak within specified overdensity radius.
+384     concentration : float
+385         Concentration of the NFW profile.
+386     redshift : float
+387         Redshift of the NFW profile.
+388     massfactor : tuple or str
+389         Mass overdensity factor and type for provided profiles:
+390             Tuple version:
+391                 ("virial",) : virial radius
+392 
+393                 ("critical", N)  : radius where density is N times that of the critical density
+394 
+395                 ("mean", N)  : radius where density is N times that of the mean density
+396 
+397             String version:
+398                 "virial" : virial radius
+399 
+400                 "Nc"  : radius where density is N times that of the critical density (e.g. "200c")
+401 
+402                 "Nm"  : radius where density is N times that of the mean density (e.g. "500m")
+403     cosmo : :class:`~astropy.cosmology.Cosmology`
+404         Background cosmology for density calculation. If None, the default cosmology will be used.
+405 
+406     Notes
+407     -----
+408 
+409     Model formula:
+410 
+411     .. math:: \rho(r)=\frac{\delta_c\rho_{c}}{r/r_s(1+r/r_s)^2}
+412 
+413     References
+414     ----------
+415     .. [1] https://arxiv.org/pdf/astro-ph/9508025
+416     .. [2] https://en.wikipedia.org/wiki/Navarro%E2%80%93Frenk%E2%80%93White_profile
+417     .. [3] https://en.wikipedia.org/wiki/Virial_mass
+418     """
+419 
+420     # Model Parameters
+421 
+422     # NFW Profile mass
+423     mass = Parameter(default=1.0, min=1.0, unit=u.M_sun,
+424            description="Peak mass within specified overdensity radius")
+425 
+426     # NFW profile concentration
+427     concentration = Parameter(default=1.0, min=1.0, description="Concentration")
+428 
+429     # NFW Profile redshift
+430     redshift = Parameter(default=0.0, min=0.0, description="Redshift")
+431 
+432     # We allow values without units to be passed when evaluating the model, and
+433     # in this case the input r values are assumed to be lengths / positions in kpc.
+434     _input_units_allow_dimensionless = True
+435 
+436     def __init__(self, mass=u.Quantity(mass.default, mass.unit),
+437                  concentration=concentration.default, redshift=redshift.default,
+438                  massfactor=("critical", 200), cosmo=None,  **kwargs):
+439         # Set default cosmology
+440         if cosmo is None:
+441             # LOCAL
+442             from astropy.cosmology import default_cosmology
+443 
+444             cosmo = default_cosmology.get()
+445 
+446         # Set mass overdensity type and factor
+447         self._density_delta(massfactor, cosmo, redshift)
+448 
+449         # Establish mass units for density calculation (default solar masses)
+450         if not isinstance(mass, u.Quantity):
+451             in_mass = u.Quantity(mass, u.M_sun)
+452         else:
+453             in_mass = mass
+454 
+455         # Obtain scale radius
+456         self._radius_s(mass, concentration)
+457 
+458         # Obtain scale density
+459         self._density_s(mass, concentration)
+460 
+461         super().__init__(mass=in_mass, concentration=concentration, redshift=redshift, **kwargs)
+462 
+463     def evaluate(self, r, mass, concentration, redshift):
+464         """
+465         One dimensional NFW profile function
+466 
+467         Parameters
+468         ----------
+469         r : float or `~astropy.units.Quantity` ['length']
+470             Radial position of density to be calculated for the NFW profile.
+471         mass : float or `~astropy.units.Quantity` ['mass']
+472             Mass of NFW peak within specified overdensity radius.
+473         concentration : float
+474             Concentration of the NFW profile.
+475         redshift : float
+476             Redshift of the NFW profile.
+477 
+478         Returns
+479         -------
+480         density : float or `~astropy.units.Quantity` ['density']
+481             NFW profile mass density at location ``r``. The density units are:
+482             [``mass`` / ``r`` ^3]
+483 
+484         Notes
+485         -----
+486         .. warning::
+487 
+488             Output values might contain ``nan`` and ``inf``.
+489         """
+490         # Create radial version of input with dimension
+491         if hasattr(r, "unit"):
+492             in_r = r
+493         else:
+494             in_r = u.Quantity(r, u.kpc)
+495 
+496         # Define reduced radius (r / r_{\\rm s})
+497         #   also update scale radius
+498         radius_reduced = in_r / self._radius_s(mass, concentration).to(in_r.unit)
+499 
+500         # Density distribution
+501         # \rho (r)=\frac{\rho_0}{\frac{r}{R_s}\left(1~+~\frac{r}{R_s}\right)^2}
+502         #   also update scale density
+503         density = self._density_s(mass, concentration) / (radius_reduced *
+504                                                           (u.Quantity(1.0) + radius_reduced) ** 2)
+505 
+506         if hasattr(mass, "unit"):
+507             return density
+508         else:
+509             return density.value
+510 
+511     def _density_delta(self, massfactor, cosmo, redshift):
+512         """
+513         Calculate density delta.
+514         """
+515         # Set mass overdensity type and factor
+516         if isinstance(massfactor, tuple):
+517             # Tuple options
+518             #   ("virial")       : virial radius
+519             #   ("critical", N)  : radius where density is N that of the critical density
+520             #   ("mean", N)      : radius where density is N that of the mean density
+521             if massfactor[0].lower() == "virial":
+522                 # Virial Mass
+523                 delta = None
+524                 masstype = massfactor[0].lower()
+525             elif massfactor[0].lower() == "critical":
+526                 # Critical or Mean Overdensity Mass
+527                 delta = float(massfactor[1])
+528                 masstype = 'c'
+529             elif massfactor[0].lower() == "mean":
+530                 # Critical or Mean Overdensity Mass
+531                 delta = float(massfactor[1])
+532                 masstype = 'm'
+533             else:
+534                 raise ValueError("Massfactor '" + str(massfactor[0]) + "' not one of 'critical', "
+535                                                                        "'mean', or 'virial'")
+536         else:
+537             try:
+538                 # String options
+539                 #   virial : virial radius
+540                 #   Nc  : radius where density is N that of the critical density
+541                 #   Nm  : radius where density is N that of the mean density
+542                 if massfactor.lower() == "virial":
+543                     # Virial Mass
+544                     delta = None
+545                     masstype = massfactor.lower()
+546                 elif massfactor[-1].lower() == 'c' or massfactor[-1].lower() == 'm':
+547                     # Critical or Mean Overdensity Mass
+548                     delta = float(massfactor[0:-1])
+549                     masstype = massfactor[-1].lower()
+550                 else:
+551                     raise ValueError("Massfactor " + str(massfactor) + " string not of the form "
+552                                                                        "'#m', '#c', or 'virial'")
+553             except (AttributeError, TypeError):
+554                 raise TypeError("Massfactor " + str(
+555                     massfactor) + " not a tuple or string")
+556 
+557         # Set density from masstype specification
+558         if masstype == "virial":
+559             Om_c = cosmo.Om(redshift) - 1.0
+560             d_c = 18.0 * np.pi ** 2 + 82.0 * Om_c - 39.0 * Om_c ** 2
+561             self.density_delta = d_c * cosmo.critical_density(redshift)
+562         elif masstype == 'c':
+563             self.density_delta = delta * cosmo.critical_density(redshift)
+564         elif masstype == 'm':
+565             self.density_delta = delta * cosmo.critical_density(redshift) * cosmo.Om(redshift)
+566 
+567         return self.density_delta
+568 
+569     @staticmethod
+570     def A_NFW(y):
+571         r"""
+572         Dimensionless volume integral of the NFW profile, used as an intermediate step in some
+573         calculations for this model.
+574 
+575         Notes
+576         -----
+577 
+578         Model formula:
+579 
+580         .. math:: A_{NFW} = [\ln(1+y) - \frac{y}{1+y}]
+581         """
+582         return np.log(1.0 + y) - (y / (1.0 + y))
+583 
+584     def _density_s(self, mass, concentration):
+585         """
+586         Calculate scale density of the NFW profile.
+587         """
+588         # Enforce default units
+589         if not isinstance(mass, u.Quantity):
+590             in_mass = u.Quantity(mass, u.M_sun)
+591         else:
+592             in_mass = mass
+593 
+594         # Calculate scale density
+595         # M_{200} = 4\pi \rho_{s} R_{s}^3 \left[\ln(1+c) - \frac{c}{1+c}\right].
+596         self.density_s = in_mass / (4.0 * np.pi * self._radius_s(in_mass, concentration) ** 3 *
+597                                     self.A_NFW(concentration))
+598 
+599         return self.density_s
+600 
+601     @property
+602     def rho_scale(self):
+603         r"""
+604         Scale density of the NFW profile. Often written in the literature as :math:`\rho_s`
+605         """
+606         return self.density_s
+607 
+608     def _radius_s(self, mass, concentration):
+609         """
+610         Calculate scale radius of the NFW profile.
+611         """
+612         # Enforce default units
+613         if not isinstance(mass, u.Quantity):
+614             in_mass = u.Quantity(mass, u.M_sun)
+615         else:
+616             in_mass = mass
+617 
+618         # Delta Mass is related to delta radius by
+619         # M_{200}=\frac{4}{3}\pi r_{200}^3 200 \rho_{c}
+620         # And delta radius is related to the NFW scale radius by
+621         # c = R / r_{\\rm s}
+622         self.radius_s = (((3.0 * in_mass) / (4.0 * np.pi * self.density_delta)) ** (
+623                           1.0 / 3.0)) / concentration
+624 
+625         # Set radial units to kiloparsec by default (unit will be rescaled by units of radius
+626         # in evaluate)
+627         return self.radius_s.to(u.kpc)
+628 
+629     @property
+630     def r_s(self):
+631         """
+632         Scale radius of the NFW profile.
+633         """
+634         return self.radius_s
+635 
+636     @property
+637     def r_virial(self):
+638         """
+639         Mass factor defined virial radius of the NFW profile (R200c for M200c, Rvir for Mvir, etc.).
+640         """
+641         return self.r_s * self.concentration
+642 
+643     @property
+644     def r_max(self):
+645         """
+646         Radius of maximum circular velocity.
+647         """
+648         return self.r_s * 2.16258
+649 
+650     @property
+651     def v_max(self):
+652         """
+653         Maximum circular velocity.
+654         """
+655         return self.circular_velocity(self.r_max)
+656 
+657     def circular_velocity(self, r):
+658         r"""
+659         Circular velocities of the NFW profile.
+660 
+661         Parameters
+662         ----------
+663         r : float or `~astropy.units.Quantity` ['length']
+664             Radial position of velocity to be calculated for the NFW profile.
+665 
+666         Returns
+667         -------
+668         velocity : float or `~astropy.units.Quantity` ['speed']
+669             NFW profile circular velocity at location ``r``. The velocity units are:
+670             [km / s]
+671 
+672         Notes
+673         -----
+674 
+675         Model formula:
+676 
+677         .. math:: v_{circ}(r)^2 = \frac{1}{x}\frac{\ln(1+cx)-(cx)/(1+cx)}{\ln(1+c)-c/(1+c)}
+678 
+679         .. math:: x = r/r_s
+680 
+681         .. warning::
+682 
+683             Output values might contain ``nan`` and ``inf``.
+684         """
+685         # Enforce default units (if parameters are without units)
+686         if hasattr(r, "unit"):
+687             in_r = r
+688         else:
+689             in_r = u.Quantity(r, u.kpc)
+690 
+691         # Mass factor defined velocity (i.e. V200c for M200c, Rvir for Mvir)
+692         v_profile = np.sqrt(self.mass * const.G.to(in_r.unit**3 / (self.mass.unit * u.s**2)) /
+693                             self.r_virial)
+694 
+695         # Define reduced radius (r / r_{\\rm s})
+696         reduced_radius = in_r / self.r_virial.to(in_r.unit)
+697 
+698         # Circular velocity given by:
+699         # v^2=\frac{1}{x}\frac{\ln(1+cx)-(cx)/(1+cx)}{\ln(1+c)-c/(1+c)}
+700         # where x=r/r_{200}
+701         velocity = np.sqrt((v_profile**2 * self.A_NFW(self.concentration * reduced_radius)) /
+702                            (reduced_radius * self.A_NFW(self.concentration)))
+703 
+704         return velocity.to(u.km / u.s)
+705 
+706     @property
+707     def input_units(self):
+708         # The units for the 'r' variable should be a length (default kpc)
+709         return {self.inputs[0]: u.kpc}
+710 
+711     @property
+712     def return_units(self):
+713         # The units for the 'density' variable should be a matter density (default M_sun / kpc^3)
+714 
+715         if (self.mass.unit is None):
+716             return {self.outputs[0]: u.M_sun / self.input_units[self.inputs[0]] ** 3}
+717         else:
+718             return {self.outputs[0]: self.mass.unit / self.input_units[self.inputs[0]] ** 3}
+719 
+720     def _parameter_units_for_data_units(self, inputs_unit, outputs_unit):
+721         return {'mass': u.M_sun,
+722                 "concentration": None,
+723                 "redshift": None}
+724 
+[end of astropy/modeling/physical_models.py]
+[start of astropy/units/core.py]
+1 # Licensed under a 3-clause BSD style license - see LICENSE.rst
+2 
+3 """
+4 Core units classes and functions
+5 """
+6 
+7 
+8 import inspect
+9 import operator
+10 import textwrap
+11 import warnings
+12 
+13 import numpy as np
+14 
+15 from astropy.utils.decorators import lazyproperty
+16 from astropy.utils.exceptions import AstropyWarning
+17 from astropy.utils.misc import isiterable
+18 from .utils import (is_effectively_unity, sanitize_scale, validate_power,
+19                     resolve_fractions)
+20 from . import format as unit_format
+21 
+22 
+23 __all__ = [
+24     'UnitsError', 'UnitsWarning', 'UnitConversionError', 'UnitTypeError',
+25     'UnitBase', 'NamedUnit', 'IrreducibleUnit', 'Unit', 'CompositeUnit',
+26     'PrefixUnit', 'UnrecognizedUnit', 'def_unit', 'get_current_unit_registry',
+27     'set_enabled_units', 'add_enabled_units',
+28     'set_enabled_equivalencies', 'add_enabled_equivalencies',
+29     'set_enabled_aliases', 'add_enabled_aliases',
+30     'dimensionless_unscaled', 'one',
+31 ]
+32 
+33 UNITY = 1.0
+34 
+35 
+36 def _flatten_units_collection(items):
+37     """
+38     Given a list of sequences, modules or dictionaries of units, or
+39     single units, return a flat set of all the units found.
+40     """
+41     if not isinstance(items, list):
+42         items = [items]
+43 
+44     result = set()
+45     for item in items:
+46         if isinstance(item, UnitBase):
+47             result.add(item)
+48         else:
+49             if isinstance(item, dict):
+50                 units = item.values()
+51             elif inspect.ismodule(item):
+52                 units = vars(item).values()
+53             elif isiterable(item):
+54                 units = item
+55             else:
+56                 continue
+57 
+58             for unit in units:
+59                 if isinstance(unit, UnitBase):
+60                     result.add(unit)
+61 
+62     return result
+63 
+64 
+65 def _normalize_equivalencies(equivalencies):
+66     """
+67     Normalizes equivalencies, ensuring each is a 4-tuple of the form::
+68 
+69     (from_unit, to_unit, forward_func, backward_func)
+70 
+71     Parameters
+72     ----------
+73     equivalencies : list of equivalency pairs
+74 
+75     Raises
+76     ------
+77     ValueError if an equivalency cannot be interpreted
+78     """
+79     if equivalencies is None:
+80         return []
+81 
+82     normalized = []
+83 
+84     for i, equiv in enumerate(equivalencies):
+85         if len(equiv) == 2:
+86             funit, tunit = equiv
+87             a = b = lambda x: x
+88         elif len(equiv) == 3:
+89             funit, tunit, a = equiv
+90             b = a
+91         elif len(equiv) == 4:
+92             funit, tunit, a, b = equiv
+93         else:
+94             raise ValueError(
+95                 f"Invalid equivalence entry {i}: {equiv!r}")
+96         if not (funit is Unit(funit) and
+97                 (tunit is None or tunit is Unit(tunit)) and
+98                 callable(a) and
+99                 callable(b)):
+100             raise ValueError(
+101                 f"Invalid equivalence entry {i}: {equiv!r}")
+102         normalized.append((funit, tunit, a, b))
+103 
+104     return normalized
+105 
+106 
+107 class _UnitRegistry:
+108     """
+109     Manages a registry of the enabled units.
+110     """
+111 
+112     def __init__(self, init=[], equivalencies=[], aliases={}):
+113 
+114         if isinstance(init, _UnitRegistry):
+115             # If passed another registry we don't need to rebuild everything.
+116             # but because these are mutable types we don't want to create
+117             # conflicts so everything needs to be copied.
+118             self._equivalencies = init._equivalencies.copy()
+119             self._aliases = init._aliases.copy()
+120             self._all_units = init._all_units.copy()
+121             self._registry = init._registry.copy()
+122             self._non_prefix_units = init._non_prefix_units.copy()
+123             # The physical type is a dictionary containing sets as values.
+124             # All of these must be copied otherwise we could alter the old
+125             # registry.
+126             self._by_physical_type = {k: v.copy() for k, v in
+127                                       init._by_physical_type.items()}
+128 
+129         else:
+130             self._reset_units()
+131             self._reset_equivalencies()
+132             self._reset_aliases()
+133             self.add_enabled_units(init)
+134             self.add_enabled_equivalencies(equivalencies)
+135             self.add_enabled_aliases(aliases)
+136 
+137     def _reset_units(self):
+138         self._all_units = set()
+139         self._non_prefix_units = set()
+140         self._registry = {}
+141         self._by_physical_type = {}
+142 
+143     def _reset_equivalencies(self):
+144         self._equivalencies = set()
+145 
+146     def _reset_aliases(self):
+147         self._aliases = {}
+148 
+149     @property
+150     def registry(self):
+151         return self._registry
+152 
+153     @property
+154     def all_units(self):
+155         return self._all_units
+156 
+157     @property
+158     def non_prefix_units(self):
+159         return self._non_prefix_units
+160 
+161     def set_enabled_units(self, units):
+162         """
+163         Sets the units enabled in the unit registry.
+164 
+165         These units are searched when using
+166         `UnitBase.find_equivalent_units`, for example.
+167 
+168         Parameters
+169         ----------
+170         units : list of sequence, dict, or module
+171             This is a list of things in which units may be found
+172             (sequences, dicts or modules), or units themselves.  The
+173             entire set will be "enabled" for searching through by
+174             methods like `UnitBase.find_equivalent_units` and
+175             `UnitBase.compose`.
+176         """
+177         self._reset_units()
+178         return self.add_enabled_units(units)
+179 
+180     def add_enabled_units(self, units):
+181         """
+182         Adds to the set of units enabled in the unit registry.
+183 
+184         These units are searched when using
+185         `UnitBase.find_equivalent_units`, for example.
+186 
+187         Parameters
+188         ----------
+189         units : list of sequence, dict, or module
+190             This is a list of things in which units may be found
+191             (sequences, dicts or modules), or units themselves.  The
+192             entire set will be added to the "enabled" set for
+193             searching through by methods like
+194             `UnitBase.find_equivalent_units` and `UnitBase.compose`.
+195         """
+196         units = _flatten_units_collection(units)
+197 
+198         for unit in units:
+199             # Loop through all of the names first, to ensure all of them
+200             # are new, then add them all as a single "transaction" below.
+201             for st in unit._names:
+202                 if (st in self._registry and unit != self._registry[st]):
+203                     raise ValueError(
+204                         "Object with name {!r} already exists in namespace. "
+205                         "Filter the set of units to avoid name clashes before "
+206                         "enabling them.".format(st))
+207 
+208             for st in unit._names:
+209                 self._registry[st] = unit
+210 
+211             self._all_units.add(unit)
+212             if not isinstance(unit, PrefixUnit):
+213                 self._non_prefix_units.add(unit)
+214 
+215             hash = unit._get_physical_type_id()
+216             self._by_physical_type.setdefault(hash, set()).add(unit)
+217 
+218     def get_units_with_physical_type(self, unit):
+219         """
+220         Get all units in the registry with the same physical type as
+221         the given unit.
+222 
+223         Parameters
+224         ----------
+225         unit : UnitBase instance
+226         """
+227         return self._by_physical_type.get(unit._get_physical_type_id(), set())
+228 
+229     @property
+230     def equivalencies(self):
+231         return list(self._equivalencies)
+232 
+233     def set_enabled_equivalencies(self, equivalencies):
+234         """
+235         Sets the equivalencies enabled in the unit registry.
+236 
+237         These equivalencies are used if no explicit equivalencies are given,
+238         both in unit conversion and in finding equivalent units.
+239 
+240         This is meant in particular for allowing angles to be dimensionless.
+241         Use with care.
+242 
+243         Parameters
+244         ----------
+245         equivalencies : list of tuple
+246             List of equivalent pairs, e.g., as returned by
+247             `~astropy.units.equivalencies.dimensionless_angles`.
+248         """
+249         self._reset_equivalencies()
+250         return self.add_enabled_equivalencies(equivalencies)
+251 
+252     def add_enabled_equivalencies(self, equivalencies):
+253         """
+254         Adds to the set of equivalencies enabled in the unit registry.
+255 
+256         These equivalencies are used if no explicit equivalencies are given,
+257         both in unit conversion and in finding equivalent units.
+258 
+259         This is meant in particular for allowing angles to be dimensionless.
+260         Use with care.
+261 
+262         Parameters
+263         ----------
+264         equivalencies : list of tuple
+265             List of equivalent pairs, e.g., as returned by
+266             `~astropy.units.equivalencies.dimensionless_angles`.
+267         """
+268         # pre-normalize list to help catch mistakes
+269         equivalencies = _normalize_equivalencies(equivalencies)
+270         self._equivalencies |= set(equivalencies)
+271 
+272     @property
+273     def aliases(self):
+274         return self._aliases
+275 
+276     def set_enabled_aliases(self, aliases):
+277         """
+278         Set aliases for units.
+279 
+280         Parameters
+281         ----------
+282         aliases : dict of str, Unit
+283             The aliases to set. The keys must be the string aliases, and values
+284             must be the `astropy.units.Unit` that the alias will be mapped to.
+285 
+286         Raises
+287         ------
+288         ValueError
+289             If the alias already defines a different unit.
+290 
+291         """
+292         self._reset_aliases()
+293         self.add_enabled_aliases(aliases)
+294 
+295     def add_enabled_aliases(self, aliases):
+296         """
+297         Add aliases for units.
+298 
+299         Parameters
+300         ----------
+301         aliases : dict of str, Unit
+302             The aliases to add. The keys must be the string aliases, and values
+303             must be the `astropy.units.Unit` that the alias will be mapped to.
+304 
+305         Raises
+306         ------
+307         ValueError
+308             If the alias already defines a different unit.
+309 
+310         """
+311         for alias, unit in aliases.items():
+312             if alias in self._registry and unit != self._registry[alias]:
+313                 raise ValueError(
+314                     f"{alias} already means {self._registry[alias]}, so "
+315                     f"cannot be used as an alias for {unit}.")
+316             if alias in self._aliases and unit != self._aliases[alias]:
+317                 raise ValueError(
+318                     f"{alias} already is an alias for {self._aliases[alias]}, so "
+319                     f"cannot be used as an alias for {unit}.")
+320 
+321         for alias, unit in aliases.items():
+322             if alias not in self._registry and alias not in self._aliases:
+323                 self._aliases[alias] = unit
+324 
+325 
+326 class _UnitContext:
+327     def __init__(self, init=[], equivalencies=[]):
+328         _unit_registries.append(
+329             _UnitRegistry(init=init, equivalencies=equivalencies))
+330 
+331     def __enter__(self):
+332         pass
+333 
+334     def __exit__(self, type, value, tb):
+335         _unit_registries.pop()
+336 
+337 
+338 _unit_registries = [_UnitRegistry()]
+339 
+340 
+341 def get_current_unit_registry():
+342     return _unit_registries[-1]
+343 
+344 
+345 def set_enabled_units(units):
+346     """
+347     Sets the units enabled in the unit registry.
+348 
+349     These units are searched when using
+350     `UnitBase.find_equivalent_units`, for example.
+351 
+352     This may be used either permanently, or as a context manager using
+353     the ``with`` statement (see example below).
+354 
+355     Parameters
+356     ----------
+357     units : list of sequence, dict, or module
+358         This is a list of things in which units may be found
+359         (sequences, dicts or modules), or units themselves.  The
+360         entire set will be "enabled" for searching through by methods
+361         like `UnitBase.find_equivalent_units` and `UnitBase.compose`.
+362 
+363     Examples
+364     --------
+365 
+366     >>> from astropy import units as u
+367     >>> with u.set_enabled_units([u.pc]):
+368     ...     u.m.find_equivalent_units()
+369     ...
+370       Primary name | Unit definition | Aliases
+371     [
+372       pc           | 3.08568e+16 m   | parsec  ,
+373     ]
+374     >>> u.m.find_equivalent_units()
+375       Primary name | Unit definition | Aliases
+376     [
+377       AU           | 1.49598e+11 m   | au, astronomical_unit            ,
+378       Angstrom     | 1e-10 m         | AA, angstrom                     ,
+379       cm           | 0.01 m          | centimeter                       ,
+380       earthRad     | 6.3781e+06 m    | R_earth, Rearth                  ,
+381       jupiterRad   | 7.1492e+07 m    | R_jup, Rjup, R_jupiter, Rjupiter ,
+382       lsec         | 2.99792e+08 m   | lightsecond                      ,
+383       lyr          | 9.46073e+15 m   | lightyear                        ,
+384       m            | irreducible     | meter                            ,
+385       micron       | 1e-06 m         |                                  ,
+386       pc           | 3.08568e+16 m   | parsec                           ,
+387       solRad       | 6.957e+08 m     | R_sun, Rsun                      ,
+388     ]
+389     """
+390     # get a context with a new registry, using equivalencies of the current one
+391     context = _UnitContext(
+392         equivalencies=get_current_unit_registry().equivalencies)
+393     # in this new current registry, enable the units requested
+394     get_current_unit_registry().set_enabled_units(units)
+395     return context
+396 
+397 
+398 def add_enabled_units(units):
+399     """
+400     Adds to the set of units enabled in the unit registry.
+401 
+402     These units are searched when using
+403     `UnitBase.find_equivalent_units`, for example.
+404 
+405     This may be used either permanently, or as a context manager using
+406     the ``with`` statement (see example below).
+407 
+408     Parameters
+409     ----------
+410     units : list of sequence, dict, or module
+411         This is a list of things in which units may be found
+412         (sequences, dicts or modules), or units themselves.  The
+413         entire set will be added to the "enabled" set for searching
+414         through by methods like `UnitBase.find_equivalent_units` and
+415         `UnitBase.compose`.
+416 
+417     Examples
+418     --------
+419 
+420     >>> from astropy import units as u
+421     >>> from astropy.units import imperial
+422     >>> with u.add_enabled_units(imperial):
+423     ...     u.m.find_equivalent_units()
+424     ...
+425       Primary name | Unit definition | Aliases
+426     [
+427       AU           | 1.49598e+11 m   | au, astronomical_unit            ,
+428       Angstrom     | 1e-10 m         | AA, angstrom                     ,
+429       cm           | 0.01 m          | centimeter                       ,
+430       earthRad     | 6.3781e+06 m    | R_earth, Rearth                  ,
+431       ft           | 0.3048 m        | foot                             ,
+432       fur          | 201.168 m       | furlong                          ,
+433       inch         | 0.0254 m        |                                  ,
+434       jupiterRad   | 7.1492e+07 m    | R_jup, Rjup, R_jupiter, Rjupiter ,
+435       lsec         | 2.99792e+08 m   | lightsecond                      ,
+436       lyr          | 9.46073e+15 m   | lightyear                        ,
+437       m            | irreducible     | meter                            ,
+438       mi           | 1609.34 m       | mile                             ,
+439       micron       | 1e-06 m         |                                  ,
+440       mil          | 2.54e-05 m      | thou                             ,
+441       nmi          | 1852 m          | nauticalmile, NM                 ,
+442       pc           | 3.08568e+16 m   | parsec                           ,
+443       solRad       | 6.957e+08 m     | R_sun, Rsun                      ,
+444       yd           | 0.9144 m        | yard                             ,
+445     ]
+446     """
+447     # get a context with a new registry, which is a copy of the current one
+448     context = _UnitContext(get_current_unit_registry())
+449     # in this new current registry, enable the further units requested
+450     get_current_unit_registry().add_enabled_units(units)
+451     return context
+452 
+453 
+454 def set_enabled_equivalencies(equivalencies):
+455     """
+456     Sets the equivalencies enabled in the unit registry.
+457 
+458     These equivalencies are used if no explicit equivalencies are given,
+459     both in unit conversion and in finding equivalent units.
+460 
+461     This is meant in particular for allowing angles to be dimensionless.
+462     Use with care.
+463 
+464     Parameters
+465     ----------
+466     equivalencies : list of tuple
+467         list of equivalent pairs, e.g., as returned by
+468         `~astropy.units.equivalencies.dimensionless_angles`.
+469 
+470     Examples
+471     --------
+472     Exponentiation normally requires dimensionless quantities.  To avoid
+473     problems with complex phases::
+474 
+475         >>> from astropy import units as u
+476         >>> with u.set_enabled_equivalencies(u.dimensionless_angles()):
+477         ...     phase = 0.5 * u.cycle
+478         ...     np.exp(1j*phase)  # doctest: +FLOAT_CMP
+479         <Quantity -1.+1.2246468e-16j>
+480     """
+481     # get a context with a new registry, using all units of the current one
+482     context = _UnitContext(get_current_unit_registry())
+483     # in this new current registry, enable the equivalencies requested
+484     get_current_unit_registry().set_enabled_equivalencies(equivalencies)
+485     return context
+486 
+487 
+488 def add_enabled_equivalencies(equivalencies):
+489     """
+490     Adds to the equivalencies enabled in the unit registry.
+491 
+492     These equivalencies are used if no explicit equivalencies are given,
+493     both in unit conversion and in finding equivalent units.
+494 
+495     This is meant in particular for allowing angles to be dimensionless.
+496     Since no equivalencies are enabled by default, generally it is recommended
+497     to use `set_enabled_equivalencies`.
+498 
+499     Parameters
+500     ----------
+501     equivalencies : list of tuple
+502         list of equivalent pairs, e.g., as returned by
+503         `~astropy.units.equivalencies.dimensionless_angles`.
+504     """
+505     # get a context with a new registry, which is a copy of the current one
+506     context = _UnitContext(get_current_unit_registry())
+507     # in this new current registry, enable the further equivalencies requested
+508     get_current_unit_registry().add_enabled_equivalencies(equivalencies)
+509     return context
+510 
+511 
+512 def set_enabled_aliases(aliases):
+513     """
+514     Set aliases for units.
+515 
+516     This is useful for handling alternate spellings for units, or
+517     misspelled units in files one is trying to read.
+518 
+519     Parameters
+520     ----------
+521     aliases : dict of str, Unit
+522         The aliases to set. The keys must be the string aliases, and values
+523         must be the `astropy.units.Unit` that the alias will be mapped to.
+524 
+525     Raises
+526     ------
+527     ValueError
+528         If the alias already defines a different unit.
+529 
+530     Examples
+531     --------
+532     To temporarily allow for a misspelled 'Angstroem' unit::
+533 
+534         >>> from astropy import units as u
+535         >>> with u.set_enabled_aliases({'Angstroem': u.Angstrom}):
+536         ...     print(u.Unit("Angstroem", parse_strict="raise") == u.Angstrom)
+537         True
+538 
+539     """
+540     # get a context with a new registry, which is a copy of the current one
+541     context = _UnitContext(get_current_unit_registry())
+542     # in this new current registry, enable the further equivalencies requested
+543     get_current_unit_registry().set_enabled_aliases(aliases)
+544     return context
+545 
+546 
+547 def add_enabled_aliases(aliases):
+548     """
+549     Add aliases for units.
+550 
+551     This is useful for handling alternate spellings for units, or
+552     misspelled units in files one is trying to read.
+553 
+554     Since no aliases are enabled by default, generally it is recommended
+555     to use `set_enabled_aliases`.
+556 
+557     Parameters
+558     ----------
+559     aliases : dict of str, Unit
+560         The aliases to add. The keys must be the string aliases, and values
+561         must be the `astropy.units.Unit` that the alias will be mapped to.
+562 
+563     Raises
+564     ------
+565     ValueError
+566         If the alias already defines a different unit.
+567 
+568     Examples
+569     --------
+570     To temporarily allow for a misspelled 'Angstroem' unit::
+571 
+572         >>> from astropy import units as u
+573         >>> with u.add_enabled_aliases({'Angstroem': u.Angstrom}):
+574         ...     print(u.Unit("Angstroem", parse_strict="raise") == u.Angstrom)
+575         True
+576 
+577     """
+578     # get a context with a new registry, which is a copy of the current one
+579     context = _UnitContext(get_current_unit_registry())
+580     # in this new current registry, enable the further equivalencies requested
+581     get_current_unit_registry().add_enabled_aliases(aliases)
+582     return context
+583 
+584 
+585 class UnitsError(Exception):
+586     """
+587     The base class for unit-specific exceptions.
+588     """
+589 
+590 
+591 class UnitScaleError(UnitsError, ValueError):
+592     """
+593     Used to catch the errors involving scaled units,
+594     which are not recognized by FITS format.
+595     """
+596     pass
+597 
+598 
+599 class UnitConversionError(UnitsError, ValueError):
+600     """
+601     Used specifically for errors related to converting between units or
+602     interpreting units in terms of other units.
+603     """
+604 
+605 
+606 class UnitTypeError(UnitsError, TypeError):
+607     """
+608     Used specifically for errors in setting to units not allowed by a class.
+609 
+610     E.g., would be raised if the unit of an `~astropy.coordinates.Angle`
+611     instances were set to a non-angular unit.
+612     """
+613 
+614 
+615 class UnitsWarning(AstropyWarning):
+616     """
+617     The base class for unit-specific warnings.
+618     """
+619 
+620 
+621 class UnitBase:
+622     """
+623     Abstract base class for units.
+624 
+625     Most of the arithmetic operations on units are defined in this
+626     base class.
+627 
+628     Should not be instantiated by users directly.
+629     """
+630     # Make sure that __rmul__ of units gets called over the __mul__ of Numpy
+631     # arrays to avoid element-wise multiplication.
+632     __array_priority__ = 1000
+633 
+634     _hash = None
+635 
+636     def __deepcopy__(self, memo):
+637         # This may look odd, but the units conversion will be very
+638         # broken after deep-copying if we don't guarantee that a given
+639         # physical unit corresponds to only one instance
+640         return self
+641 
+642     def _repr_latex_(self):
+643         """
+644         Generate latex representation of unit name.  This is used by
+645         the IPython notebook to print a unit with a nice layout.
+646 
+647         Returns
+648         -------
+649         Latex string
+650         """
+651         return unit_format.Latex.to_string(self)
+652 
+653     def __bytes__(self):
+654         """Return string representation for unit"""
+655         return unit_format.Generic.to_string(self).encode('unicode_escape')
+656 
+657     def __str__(self):
+658         """Return string representation for unit"""
+659         return unit_format.Generic.to_string(self)
+660 
+661     def __repr__(self):
+662         string = unit_format.Generic.to_string(self)
+663 
+664         return f'Unit("{string}")'
+665 
+666     def _get_physical_type_id(self):
+667         """
+668         Returns an identifier that uniquely identifies the physical
+669         type of this unit.  It is comprised of the bases and powers of
+670         this unit, without the scale.  Since it is hashable, it is
+671         useful as a dictionary key.
+672         """
+673         unit = self.decompose()
+674         r = zip([x.name for x in unit.bases], unit.powers)
+675         # bases and powers are already sorted in a unique way
+676         # r.sort()
+677         r = tuple(r)
+678         return r
+679 
+680     @property
+681     def names(self):
+682         """
+683         Returns all of the names associated with this unit.
+684         """
+685         raise AttributeError(
+686             "Can not get names from unnamed units. "
+687             "Perhaps you meant to_string()?")
+688 
+689     @property
+690     def name(self):
+691         """
+692         Returns the canonical (short) name associated with this unit.
+693         """
+694         raise AttributeError(
+695             "Can not get names from unnamed units. "
+696             "Perhaps you meant to_string()?")
+697 
+698     @property
+699     def aliases(self):
+700         """
+701         Returns the alias (long) names for this unit.
+702         """
+703         raise AttributeError(
+704             "Can not get aliases from unnamed units. "
+705             "Perhaps you meant to_string()?")
+706 
+707     @property
+708     def scale(self):
+709         """
+710         Return the scale of the unit.
+711         """
+712         return 1.0
+713 
+714     @property
+715     def bases(self):
+716         """
+717         Return the bases of the unit.
+718         """
+719         return [self]
+720 
+721     @property
+722     def powers(self):
+723         """
+724         Return the powers of the unit.
+725         """
+726         return [1]
+727 
+728     def to_string(self, format=unit_format.Generic):
+729         """
+730         Output the unit in the given format as a string.
+731 
+732         Parameters
+733         ----------
+734         format : `astropy.units.format.Base` instance or str
+735             The name of a format or a formatter object.  If not
+736             provided, defaults to the generic format.
+737         """
+738 
+739         f = unit_format.get_format(format)
+740         return f.to_string(self)
+741 
+742     def __format__(self, format_spec):
+743         """Try to format units using a formatter."""
+744         try:
+745             return self.to_string(format=format_spec)
+746         except ValueError:
+747             return format(str(self), format_spec)
+748 
+749     @staticmethod
+750     def _normalize_equivalencies(equivalencies):
+751         """
+752         Normalizes equivalencies, ensuring each is a 4-tuple of the form::
+753 
+754         (from_unit, to_unit, forward_func, backward_func)
+755 
+756         Parameters
+757         ----------
+758         equivalencies : list of equivalency pairs, or None
+759 
+760         Returns
+761         -------
+762         A normalized list, including possible global defaults set by, e.g.,
+763         `set_enabled_equivalencies`, except when `equivalencies`=`None`,
+764         in which case the returned list is always empty.
+765 
+766         Raises
+767         ------
+768         ValueError if an equivalency cannot be interpreted
+769         """
+770         normalized = _normalize_equivalencies(equivalencies)
+771         if equivalencies is not None:
+772             normalized += get_current_unit_registry().equivalencies
+773 
+774         return normalized
+775 
+776     def __pow__(self, p):
+777         p = validate_power(p)
+778         return CompositeUnit(1, [self], [p], _error_check=False)
+779 
+780     def __truediv__(self, m):
+781         if isinstance(m, (bytes, str)):
+782             m = Unit(m)
+783 
+784         if isinstance(m, UnitBase):
+785             if m.is_unity():
+786                 return self
+787             return CompositeUnit(1, [self, m], [1, -1], _error_check=False)
+788 
+789         try:
+790             # Cannot handle this as Unit, re-try as Quantity
+791             from .quantity import Quantity
+792             return Quantity(1, self) / m
+793         except TypeError:
+794             return NotImplemented
+795 
+796     def __rtruediv__(self, m):
+797         if isinstance(m, (bytes, str)):
+798             return Unit(m) / self
+799 
+800         try:
+801             # Cannot handle this as Unit.  Here, m cannot be a Quantity,
+802             # so we make it into one, fasttracking when it does not have a
+803             # unit, for the common case of <array> / <unit>.
+804             from .quantity import Quantity
+805             if hasattr(m, 'unit'):
+806                 result = Quantity(m)
+807                 result /= self
+808                 return result
+809             else:
+810                 return Quantity(m, self**(-1))
+811         except TypeError:
+812             return NotImplemented
+813 
+814     def __mul__(self, m):
+815         if isinstance(m, (bytes, str)):
+816             m = Unit(m)
+817 
+818         if isinstance(m, UnitBase):
+819             if m.is_unity():
+820                 return self
+821             elif self.is_unity():
+822                 return m
+823             return CompositeUnit(1, [self, m], [1, 1], _error_check=False)
+824 
+825         # Cannot handle this as Unit, re-try as Quantity.
+826         try:
+827             from .quantity import Quantity
+828             return Quantity(1, self) * m
+829         except TypeError:
+830             return NotImplemented
+831 
+832     def __rmul__(self, m):
+833         if isinstance(m, (bytes, str)):
+834             return Unit(m) * self
+835 
+836         # Cannot handle this as Unit.  Here, m cannot be a Quantity,
+837         # so we make it into one, fasttracking when it does not have a unit
+838         # for the common case of <array> * <unit>.
+839         try:
+840             from .quantity import Quantity
+841             if hasattr(m, 'unit'):
+842                 result = Quantity(m)
+843                 result *= self
+844                 return result
+845             else:
+846                 return Quantity(m, self)
+847         except TypeError:
+848             return NotImplemented
+849 
+850     def __rlshift__(self, m):
+851         try:
+852             from .quantity import Quantity
+853             return Quantity(m, self, copy=False, subok=True)
+854         except Exception:
+855             return NotImplemented
+856 
+857     def __rrshift__(self, m):
+858         warnings.warn(">> is not implemented. Did you mean to convert "
+859                       "to a Quantity with unit {} using '<<'?".format(self),
+860                       AstropyWarning)
+861         return NotImplemented
+862 
+863     def __hash__(self):
+864         if self._hash is None:
+865             parts = ([str(self.scale)] +
+866                      [x.name for x in self.bases] +
+867                      [str(x) for x in self.powers])
+868             self._hash = hash(tuple(parts))
+869         return self._hash
+870 
+871     def __getstate__(self):
+872         # If we get pickled, we should *not* store the memoized hash since
+873         # hashes of strings vary between sessions.
+874         state = self.__dict__.copy()
+875         state.pop('_hash', None)
+876         return state
+877 
+878     def __eq__(self, other):
+879         if self is other:
+880             return True
+881 
+882         try:
+883             other = Unit(other, parse_strict='silent')
+884         except (ValueError, UnitsError, TypeError):
+885             return NotImplemented
+886 
+887         # Other is unit-like, but the test below requires it is a UnitBase
+888         # instance; if it is not, give up (so that other can try).
+889         if not isinstance(other, UnitBase):
+890             return NotImplemented
+891 
+892         try:
+893             return is_effectively_unity(self._to(other))
+894         except UnitsError:
+895             return False
+896 
+897     def __ne__(self, other):
+898         return not (self == other)
+899 
+900     def __le__(self, other):
+901         scale = self._to(Unit(other))
+902         return scale <= 1. or is_effectively_unity(scale)
+903 
+904     def __ge__(self, other):
+905         scale = self._to(Unit(other))
+906         return scale >= 1. or is_effectively_unity(scale)
+907 
+908     def __lt__(self, other):
+909         return not (self >= other)
+910 
+911     def __gt__(self, other):
+912         return not (self <= other)
+913 
+914     def __neg__(self):
+915         return self * -1.
+916 
+917     def is_equivalent(self, other, equivalencies=[]):
+918         """
+919         Returns `True` if this unit is equivalent to ``other``.
+920 
+921         Parameters
+922         ----------
+923         other : `~astropy.units.Unit`, str, or tuple
+924             The unit to convert to. If a tuple of units is specified, this
+925             method returns true if the unit matches any of those in the tuple.
+926 
+927         equivalencies : list of tuple
+928             A list of equivalence pairs to try if the units are not
+929             directly convertible.  See :ref:`astropy:unit_equivalencies`.
+930             This list is in addition to possible global defaults set by, e.g.,
+931             `set_enabled_equivalencies`.
+932             Use `None` to turn off all equivalencies.
+933 
+934         Returns
+935         -------
+936         bool
+937         """
+938         equivalencies = self._normalize_equivalencies(equivalencies)
+939 
+940         if isinstance(other, tuple):
+941             return any(self.is_equivalent(u, equivalencies=equivalencies)
+942                        for u in other)
+943 
+944         other = Unit(other, parse_strict='silent')
+945 
+946         return self._is_equivalent(other, equivalencies)
+947 
+948     def _is_equivalent(self, other, equivalencies=[]):
+949         """Returns `True` if this unit is equivalent to `other`.
+950         See `is_equivalent`, except that a proper Unit object should be
+951         given (i.e., no string) and that the equivalency list should be
+952         normalized using `_normalize_equivalencies`.
+953         """
+954         if isinstance(other, UnrecognizedUnit):
+955             return False
+956 
+957         if (self._get_physical_type_id() ==
+958                 other._get_physical_type_id()):
+959             return True
+960         elif len(equivalencies):
+961             unit = self.decompose()
+962             other = other.decompose()
+963             for a, b, forward, backward in equivalencies:
+964                 if b is None:
+965                     # after canceling, is what's left convertible
+966                     # to dimensionless (according to the equivalency)?
+967                     try:
+968                         (other/unit).decompose([a])
+969                         return True
+970                     except Exception:
+971                         pass
+972                 else:
+973                     if(a._is_equivalent(unit) and b._is_equivalent(other) or
+974                        b._is_equivalent(unit) and a._is_equivalent(other)):
+975                         return True
+976 
+977         return False
+978 
+979     def _apply_equivalencies(self, unit, other, equivalencies):
+980         """
+981         Internal function (used from `_get_converter`) to apply
+982         equivalence pairs.
+983         """
+984         def make_converter(scale1, func, scale2):
+985             def convert(v):
+986                 return func(_condition_arg(v) / scale1) * scale2
+987             return convert
+988 
+989         for funit, tunit, a, b in equivalencies:
+990             if tunit is None:
+991                 try:
+992                     ratio_in_funit = (other.decompose() /
+993                                       unit.decompose()).decompose([funit])
+994                     return make_converter(ratio_in_funit.scale, a, 1.)
+995                 except UnitsError:
+996                     pass
+997             else:
+998                 try:
+999                     scale1 = funit._to(unit)
+1000                     scale2 = tunit._to(other)
+1001                     return make_converter(scale1, a, scale2)
+1002                 except UnitsError:
+1003                     pass
+1004                 try:
+1005                     scale1 = tunit._to(unit)
+1006                     scale2 = funit._to(other)
+1007                     return make_converter(scale1, b, scale2)
+1008                 except UnitsError:
+1009                     pass
+1010 
+1011         def get_err_str(unit):
+1012             unit_str = unit.to_string('unscaled')
+1013             physical_type = unit.physical_type
+1014             if physical_type != 'unknown':
+1015                 unit_str = f"'{unit_str}' ({physical_type})"
+1016             else:
+1017                 unit_str = f"'{unit_str}'"
+1018             return unit_str
+1019 
+1020         unit_str = get_err_str(unit)
+1021         other_str = get_err_str(other)
+1022 
+1023         raise UnitConversionError(
+1024             f"{unit_str} and {other_str} are not convertible")
+1025 
+1026     def _get_converter(self, other, equivalencies=[]):
+1027         """Get a converter for values in ``self`` to ``other``.
+1028 
+1029         If no conversion is necessary, returns ``unit_scale_converter``
+1030         (which is used as a check in quantity helpers).
+1031 
+1032         """
+1033 
+1034         # First see if it is just a scaling.
+1035         try:
+1036             scale = self._to(other)
+1037         except UnitsError:
+1038             pass
+1039         else:
+1040             if scale == 1.:
+1041                 return unit_scale_converter
+1042             else:
+1043                 return lambda val: scale * _condition_arg(val)
+1044 
+1045         # if that doesn't work, maybe we can do it with equivalencies?
+1046         try:
+1047             return self._apply_equivalencies(
+1048                 self, other, self._normalize_equivalencies(equivalencies))
+1049         except UnitsError as exc:
+1050             # Last hope: maybe other knows how to do it?
+1051             # We assume the equivalencies have the unit itself as first item.
+1052             # TODO: maybe better for other to have a `_back_converter` method?
+1053             if hasattr(other, 'equivalencies'):
+1054                 for funit, tunit, a, b in other.equivalencies:
+1055                     if other is funit:
+1056                         try:
+1057                             return lambda v: b(self._get_converter(
+1058                                 tunit, equivalencies=equivalencies)(v))
+1059                         except Exception:
+1060                             pass
+1061 
+1062             raise exc
+1063 
+1064     def _to(self, other):
+1065         """
+1066         Returns the scale to the specified unit.
+1067 
+1068         See `to`, except that a Unit object should be given (i.e., no
+1069         string), and that all defaults are used, i.e., no
+1070         equivalencies and value=1.
+1071         """
+1072         # There are many cases where we just want to ensure a Quantity is
+1073         # of a particular unit, without checking whether it's already in
+1074         # a particular unit.  If we're being asked to convert from a unit
+1075         # to itself, we can short-circuit all of this.
+1076         if self is other:
+1077             return 1.0
+1078 
+1079         # Don't presume decomposition is possible; e.g.,
+1080         # conversion to function units is through equivalencies.
+1081         if isinstance(other, UnitBase):
+1082             self_decomposed = self.decompose()
+1083             other_decomposed = other.decompose()
+1084 
+1085             # Check quickly whether equivalent.  This is faster than
+1086             # `is_equivalent`, because it doesn't generate the entire
+1087             # physical type list of both units.  In other words it "fails
+1088             # fast".
+1089             if(self_decomposed.powers == other_decomposed.powers and
+1090                all(self_base is other_base for (self_base, other_base)
+1091                    in zip(self_decomposed.bases, other_decomposed.bases))):
+1092                 return self_decomposed.scale / other_decomposed.scale
+1093 
+1094         raise UnitConversionError(
+1095             f"'{self!r}' is not a scaled version of '{other!r}'")
+1096 
+1097     def to(self, other, value=UNITY, equivalencies=[]):
+1098         """
+1099         Return the converted values in the specified unit.
+1100 
+1101         Parameters
+1102         ----------
+1103         other : unit-like
+1104             The unit to convert to.
+1105 
+1106         value : int, float, or scalar array-like, optional
+1107             Value(s) in the current unit to be converted to the
+1108             specified unit.  If not provided, defaults to 1.0
+1109 
+1110         equivalencies : list of tuple
+1111             A list of equivalence pairs to try if the units are not
+1112             directly convertible.  See :ref:`astropy:unit_equivalencies`.
+1113             This list is in addition to possible global defaults set by, e.g.,
+1114             `set_enabled_equivalencies`.
+1115             Use `None` to turn off all equivalencies.
+1116 
+1117         Returns
+1118         -------
+1119         values : scalar or array
+1120             Converted value(s). Input value sequences are returned as
+1121             numpy arrays.
+1122 
+1123         Raises
+1124         ------
+1125         UnitsError
+1126             If units are inconsistent
+1127         """
+1128         if other is self and value is UNITY:
+1129             return UNITY
+1130         else:
+1131             return self._get_converter(Unit(other),
+1132                                        equivalencies=equivalencies)(value)
+1133 
+1134     def in_units(self, other, value=1.0, equivalencies=[]):
+1135         """
+1136         Alias for `to` for backward compatibility with pynbody.
+1137         """
+1138         return self.to(
+1139             other, value=value, equivalencies=equivalencies)
+1140 
+1141     def decompose(self, bases=set()):
+1142         """
+1143         Return a unit object composed of only irreducible units.
+1144 
+1145         Parameters
+1146         ----------
+1147         bases : sequence of UnitBase, optional
+1148             The bases to decompose into.  When not provided,
+1149             decomposes down to any irreducible units.  When provided,
+1150             the decomposed result will only contain the given units.
+1151             This will raises a `UnitsError` if it's not possible
+1152             to do so.
+1153 
+1154         Returns
+1155         -------
+1156         unit : `~astropy.units.CompositeUnit`
+1157             New object containing only irreducible unit objects.
+1158         """
+1159         raise NotImplementedError()
+1160 
+1161     def _compose(self, equivalencies=[], namespace=[], max_depth=2, depth=0,
+1162                  cached_results=None):
+1163         def is_final_result(unit):
+1164             # Returns True if this result contains only the expected
+1165             # units
+1166             for base in unit.bases:
+1167                 if base not in namespace:
+1168                     return False
+1169             return True
+1170 
+1171         unit = self.decompose()
+1172         key = hash(unit)
+1173 
+1174         cached = cached_results.get(key)
+1175         if cached is not None:
+1176             if isinstance(cached, Exception):
+1177                 raise cached
+1178             return cached
+1179 
+1180         # Prevent too many levels of recursion
+1181         # And special case for dimensionless unit
+1182         if depth >= max_depth:
+1183             cached_results[key] = [unit]
+1184             return [unit]
+1185 
+1186         # Make a list including all of the equivalent units
+1187         units = [unit]
+1188         for funit, tunit, a, b in equivalencies:
+1189             if tunit is not None:
+1190                 if self._is_equivalent(funit):
+1191                     scale = funit.decompose().scale / unit.scale
+1192                     units.append(Unit(a(1.0 / scale) * tunit).decompose())
+1193                 elif self._is_equivalent(tunit):
+1194                     scale = tunit.decompose().scale / unit.scale
+1195                     units.append(Unit(b(1.0 / scale) * funit).decompose())
+1196             else:
+1197                 if self._is_equivalent(funit):
+1198                     units.append(Unit(unit.scale))
+1199 
+1200         # Store partial results
+1201         partial_results = []
+1202         # Store final results that reduce to a single unit or pair of
+1203         # units
+1204         if len(unit.bases) == 0:
+1205             final_results = [set([unit]), set()]
+1206         else:
+1207             final_results = [set(), set()]
+1208 
+1209         for tunit in namespace:
+1210             tunit_decomposed = tunit.decompose()
+1211             for u in units:
+1212                 # If the unit is a base unit, look for an exact match
+1213                 # to one of the bases of the target unit.  If found,
+1214                 # factor by the same power as the target unit's base.
+1215                 # This allows us to factor out fractional powers
+1216                 # without needing to do an exhaustive search.
+1217                 if len(tunit_decomposed.bases) == 1:
+1218                     for base, power in zip(u.bases, u.powers):
+1219                         if tunit_decomposed._is_equivalent(base):
+1220                             tunit = tunit ** power
+1221                             tunit_decomposed = tunit_decomposed ** power
+1222                             break
+1223 
+1224                 composed = (u / tunit_decomposed).decompose()
+1225                 factored = composed * tunit
+1226                 len_bases = len(composed.bases)
+1227                 if is_final_result(factored) and len_bases <= 1:
+1228                     final_results[len_bases].add(factored)
+1229                 else:
+1230                     partial_results.append(
+1231                         (len_bases, composed, tunit))
+1232 
+1233         # Do we have any minimal results?
+1234         for final_result in final_results:
+1235             if len(final_result):
+1236                 results = final_results[0].union(final_results[1])
+1237                 cached_results[key] = results
+1238                 return results
+1239 
+1240         partial_results.sort(key=operator.itemgetter(0))
+1241 
+1242         # ...we have to recurse and try to further compose
+1243         results = []
+1244         for len_bases, composed, tunit in partial_results:
+1245             try:
+1246                 composed_list = composed._compose(
+1247                     equivalencies=equivalencies,
+1248                     namespace=namespace,
+1249                     max_depth=max_depth, depth=depth + 1,
+1250                     cached_results=cached_results)
+1251             except UnitsError:
+1252                 composed_list = []
+1253             for subcomposed in composed_list:
+1254                 results.append(
+1255                     (len(subcomposed.bases), subcomposed, tunit))
+1256 
+1257         if len(results):
+1258             results.sort(key=operator.itemgetter(0))
+1259 
+1260             min_length = results[0][0]
+1261             subresults = set()
+1262             for len_bases, composed, tunit in results:
+1263                 if len_bases > min_length:
+1264                     break
+1265                 else:
+1266                     factored = composed * tunit
+1267                     if is_final_result(factored):
+1268                         subresults.add(factored)
+1269 
+1270             if len(subresults):
+1271                 cached_results[key] = subresults
+1272                 return subresults
+1273 
+1274         if not is_final_result(self):
+1275             result = UnitsError(
+1276                 f"Cannot represent unit {self} in terms of the given units")
+1277             cached_results[key] = result
+1278             raise result
+1279 
+1280         cached_results[key] = [self]
+1281         return [self]
+1282 
+1283     def compose(self, equivalencies=[], units=None, max_depth=2,
+1284                 include_prefix_units=None):
+1285         """
+1286         Return the simplest possible composite unit(s) that represent
+1287         the given unit.  Since there may be multiple equally simple
+1288         compositions of the unit, a list of units is always returned.
+1289 
+1290         Parameters
+1291         ----------
+1292         equivalencies : list of tuple
+1293             A list of equivalence pairs to also list.  See
+1294             :ref:`astropy:unit_equivalencies`.
+1295             This list is in addition to possible global defaults set by, e.g.,
+1296             `set_enabled_equivalencies`.
+1297             Use `None` to turn off all equivalencies.
+1298 
+1299         units : set of `~astropy.units.Unit`, optional
+1300             If not provided, any known units may be used to compose
+1301             into.  Otherwise, ``units`` is a dict, module or sequence
+1302             containing the units to compose into.
+1303 
+1304         max_depth : int, optional
+1305             The maximum recursion depth to use when composing into
+1306             composite units.
+1307 
+1308         include_prefix_units : bool, optional
+1309             When `True`, include prefixed units in the result.
+1310             Default is `True` if a sequence is passed in to ``units``,
+1311             `False` otherwise.
+1312 
+1313         Returns
+1314         -------
+1315         units : list of `CompositeUnit`
+1316             A list of candidate compositions.  These will all be
+1317             equally simple, but it may not be possible to
+1318             automatically determine which of the candidates are
+1319             better.
+1320         """
+1321         # if units parameter is specified and is a sequence (list|tuple),
+1322         # include_prefix_units is turned on by default.  Ex: units=[u.kpc]
+1323         if include_prefix_units is None:
+1324             include_prefix_units = isinstance(units, (list, tuple))
+1325 
+1326         # Pre-normalize the equivalencies list
+1327         equivalencies = self._normalize_equivalencies(equivalencies)
+1328 
+1329         # The namespace of units to compose into should be filtered to
+1330         # only include units with bases in common with self, otherwise
+1331         # they can't possibly provide useful results.  Having too many
+1332         # destination units greatly increases the search space.
+1333 
+1334         def has_bases_in_common(a, b):
+1335             if len(a.bases) == 0 and len(b.bases) == 0:
+1336                 return True
+1337             for ab in a.bases:
+1338                 for bb in b.bases:
+1339                     if ab == bb:
+1340                         return True
+1341             return False
+1342 
+1343         def has_bases_in_common_with_equiv(unit, other):
+1344             if has_bases_in_common(unit, other):
+1345                 return True
+1346             for funit, tunit, a, b in equivalencies:
+1347                 if tunit is not None:
+1348                     if unit._is_equivalent(funit):
+1349                         if has_bases_in_common(tunit.decompose(), other):
+1350                             return True
+1351                     elif unit._is_equivalent(tunit):
+1352                         if has_bases_in_common(funit.decompose(), other):
+1353                             return True
+1354                 else:
+1355                     if unit._is_equivalent(funit):
+1356                         if has_bases_in_common(dimensionless_unscaled, other):
+1357                             return True
+1358             return False
+1359 
+1360         def filter_units(units):
+1361             filtered_namespace = set()
+1362             for tunit in units:
+1363                 if (isinstance(tunit, UnitBase) and
+1364                     (include_prefix_units or
+1365                      not isinstance(tunit, PrefixUnit)) and
+1366                     has_bases_in_common_with_equiv(
+1367                         decomposed, tunit.decompose())):
+1368                     filtered_namespace.add(tunit)
+1369             return filtered_namespace
+1370 
+1371         decomposed = self.decompose()
+1372 
+1373         if units is None:
+1374             units = filter_units(self._get_units_with_same_physical_type(
+1375                 equivalencies=equivalencies))
+1376             if len(units) == 0:
+1377                 units = get_current_unit_registry().non_prefix_units
+1378         elif isinstance(units, dict):
+1379             units = set(filter_units(units.values()))
+1380         elif inspect.ismodule(units):
+1381             units = filter_units(vars(units).values())
+1382         else:
+1383             units = filter_units(_flatten_units_collection(units))
+1384 
+1385         def sort_results(results):
+1386             if not len(results):
+1387                 return []
+1388 
+1389             # Sort the results so the simplest ones appear first.
+1390             # Simplest is defined as "the minimum sum of absolute
+1391             # powers" (i.e. the fewest bases), and preference should
+1392             # be given to results where the sum of powers is positive
+1393             # and the scale is exactly equal to 1.0
+1394             results = list(results)
+1395             results.sort(key=lambda x: np.abs(x.scale))
+1396             results.sort(key=lambda x: np.sum(np.abs(x.powers)))
+1397             results.sort(key=lambda x: np.sum(x.powers) < 0.0)
+1398             results.sort(key=lambda x: not is_effectively_unity(x.scale))
+1399 
+1400             last_result = results[0]
+1401             filtered = [last_result]
+1402             for result in results[1:]:
+1403                 if str(result) != str(last_result):
+1404                     filtered.append(result)
+1405                 last_result = result
+1406 
+1407             return filtered
+1408 
+1409         return sort_results(self._compose(
+1410             equivalencies=equivalencies, namespace=units,
+1411             max_depth=max_depth, depth=0, cached_results={}))
+1412 
+1413     def to_system(self, system):
+1414         """
+1415         Converts this unit into ones belonging to the given system.
+1416         Since more than one result may be possible, a list is always
+1417         returned.
+1418 
+1419         Parameters
+1420         ----------
+1421         system : module
+1422             The module that defines the unit system.  Commonly used
+1423             ones include `astropy.units.si` and `astropy.units.cgs`.
+1424 
+1425             To use your own module it must contain unit objects and a
+1426             sequence member named ``bases`` containing the base units of
+1427             the system.
+1428 
+1429         Returns
+1430         -------
+1431         units : list of `CompositeUnit`
+1432             The list is ranked so that units containing only the base
+1433             units of that system will appear first.
+1434         """
+1435         bases = set(system.bases)
+1436 
+1437         def score(compose):
+1438             # In case that compose._bases has no elements we return
+1439             # 'np.inf' as 'score value'.  It does not really matter which
+1440             # number we would return. This case occurs for instance for
+1441             # dimensionless quantities:
+1442             compose_bases = compose.bases
+1443             if len(compose_bases) == 0:
+1444                 return np.inf
+1445             else:
+1446                 sum = 0
+1447                 for base in compose_bases:
+1448                     if base in bases:
+1449                         sum += 1
+1450 
+1451                 return sum / float(len(compose_bases))
+1452 
+1453         x = self.decompose(bases=bases)
+1454         composed = x.compose(units=system)
+1455         composed = sorted(composed, key=score, reverse=True)
+1456         return composed
+1457 
+1458     @lazyproperty
+1459     def si(self):
+1460         """
+1461         Returns a copy of the current `Unit` instance in SI units.
+1462         """
+1463 
+1464         from . import si
+1465         return self.to_system(si)[0]
+1466 
+1467     @lazyproperty
+1468     def cgs(self):
+1469         """
+1470         Returns a copy of the current `Unit` instance with CGS units.
+1471         """
+1472         from . import cgs
+1473         return self.to_system(cgs)[0]
+1474 
+1475     @property
+1476     def physical_type(self):
+1477         """
+1478         Physical type(s) dimensionally compatible with the unit.
+1479 
+1480         Returns
+1481         -------
+1482         `~astropy.units.physical.PhysicalType`
+1483             A representation of the physical type(s) of a unit.
+1484 
+1485         Examples
+1486         --------
+1487         >>> from astropy import units as u
+1488         >>> u.m.physical_type
+1489         PhysicalType('length')
+1490         >>> (u.m ** 2 / u.s).physical_type
+1491         PhysicalType({'diffusivity', 'kinematic viscosity'})
+1492 
+1493         Physical types can be compared to other physical types
+1494         (recommended in packages) or to strings.
+1495 
+1496         >>> area = (u.m ** 2).physical_type
+1497         >>> area == u.m.physical_type ** 2
+1498         True
+1499         >>> area == "area"
+1500         True
+1501 
+1502         `~astropy.units.physical.PhysicalType` objects can be used for
+1503         dimensional analysis.
+1504 
+1505         >>> number_density = u.m.physical_type ** -3
+1506         >>> velocity = (u.m / u.s).physical_type
+1507         >>> number_density * velocity
+1508         PhysicalType('particle flux')
+1509         """
+1510         from . import physical
+1511         return physical.get_physical_type(self)
+1512 
+1513     def _get_units_with_same_physical_type(self, equivalencies=[]):
+1514         """
+1515         Return a list of registered units with the same physical type
+1516         as this unit.
+1517 
+1518         This function is used by Quantity to add its built-in
+1519         conversions to equivalent units.
+1520 
+1521         This is a private method, since end users should be encouraged
+1522         to use the more powerful `compose` and `find_equivalent_units`
+1523         methods (which use this under the hood).
+1524 
+1525         Parameters
+1526         ----------
+1527         equivalencies : list of tuple
+1528             A list of equivalence pairs to also pull options from.
+1529             See :ref:`astropy:unit_equivalencies`.  It must already be
+1530             normalized using `_normalize_equivalencies`.
+1531         """
+1532         unit_registry = get_current_unit_registry()
+1533         units = set(unit_registry.get_units_with_physical_type(self))
+1534         for funit, tunit, a, b in equivalencies:
+1535             if tunit is not None:
+1536                 if self.is_equivalent(funit) and tunit not in units:
+1537                     units.update(
+1538                         unit_registry.get_units_with_physical_type(tunit))
+1539                 if self._is_equivalent(tunit) and funit not in units:
+1540                     units.update(
+1541                         unit_registry.get_units_with_physical_type(funit))
+1542             else:
+1543                 if self.is_equivalent(funit):
+1544                     units.add(dimensionless_unscaled)
+1545         return units
+1546 
+1547     class EquivalentUnitsList(list):
+1548         """
+1549         A class to handle pretty-printing the result of
+1550         `find_equivalent_units`.
+1551         """
+1552 
+1553         HEADING_NAMES = ('Primary name', 'Unit definition', 'Aliases')
+1554         ROW_LEN = 3  # len(HEADING_NAMES), but hard-code since it is constant
+1555         NO_EQUIV_UNITS_MSG = 'There are no equivalent units'
+1556 
+1557         def __repr__(self):
+1558             if len(self) == 0:
+1559                 return self.NO_EQUIV_UNITS_MSG
+1560             else:
+1561                 lines = self._process_equivalent_units(self)
+1562                 lines.insert(0, self.HEADING_NAMES)
+1563                 widths = [0] * self.ROW_LEN
+1564                 for line in lines:
+1565                     for i, col in enumerate(line):
+1566                         widths[i] = max(widths[i], len(col))
+1567 
+1568                 f = "  {{0:<{0}s}} | {{1:<{1}s}} | {{2:<{2}s}}".format(*widths)
+1569                 lines = [f.format(*line) for line in lines]
+1570                 lines = (lines[0:1] +
+1571                          ['['] +
+1572                          [f'{x} ,' for x in lines[1:]] +
+1573                          [']'])
+1574                 return '\n'.join(lines)
+1575 
+1576         def _repr_html_(self):
+1577             """
+1578             Outputs a HTML table representation within Jupyter notebooks.
+1579             """
+1580             if len(self) == 0:
+1581                 return f"<p>{self.NO_EQUIV_UNITS_MSG}</p>"
+1582             else:
+1583                 # HTML tags to use to compose the table in HTML
+1584                 blank_table = '<table style="width:50%">{}</table>'
+1585                 blank_row_container = "<tr>{}</tr>"
+1586                 heading_row_content = "<th>{}</th>" * self.ROW_LEN
+1587                 data_row_content = "<td>{}</td>" * self.ROW_LEN
+1588 
+1589                 # The HTML will be rendered & the table is simple, so don't
+1590                 # bother to include newlines & indentation for the HTML code.
+1591                 heading_row = blank_row_container.format(
+1592                     heading_row_content.format(*self.HEADING_NAMES))
+1593                 data_rows = self._process_equivalent_units(self)
+1594                 all_rows = heading_row
+1595                 for row in data_rows:
+1596                     html_row = blank_row_container.format(
+1597                         data_row_content.format(*row))
+1598                     all_rows += html_row
+1599                 return blank_table.format(all_rows)
+1600 
+1601         @staticmethod
+1602         def _process_equivalent_units(equiv_units_data):
+1603             """
+1604             Extract attributes, and sort, the equivalent units pre-formatting.
+1605             """
+1606             processed_equiv_units = []
+1607             for u in equiv_units_data:
+1608                 irred = u.decompose().to_string()
+1609                 if irred == u.name:
+1610                     irred = 'irreducible'
+1611                 processed_equiv_units.append(
+1612                     (u.name, irred, ', '.join(u.aliases)))
+1613             processed_equiv_units.sort()
+1614             return processed_equiv_units
+1615 
+1616     def find_equivalent_units(self, equivalencies=[], units=None,
+1617                               include_prefix_units=False):
+1618         """
+1619         Return a list of all the units that are the same type as ``self``.
+1620 
+1621         Parameters
+1622         ----------
+1623         equivalencies : list of tuple
+1624             A list of equivalence pairs to also list.  See
+1625             :ref:`astropy:unit_equivalencies`.
+1626             Any list given, including an empty one, supersedes global defaults
+1627             that may be in effect (as set by `set_enabled_equivalencies`)
+1628 
+1629         units : set of `~astropy.units.Unit`, optional
+1630             If not provided, all defined units will be searched for
+1631             equivalencies.  Otherwise, may be a dict, module or
+1632             sequence containing the units to search for equivalencies.
+1633 
+1634         include_prefix_units : bool, optional
+1635             When `True`, include prefixed units in the result.
+1636             Default is `False`.
+1637 
+1638         Returns
+1639         -------
+1640         units : list of `UnitBase`
+1641             A list of unit objects that match ``u``.  A subclass of
+1642             `list` (``EquivalentUnitsList``) is returned that
+1643             pretty-prints the list of units when output.
+1644         """
+1645         results = self.compose(
+1646             equivalencies=equivalencies, units=units, max_depth=1,
+1647             include_prefix_units=include_prefix_units)
+1648         results = set(
+1649             x.bases[0] for x in results if len(x.bases) == 1)
+1650         return self.EquivalentUnitsList(results)
+1651 
+1652     def is_unity(self):
+1653         """
+1654         Returns `True` if the unit is unscaled and dimensionless.
+1655         """
+1656         return False
+1657 
+1658 
+1659 class NamedUnit(UnitBase):
+1660     """
+1661     The base class of units that have a name.
+1662 
+1663     Parameters
+1664     ----------
+1665     st : str, list of str, 2-tuple
+1666         The name of the unit.  If a list of strings, the first element
+1667         is the canonical (short) name, and the rest of the elements
+1668         are aliases.  If a tuple of lists, the first element is a list
+1669         of short names, and the second element is a list of long
+1670         names; all but the first short name are considered "aliases".
+1671         Each name *should* be a valid Python identifier to make it
+1672         easy to access, but this is not required.
+1673 
+1674     namespace : dict, optional
+1675         When provided, inject the unit, and all of its aliases, in the
+1676         given namespace dictionary.  If a unit by the same name is
+1677         already in the namespace, a ValueError is raised.
+1678 
+1679     doc : str, optional
+1680         A docstring describing the unit.
+1681 
+1682     format : dict, optional
+1683         A mapping to format-specific representations of this unit.
+1684         For example, for the ``Ohm`` unit, it might be nice to have it
+1685         displayed as ``\\Omega`` by the ``latex`` formatter.  In that
+1686         case, `format` argument should be set to::
+1687 
+1688             {'latex': r'\\Omega'}
+1689 
+1690     Raises
+1691     ------
+1692     ValueError
+1693         If any of the given unit names are already in the registry.
+1694 
+1695     ValueError
+1696         If any of the given unit names are not valid Python tokens.
+1697     """
+1698 
+1699     def __init__(self, st, doc=None, format=None, namespace=None):
+1700 
+1701         UnitBase.__init__(self)
+1702 
+1703         if isinstance(st, (bytes, str)):
+1704             self._names = [st]
+1705             self._short_names = [st]
+1706             self._long_names = []
+1707         elif isinstance(st, tuple):
+1708             if not len(st) == 2:
+1709                 raise ValueError("st must be string, list or 2-tuple")
+1710             self._names = st[0] + [n for n in st[1] if n not in st[0]]
+1711             if not len(self._names):
+1712                 raise ValueError("must provide at least one name")
+1713             self._short_names = st[0][:]
+1714             self._long_names = st[1][:]
+1715         else:
+1716             if len(st) == 0:
+1717                 raise ValueError(
+1718                     "st list must have at least one entry")
+1719             self._names = st[:]
+1720             self._short_names = [st[0]]
+1721             self._long_names = st[1:]
+1722 
+1723         if format is None:
+1724             format = {}
+1725         self._format = format
+1726 
+1727         if doc is None:
+1728             doc = self._generate_doc()
+1729         else:
+1730             doc = textwrap.dedent(doc)
+1731             doc = textwrap.fill(doc)
+1732 
+1733         self.__doc__ = doc
+1734 
+1735         self._inject(namespace)
+1736 
+1737     def _generate_doc(self):
+1738         """
+1739         Generate a docstring for the unit if the user didn't supply
+1740         one.  This is only used from the constructor and may be
+1741         overridden in subclasses.
+1742         """
+1743         names = self.names
+1744         if len(self.names) > 1:
+1745             return "{1} ({0})".format(*names[:2])
+1746         else:
+1747             return names[0]
+1748 
+1749     def get_format_name(self, format):
+1750         """
+1751         Get a name for this unit that is specific to a particular
+1752         format.
+1753 
+1754         Uses the dictionary passed into the `format` kwarg in the
+1755         constructor.
+1756 
+1757         Parameters
+1758         ----------
+1759         format : str
+1760             The name of the format
+1761 
+1762         Returns
+1763         -------
+1764         name : str
+1765             The name of the unit for the given format.
+1766         """
+1767         return self._format.get(format, self.name)
+1768 
+1769     @property
+1770     def names(self):
+1771         """
+1772         Returns all of the names associated with this unit.
+1773         """
+1774         return self._names
+1775 
+1776     @property
+1777     def name(self):
+1778         """
+1779         Returns the canonical (short) name associated with this unit.
+1780         """
+1781         return self._names[0]
+1782 
+1783     @property
+1784     def aliases(self):
+1785         """
+1786         Returns the alias (long) names for this unit.
+1787         """
+1788         return self._names[1:]
+1789 
+1790     @property
+1791     def short_names(self):
+1792         """
+1793         Returns all of the short names associated with this unit.
+1794         """
+1795         return self._short_names
+1796 
+1797     @property
+1798     def long_names(self):
+1799         """
+1800         Returns all of the long names associated with this unit.
+1801         """
+1802         return self._long_names
+1803 
+1804     def _inject(self, namespace=None):
+1805         """
+1806         Injects the unit, and all of its aliases, in the given
+1807         namespace dictionary.
+1808         """
+1809         if namespace is None:
+1810             return
+1811 
+1812         # Loop through all of the names first, to ensure all of them
+1813         # are new, then add them all as a single "transaction" below.
+1814         for name in self._names:
+1815             if name in namespace and self != namespace[name]:
+1816                 raise ValueError(
+1817                     "Object with name {!r} already exists in "
+1818                     "given namespace ({!r}).".format(
+1819                         name, namespace[name]))
+1820 
+1821         for name in self._names:
+1822             namespace[name] = self
+1823 
+1824 
+1825 def _recreate_irreducible_unit(cls, names, registered):
+1826     """
+1827     This is used to reconstruct units when passed around by
+1828     multiprocessing.
+1829     """
+1830     registry = get_current_unit_registry().registry
+1831     if names[0] in registry:
+1832         # If in local registry return that object.
+1833         return registry[names[0]]
+1834     else:
+1835         # otherwise, recreate the unit.
+1836         unit = cls(names)
+1837         if registered:
+1838             # If not in local registry but registered in origin registry,
+1839             # enable unit in local registry.
+1840             get_current_unit_registry().add_enabled_units([unit])
+1841 
+1842         return unit
+1843 
+1844 
+1845 class IrreducibleUnit(NamedUnit):
+1846     """
+1847     Irreducible units are the units that all other units are defined
+1848     in terms of.
+1849 
+1850     Examples are meters, seconds, kilograms, amperes, etc.  There is
+1851     only once instance of such a unit per type.
+1852     """
+1853 
+1854     def __reduce__(self):
+1855         # When IrreducibleUnit objects are passed to other processes
+1856         # over multiprocessing, they need to be recreated to be the
+1857         # ones already in the subprocesses' namespace, not new
+1858         # objects, or they will be considered "unconvertible".
+1859         # Therefore, we have a custom pickler/unpickler that
+1860         # understands how to recreate the Unit on the other side.
+1861         registry = get_current_unit_registry().registry
+1862         return (_recreate_irreducible_unit,
+1863                 (self.__class__, list(self.names), self.name in registry),
+1864                 self.__getstate__())
+1865 
+1866     @property
+1867     def represents(self):
+1868         """The unit that this named unit represents.
+1869 
+1870         For an irreducible unit, that is always itself.
+1871         """
+1872         return self
+1873 
+1874     def decompose(self, bases=set()):
+1875         if len(bases) and self not in bases:
+1876             for base in bases:
+1877                 try:
+1878                     scale = self._to(base)
+1879                 except UnitsError:
+1880                     pass
+1881                 else:
+1882                     if is_effectively_unity(scale):
+1883                         return base
+1884                     else:
+1885                         return CompositeUnit(scale, [base], [1],
+1886                                              _error_check=False)
+1887 
+1888             raise UnitConversionError(
+1889                 f"Unit {self} can not be decomposed into the requested bases")
+1890 
+1891         return self
+1892 
+1893 
+1894 class UnrecognizedUnit(IrreducibleUnit):
+1895     """
+1896     A unit that did not parse correctly.  This allows for
+1897     round-tripping it as a string, but no unit operations actually work
+1898     on it.
+1899 
+1900     Parameters
+1901     ----------
+1902     st : str
+1903         The name of the unit.
+1904     """
+1905     # For UnrecognizedUnits, we want to use "standard" Python
+1906     # pickling, not the special case that is used for
+1907     # IrreducibleUnits.
+1908     __reduce__ = object.__reduce__
+1909 
+1910     def __repr__(self):
+1911         return f"UnrecognizedUnit({str(self)})"
+1912 
+1913     def __bytes__(self):
+1914         return self.name.encode('ascii', 'replace')
+1915 
+1916     def __str__(self):
+1917         return self.name
+1918 
+1919     def to_string(self, format=None):
+1920         return self.name
+1921 
+1922     def _unrecognized_operator(self, *args, **kwargs):
+1923         raise ValueError(
+1924             "The unit {!r} is unrecognized, so all arithmetic operations "
+1925             "with it are invalid.".format(self.name))
+1926 
+1927     __pow__ = __truediv__ = __rtruediv__ = __mul__ = __rmul__ = __lt__ = \
+1928         __gt__ = __le__ = __ge__ = __neg__ = _unrecognized_operator
+1929 
+1930     def __eq__(self, other):
+1931         try:
+1932             other = Unit(other, parse_strict='silent')
+1933         except (ValueError, UnitsError, TypeError):
+1934             return NotImplemented
+1935 
+1936         return isinstance(other, type(self)) and self.name == other.name
+1937 
+1938     def __ne__(self, other):
+1939         return not (self == other)
+1940 
+1941     def is_equivalent(self, other, equivalencies=None):
+1942         self._normalize_equivalencies(equivalencies)
+1943         return self == other
+1944 
+1945     def _get_converter(self, other, equivalencies=None):
+1946         self._normalize_equivalencies(equivalencies)
+1947         raise ValueError(
+1948             "The unit {!r} is unrecognized.  It can not be converted "
+1949             "to other units.".format(self.name))
+1950 
+1951     def get_format_name(self, format):
+1952         return self.name
+1953 
+1954     def is_unity(self):
+1955         return False
+1956 
+1957 
+1958 class _UnitMetaClass(type):
+1959     """
+1960     This metaclass exists because the Unit constructor should
+1961     sometimes return instances that already exist.  This "overrides"
+1962     the constructor before the new instance is actually created, so we
+1963     can return an existing one.
+1964     """
+1965 
+1966     def __call__(self, s="", represents=None, format=None, namespace=None,
+1967                  doc=None, parse_strict='raise'):
+1968 
+1969         # Short-circuit if we're already a unit
+1970         if hasattr(s, '_get_physical_type_id'):
+1971             return s
+1972 
+1973         # turn possible Quantity input for s or represents into a Unit
+1974         from .quantity import Quantity
+1975 
+1976         if isinstance(represents, Quantity):
+1977             if is_effectively_unity(represents.value):
+1978                 represents = represents.unit
+1979             else:
+1980                 represents = CompositeUnit(represents.value *
+1981                                            represents.unit.scale,
+1982                                            bases=represents.unit.bases,
+1983                                            powers=represents.unit.powers,
+1984                                            _error_check=False)
+1985 
+1986         if isinstance(s, Quantity):
+1987             if is_effectively_unity(s.value):
+1988                 s = s.unit
+1989             else:
+1990                 s = CompositeUnit(s.value * s.unit.scale,
+1991                                   bases=s.unit.bases,
+1992                                   powers=s.unit.powers,
+1993                                   _error_check=False)
+1994 
+1995         # now decide what we really need to do; define derived Unit?
+1996         if isinstance(represents, UnitBase):
+1997             # This has the effect of calling the real __new__ and
+1998             # __init__ on the Unit class.
+1999             return super().__call__(
+2000                 s, represents, format=format, namespace=namespace, doc=doc)
+2001 
+2002         # or interpret a Quantity (now became unit), string or number?
+2003         if isinstance(s, UnitBase):
+2004             return s
+2005 
+2006         elif isinstance(s, (bytes, str)):
+2007             if len(s.strip()) == 0:
+2008                 # Return the NULL unit
+2009                 return dimensionless_unscaled
+2010 
+2011             if format is None:
+2012                 format = unit_format.Generic
+2013 
+2014             f = unit_format.get_format(format)
+2015             if isinstance(s, bytes):
+2016                 s = s.decode('ascii')
+2017 
+2018             try:
+2019                 return f.parse(s)
+2020             except NotImplementedError:
+2021                 raise
+2022             except Exception as e:
+2023                 if parse_strict == 'silent':
+2024                     pass
+2025                 else:
+2026                     # Deliberately not issubclass here. Subclasses
+2027                     # should use their name.
+2028                     if f is not unit_format.Generic:
+2029                         format_clause = f.name + ' '
+2030                     else:
+2031                         format_clause = ''
+2032                     msg = ("'{}' did not parse as {}unit: {} "
+2033                            "If this is meant to be a custom unit, "
+2034                            "define it with 'u.def_unit'. To have it "
+2035                            "recognized inside a file reader or other code, "
+2036                            "enable it with 'u.add_enabled_units'. "
+2037                            "For details, see "
+2038                            "https://docs.astropy.org/en/latest/units/combining_and_defining.html"
+2039                            .format(s, format_clause, str(e)))
+2040                     if parse_strict == 'raise':
+2041                         raise ValueError(msg)
+2042                     elif parse_strict == 'warn':
+2043                         warnings.warn(msg, UnitsWarning)
+2044                     else:
+2045                         raise ValueError("'parse_strict' must be 'warn', "
+2046                                          "'raise' or 'silent'")
+2047                 return UnrecognizedUnit(s)
+2048 
+2049         elif isinstance(s, (int, float, np.floating, np.integer)):
+2050             return CompositeUnit(s, [], [], _error_check=False)
+2051 
+2052         elif isinstance(s, tuple):
+2053             from .structured import StructuredUnit
+2054             return StructuredUnit(s)
+2055 
+2056         elif s is None:
+2057             raise TypeError("None is not a valid Unit")
+2058 
+2059         else:
+2060             raise TypeError(f"{s} can not be converted to a Unit")
+2061 
+2062 
+2063 class Unit(NamedUnit, metaclass=_UnitMetaClass):
+2064     """
+2065     The main unit class.
+2066 
+2067     There are a number of different ways to construct a Unit, but
+2068     always returns a `UnitBase` instance.  If the arguments refer to
+2069     an already-existing unit, that existing unit instance is returned,
+2070     rather than a new one.
+2071 
+2072     - From a string::
+2073 
+2074         Unit(s, format=None, parse_strict='silent')
+2075 
+2076       Construct from a string representing a (possibly compound) unit.
+2077 
+2078       The optional `format` keyword argument specifies the format the
+2079       string is in, by default ``"generic"``.  For a description of
+2080       the available formats, see `astropy.units.format`.
+2081 
+2082       The optional ``parse_strict`` keyword controls what happens when an
+2083       unrecognized unit string is passed in.  It may be one of the following:
+2084 
+2085          - ``'raise'``: (default) raise a ValueError exception.
+2086 
+2087          - ``'warn'``: emit a Warning, and return an
+2088            `UnrecognizedUnit` instance.
+2089 
+2090          - ``'silent'``: return an `UnrecognizedUnit` instance.
+2091 
+2092     - From a number::
+2093 
+2094         Unit(number)
+2095 
+2096       Creates a dimensionless unit.
+2097 
+2098     - From a `UnitBase` instance::
+2099 
+2100         Unit(unit)
+2101 
+2102       Returns the given unit unchanged.
+2103 
+2104     - From no arguments::
+2105 
+2106         Unit()
+2107 
+2108       Returns the dimensionless unit.
+2109 
+2110     - The last form, which creates a new `Unit` is described in detail
+2111       below.
+2112 
+2113     See also: https://docs.astropy.org/en/stable/units/
+2114 
+2115     Parameters
+2116     ----------
+2117     st : str or list of str
+2118         The name of the unit.  If a list, the first element is the
+2119         canonical (short) name, and the rest of the elements are
+2120         aliases.
+2121 
+2122     represents : UnitBase instance
+2123         The unit that this named unit represents.
+2124 
+2125     doc : str, optional
+2126         A docstring describing the unit.
+2127 
+2128     format : dict, optional
+2129         A mapping to format-specific representations of this unit.
+2130         For example, for the ``Ohm`` unit, it might be nice to have it
+2131         displayed as ``\\Omega`` by the ``latex`` formatter.  In that
+2132         case, `format` argument should be set to::
+2133 
+2134             {'latex': r'\\Omega'}
+2135 
+2136     namespace : dict, optional
+2137         When provided, inject the unit (and all of its aliases) into
+2138         the given namespace.
+2139 
+2140     Raises
+2141     ------
+2142     ValueError
+2143         If any of the given unit names are already in the registry.
+2144 
+2145     ValueError
+2146         If any of the given unit names are not valid Python tokens.
+2147     """
+2148 
+2149     def __init__(self, st, represents=None, doc=None,
+2150                  format=None, namespace=None):
+2151 
+2152         represents = Unit(represents)
+2153         self._represents = represents
+2154 
+2155         NamedUnit.__init__(self, st, namespace=namespace, doc=doc,
+2156                            format=format)
+2157 
+2158     @property
+2159     def represents(self):
+2160         """The unit that this named unit represents."""
+2161         return self._represents
+2162 
+2163     def decompose(self, bases=set()):
+2164         return self._represents.decompose(bases=bases)
+2165 
+2166     def is_unity(self):
+2167         return self._represents.is_unity()
+2168 
+2169     def __hash__(self):
+2170         if self._hash is None:
+2171             self._hash = hash((self.name, self._represents))
+2172         return self._hash
+2173 
+2174     @classmethod
+2175     def _from_physical_type_id(cls, physical_type_id):
+2176         # get string bases and powers from the ID tuple
+2177         bases = [cls(base) for base, _ in physical_type_id]
+2178         powers = [power for _, power in physical_type_id]
+2179 
+2180         if len(physical_type_id) == 1 and powers[0] == 1:
+2181             unit = bases[0]
+2182         else:
+2183             unit = CompositeUnit(1, bases, powers,
+2184                                  _error_check=False)
+2185 
+2186         return unit
+2187 
+2188 
+2189 class PrefixUnit(Unit):
+2190     """
+2191     A unit that is simply a SI-prefixed version of another unit.
+2192 
+2193     For example, ``mm`` is a `PrefixUnit` of ``.001 * m``.
+2194 
+2195     The constructor is the same as for `Unit`.
+2196     """
+2197 
+2198 
+2199 class CompositeUnit(UnitBase):
+2200     """
+2201     Create a composite unit using expressions of previously defined
+2202     units.
+2203 
+2204     Direct use of this class is not recommended. Instead use the
+2205     factory function `Unit` and arithmetic operators to compose
+2206     units.
+2207 
+2208     Parameters
+2209     ----------
+2210     scale : number
+2211         A scaling factor for the unit.
+2212 
+2213     bases : sequence of `UnitBase`
+2214         A sequence of units this unit is composed of.
+2215 
+2216     powers : sequence of numbers
+2217         A sequence of powers (in parallel with ``bases``) for each
+2218         of the base units.
+2219     """
+2220     _decomposed_cache = None
+2221 
+2222     def __init__(self, scale, bases, powers, decompose=False,
+2223                  decompose_bases=set(), _error_check=True):
+2224         # There are many cases internal to astropy.units where we
+2225         # already know that all the bases are Unit objects, and the
+2226         # powers have been validated.  In those cases, we can skip the
+2227         # error checking for performance reasons.  When the private
+2228         # kwarg `_error_check` is False, the error checking is turned
+2229         # off.
+2230         if _error_check:
+2231             for base in bases:
+2232                 if not isinstance(base, UnitBase):
+2233                     raise TypeError(
+2234                         "bases must be sequence of UnitBase instances")
+2235             powers = [validate_power(p) for p in powers]
+2236 
+2237         if not decompose and len(bases) == 1 and powers[0] >= 0:
+2238             # Short-cut; with one unit there's nothing to expand and gather,
+2239             # as that has happened already when creating the unit.  But do only
+2240             # positive powers, since for negative powers we need to re-sort.
+2241             unit = bases[0]
+2242             power = powers[0]
+2243             if power == 1:
+2244                 scale *= unit.scale
+2245                 self._bases = unit.bases
+2246                 self._powers = unit.powers
+2247             elif power == 0:
+2248                 self._bases = []
+2249                 self._powers = []
+2250             else:
+2251                 scale *= unit.scale ** power
+2252                 self._bases = unit.bases
+2253                 self._powers = [operator.mul(*resolve_fractions(p, power))
+2254                                 for p in unit.powers]
+2255 
+2256             self._scale = sanitize_scale(scale)
+2257         else:
+2258             # Regular case: use inputs as preliminary scale, bases, and powers,
+2259             # then "expand and gather" identical bases, sanitize the scale, &c.
+2260             self._scale = scale
+2261             self._bases = bases
+2262             self._powers = powers
+2263             self._expand_and_gather(decompose=decompose,
+2264                                     bases=decompose_bases)
+2265 
+2266     def __repr__(self):
+2267         if len(self._bases):
+2268             return super().__repr__()
+2269         else:
+2270             if self._scale != 1.0:
+2271                 return f'Unit(dimensionless with a scale of {self._scale})'
+2272             else:
+2273                 return 'Unit(dimensionless)'
+2274 
+2275     @property
+2276     def scale(self):
+2277         """
+2278         Return the scale of the composite unit.
+2279         """
+2280         return self._scale
+2281 
+2282     @property
+2283     def bases(self):
+2284         """
+2285         Return the bases of the composite unit.
+2286         """
+2287         return self._bases
+2288 
+2289     @property
+2290     def powers(self):
+2291         """
+2292         Return the powers of the composite unit.
+2293         """
+2294         return self._powers
+2295 
+2296     def _expand_and_gather(self, decompose=False, bases=set()):
+2297         def add_unit(unit, power, scale):
+2298             if bases and unit not in bases:
+2299                 for base in bases:
+2300                     try:
+2301                         scale *= unit._to(base) ** power
+2302                     except UnitsError:
+2303                         pass
+2304                     else:
+2305                         unit = base
+2306                         break
+2307 
+2308             if unit in new_parts:
+2309                 a, b = resolve_fractions(new_parts[unit], power)
+2310                 new_parts[unit] = a + b
+2311             else:
+2312                 new_parts[unit] = power
+2313             return scale
+2314 
+2315         new_parts = {}
+2316         scale = self._scale
+2317 
+2318         for b, p in zip(self._bases, self._powers):
+2319             if decompose and b not in bases:
+2320                 b = b.decompose(bases=bases)
+2321 
+2322             if isinstance(b, CompositeUnit):
+2323                 scale *= b._scale ** p
+2324                 for b_sub, p_sub in zip(b._bases, b._powers):
+2325                     a, b = resolve_fractions(p_sub, p)
+2326                     scale = add_unit(b_sub, a * b, scale)
+2327             else:
+2328                 scale = add_unit(b, p, scale)
+2329 
+2330         new_parts = [x for x in new_parts.items() if x[1] != 0]
+2331         new_parts.sort(key=lambda x: (-x[1], getattr(x[0], 'name', '')))
+2332 
+2333         self._bases = [x[0] for x in new_parts]
+2334         self._powers = [x[1] for x in new_parts]
+2335         self._scale = sanitize_scale(scale)
+2336 
+2337     def __copy__(self):
+2338         """
+2339         For compatibility with python copy module.
+2340         """
+2341         return CompositeUnit(self._scale, self._bases[:], self._powers[:])
+2342 
+2343     def decompose(self, bases=set()):
+2344         if len(bases) == 0 and self._decomposed_cache is not None:
+2345             return self._decomposed_cache
+2346 
+2347         for base in self.bases:
+2348             if (not isinstance(base, IrreducibleUnit) or
+2349                     (len(bases) and base not in bases)):
+2350                 break
+2351         else:
+2352             if len(bases) == 0:
+2353                 self._decomposed_cache = self
+2354             return self
+2355 
+2356         x = CompositeUnit(self.scale, self.bases, self.powers, decompose=True,
+2357                           decompose_bases=bases)
+2358         if len(bases) == 0:
+2359             self._decomposed_cache = x
+2360         return x
+2361 
+2362     def is_unity(self):
+2363         unit = self.decompose()
+2364         return len(unit.bases) == 0 and unit.scale == 1.0
+2365 
+2366 
+2367 si_prefixes = [
+2368     (['Y'], ['yotta'], 1e24),
+2369     (['Z'], ['zetta'], 1e21),
+2370     (['E'], ['exa'], 1e18),
+2371     (['P'], ['peta'], 1e15),
+2372     (['T'], ['tera'], 1e12),
+2373     (['G'], ['giga'], 1e9),
+2374     (['M'], ['mega'], 1e6),
+2375     (['k'], ['kilo'], 1e3),
+2376     (['h'], ['hecto'], 1e2),
+2377     (['da'], ['deka', 'deca'], 1e1),
+2378     (['d'], ['deci'], 1e-1),
+2379     (['c'], ['centi'], 1e-2),
+2380     (['m'], ['milli'], 1e-3),
+2381     (['u'], ['micro'], 1e-6),
+2382     (['n'], ['nano'], 1e-9),
+2383     (['p'], ['pico'], 1e-12),
+2384     (['f'], ['femto'], 1e-15),
+2385     (['a'], ['atto'], 1e-18),
+2386     (['z'], ['zepto'], 1e-21),
+2387     (['y'], ['yocto'], 1e-24)
+2388 ]
+2389 
+2390 
+2391 binary_prefixes = [
+2392     (['Ki'], ['kibi'], 2. ** 10),
+2393     (['Mi'], ['mebi'], 2. ** 20),
+2394     (['Gi'], ['gibi'], 2. ** 30),
+2395     (['Ti'], ['tebi'], 2. ** 40),
+2396     (['Pi'], ['pebi'], 2. ** 50),
+2397     (['Ei'], ['exbi'], 2. ** 60)
+2398 ]
+2399 
+2400 
+2401 def _add_prefixes(u, excludes=[], namespace=None, prefixes=False):
+2402     """
+2403     Set up all of the standard metric prefixes for a unit.  This
+2404     function should not be used directly, but instead use the
+2405     `prefixes` kwarg on `def_unit`.
+2406 
+2407     Parameters
+2408     ----------
+2409     excludes : list of str, optional
+2410         Any prefixes to exclude from creation to avoid namespace
+2411         collisions.
+2412 
+2413     namespace : dict, optional
+2414         When provided, inject the unit (and all of its aliases) into
+2415         the given namespace dictionary.
+2416 
+2417     prefixes : list, optional
+2418         When provided, it is a list of prefix definitions of the form:
+2419 
+2420             (short_names, long_tables, factor)
+2421     """
+2422     if prefixes is True:
+2423         prefixes = si_prefixes
+2424     elif prefixes is False:
+2425         prefixes = []
+2426 
+2427     for short, full, factor in prefixes:
+2428         names = []
+2429         format = {}
+2430         for prefix in short:
+2431             if prefix in excludes:
+2432                 continue
+2433 
+2434             for alias in u.short_names:
+2435                 names.append(prefix + alias)
+2436 
+2437                 # This is a hack to use Greek mu as a prefix
+2438                 # for some formatters.
+2439                 if prefix == 'u':
+2440                     format['latex'] = r'\mu ' + u.get_format_name('latex')
+2441                     format['unicode'] = '\N{MICRO SIGN}' + u.get_format_name('unicode')
+2442 
+2443                 for key, val in u._format.items():
+2444                     format.setdefault(key, prefix + val)
+2445 
+2446         for prefix in full:
+2447             if prefix in excludes:
+2448                 continue
+2449 
+2450             for alias in u.long_names:
+2451                 names.append(prefix + alias)
+2452 
+2453         if len(names):
+2454             PrefixUnit(names, CompositeUnit(factor, [u], [1],
+2455                                             _error_check=False),
+2456                        namespace=namespace, format=format)
+2457 
+2458 
+2459 def def_unit(s, represents=None, doc=None, format=None, prefixes=False,
+2460              exclude_prefixes=[], namespace=None):
+2461     """
+2462     Factory function for defining new units.
+2463 
+2464     Parameters
+2465     ----------
+2466     s : str or list of str
+2467         The name of the unit.  If a list, the first element is the
+2468         canonical (short) name, and the rest of the elements are
+2469         aliases.
+2470 
+2471     represents : UnitBase instance, optional
+2472         The unit that this named unit represents.  If not provided,
+2473         a new `IrreducibleUnit` is created.
+2474 
+2475     doc : str, optional
+2476         A docstring describing the unit.
+2477 
+2478     format : dict, optional
+2479         A mapping to format-specific representations of this unit.
+2480         For example, for the ``Ohm`` unit, it might be nice to
+2481         have it displayed as ``\\Omega`` by the ``latex``
+2482         formatter.  In that case, `format` argument should be set
+2483         to::
+2484 
+2485             {'latex': r'\\Omega'}
+2486 
+2487     prefixes : bool or list, optional
+2488         When `True`, generate all of the SI prefixed versions of the
+2489         unit as well.  For example, for a given unit ``m``, will
+2490         generate ``mm``, ``cm``, ``km``, etc.  When a list, it is a list of
+2491         prefix definitions of the form:
+2492 
+2493             (short_names, long_tables, factor)
+2494 
+2495         Default is `False`.  This function always returns the base
+2496         unit object, even if multiple scaled versions of the unit were
+2497         created.
+2498 
+2499     exclude_prefixes : list of str, optional
+2500         If any of the SI prefixes need to be excluded, they may be
+2501         listed here.  For example, ``Pa`` can be interpreted either as
+2502         "petaannum" or "Pascal".  Therefore, when defining the
+2503         prefixes for ``a``, ``exclude_prefixes`` should be set to
+2504         ``["P"]``.
+2505 
+2506     namespace : dict, optional
+2507         When provided, inject the unit (and all of its aliases and
+2508         prefixes), into the given namespace dictionary.
+2509 
+2510     Returns
+2511     -------
+2512     unit : `~astropy.units.UnitBase`
+2513         The newly-defined unit, or a matching unit that was already
+2514         defined.
+2515     """
+2516 
+2517     if represents is not None:
+2518         result = Unit(s, represents, namespace=namespace, doc=doc,
+2519                       format=format)
+2520     else:
+2521         result = IrreducibleUnit(
+2522             s, namespace=namespace, doc=doc, format=format)
+2523 
+2524     if prefixes:
+2525         _add_prefixes(result, excludes=exclude_prefixes, namespace=namespace,
+2526                       prefixes=prefixes)
+2527     return result
+2528 
+2529 
+2530 def _condition_arg(value):
+2531     """
+2532     Validate value is acceptable for conversion purposes.
+2533 
+2534     Will convert into an array if not a scalar, and can be converted
+2535     into an array
+2536 
+2537     Parameters
+2538     ----------
+2539     value : int or float value, or sequence of such values
+2540 
+2541     Returns
+2542     -------
+2543     Scalar value or numpy array
+2544 
+2545     Raises
+2546     ------
+2547     ValueError
+2548         If value is not as expected
+2549     """
+2550     if isinstance(value, (np.ndarray, float, int, complex, np.void)):
+2551         return value
+2552 
+2553     avalue = np.array(value)
+2554     if avalue.dtype.kind not in ['i', 'f', 'c']:
+2555         raise ValueError("Value not scalar compatible or convertible to "
+2556                          "an int, float, or complex array")
+2557     return avalue
+2558 
+2559 
+2560 def unit_scale_converter(val):
+2561     """Function that just multiplies the value by unity.
+2562 
+2563     This is a separate function so it can be recognized and
+2564     discarded in unit conversion.
+2565     """
+2566     return 1. * _condition_arg(val)
+2567 
+2568 
+2569 dimensionless_unscaled = CompositeUnit(1, [], [], _error_check=False)
+2570 # Abbreviation of the above, see #1980
+2571 one = dimensionless_unscaled
+2572 
+2573 # Maintain error in old location for backward compatibility
+2574 # TODO: Is this still needed? Should there be a deprecation warning?
+2575 unit_format.fits.UnitScaleError = UnitScaleError
+2576 
+[end of astropy/units/core.py]
+</code>
+I need you to solve this issue by generating a single patch file that I can apply directly to this repository using git apply. Please respond with a single patch file in the following format.
+<patch>
+--- a/file.py
++++ b/file.py
+@@ -1,27 +1,35 @@
+ def euclidean(a, b):
+-    while b:
+-        a, b = b, a % b
+-    return a
++    if b == 0:
++        return a
++    return euclidean(b, a % b)
+ 
+ 
+ def bresenham(x0, y0, x1, y1):
+     points = []
+     dx = abs(x1 - x0)
+     dy = abs(y1 - y0)
+-    sx = 1 if x0 < x1 else -1
+-    sy = 1 if y0 < y1 else -1
+-    err = dx - dy
++    x, y = x0, y0
++    sx = -1 if x0 > x1 else 1
++    sy = -1 if y0 > y1 else 1
+ 
+-    while True:
+-        points.append((x0, y0))
+-        if x0 == x1 and y0 == y1:
+-            break
+-        e2 = 2 * err
+-        if e2 > -dy:
++    if dx > dy:
++        err = dx / 2.0
++        while x != x1:
++            points.append((x, y))
+             err -= dy
+-            x0 += sx
+-        if e2 < dx:
+-            err += dx
+-            y0 += sy
++            if err < 0:
++                y += sy
++                err += dx
++            x += sx
++    else:
++        err = dy / 2.0
++        while y != y1:
++            points.append((x, y))
++            err -= dx
++            if err < 0:
++                x += sx
++                err += dy
++            y += sy
+ 
++    points.append((x, y))
+     return points
+</patch>

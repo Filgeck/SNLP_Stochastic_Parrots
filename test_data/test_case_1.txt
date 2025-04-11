@@ -1,0 +1,3173 @@
+You will be provided with a partial code base and an issue statement explaining a problem to resolve.
+<issue>
+'WCS.all_world2pix' failed to converge when plotting WCS with non linear distortions
+<!-- This comments are hidden when you submit the issue,
+
+so you do not need to remove them! -->
+
+
+
+<!-- Please be sure to check out our contributing guidelines,
+
+https://github.com/astropy/astropy/blob/master/CONTRIBUTING.md .
+
+Please be sure to check out our code of conduct,
+
+https://github.com/astropy/astropy/blob/master/CODE_OF_CONDUCT.md . -->
+
+
+
+<!-- Please have a search on our GitHub repository to see if a similar
+
+issue has already been posted.
+
+If a similar issue is closed, have a quick look to see if you are satisfied
+
+by the resolution.
+
+If not please go ahead and open an issue! -->
+
+
+
+<!-- Please check that the development version still produces the same bug.
+
+You can install development version with
+
+pip install git+https://github.com/astropy/astropy
+
+command. -->
+
+
+
+### Description
+
+When trying to plot an image with a WCS as projection that contains non linear Distortions it fails with a `NoConvergence` error.
+
+
+
+### Expected behavior
+
+When I add `quiet=True` as parameter to the call 
+
+```pixel = self.all_world2pix(*world_arrays, 0)``` 
+
+at line 326 of `astropy/wcs/wcsapi/fitswcs.py` I get the good enough looking plot below:
+
+
+
+![bugreport](https://user-images.githubusercontent.com/64231/112940287-37c2c800-912d-11eb-8ce8-56fd284bb8e7.png)
+
+
+
+It would be nice if there was a way of getting that plot without having to hack the library code like that.
+
+### Actual behavior
+
+<!-- What actually happened. -->
+
+<!-- Was the output confusing or poorly described? -->
+
+The call to plotting the grid fails with the following error (last few lines, can provide more if necessary):
+
+
+
+```
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcsapi/fitswcs.py in world_to_pixel_values(self, *world_arrays)
+
+    324 
+
+    325     def world_to_pixel_values(self, *world_arrays):
+
+--> 326         pixel = self.all_world2pix(*world_arrays, 0)
+
+    327         return pixel[0] if self.pixel_n_dim == 1 else tuple(pixel)
+
+    328 
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/utils/decorators.py in wrapper(*args, **kwargs)
+
+    534                     warnings.warn(message, warning_type, stacklevel=2)
+
+    535 
+
+--> 536             return function(*args, **kwargs)
+
+    537 
+
+    538         return wrapper
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in all_world2pix(self, tolerance, maxiter, adaptive, detect_divergence, quiet, *args, **kwargs)
+
+   1886             raise ValueError("No basic WCS settings were created.")
+
+   1887 
+
+-> 1888         return self._array_converter(
+
+   1889             lambda *args, **kwargs:
+
+   1890             self._all_world2pix(
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in _array_converter(self, func, sky, ra_dec_order, *args)
+
+   1335                     "a 1-D array for each axis, followed by an origin.")
+
+   1336 
+
+-> 1337             return _return_list_of_arrays(axes, origin)
+
+   1338 
+
+   1339         raise TypeError(
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in _return_list_of_arrays(axes, origin)
+
+   1289             if ra_dec_order and sky == 'input':
+
+   1290                 xy = self._denormalize_sky(xy)
+
+-> 1291             output = func(xy, origin)
+
+   1292             if ra_dec_order and sky == 'output':
+
+   1293                 output = self._normalize_sky(output)
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in <lambda>(*args, **kwargs)
+
+   1888         return self._array_converter(
+
+   1889             lambda *args, **kwargs:
+
+-> 1890             self._all_world2pix(
+
+   1891                 *args, tolerance=tolerance, maxiter=maxiter,
+
+   1892                 adaptive=adaptive, detect_divergence=detect_divergence,
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in _all_world2pix(self, world, origin, tolerance, maxiter, adaptive, detect_divergence, quiet)
+
+   1869                     slow_conv=ind, divergent=None)
+
+   1870             else:
+
+-> 1871                 raise NoConvergence(
+
+   1872                     "'WCS.all_world2pix' failed to "
+
+   1873                     "converge to the requested accuracy.\n"
+
+
+
+NoConvergence: 'WCS.all_world2pix' failed to converge to the requested accuracy.
+
+After 20 iterations, the solution is diverging at least for one input point.
+
+```
+
+
+
+### Steps to Reproduce
+
+<!-- Ideally a code example could be provided so we can run it ourselves. -->
+
+<!-- If you are pasting code, use triple backticks (```) around
+
+your code snippet. -->
+
+<!-- If necessary, sanitize your screen output to be pasted so you do not
+
+reveal secrets like tokens and passwords. -->
+
+
+
+Here is the code to reproduce the problem:
+
+```
+
+from astropy.wcs import WCS, Sip
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+
+
+wcs = WCS(naxis=2)
+
+a = [[ 0.00000000e+00,  0.00000000e+00,  6.77532513e-07,
+
+        -1.76632141e-10],
+
+       [ 0.00000000e+00,  9.49130161e-06, -1.50614321e-07,
+
+         0.00000000e+00],
+
+       [ 7.37260409e-06,  2.07020239e-09,  0.00000000e+00,
+
+         0.00000000e+00],
+
+       [-1.20116753e-07,  0.00000000e+00,  0.00000000e+00,
+
+         0.00000000e+00]]
+
+b = [[ 0.00000000e+00,  0.00000000e+00,  1.34606617e-05,
+
+        -1.41919055e-07],
+
+       [ 0.00000000e+00,  5.85158316e-06, -1.10382462e-09,
+
+         0.00000000e+00],
+
+       [ 1.06306407e-05, -1.36469008e-07,  0.00000000e+00,
+
+         0.00000000e+00],
+
+       [ 3.27391123e-09,  0.00000000e+00,  0.00000000e+00,
+
+         0.00000000e+00]]
+
+crpix = [1221.87375165,  994.90917378]
+
+ap = bp = np.zeros((4, 4))
+
+
+
+wcs.sip = Sip(a, b, ap, bp, crpix)
+
+
+
+plt.subplot(projection=wcs)
+
+plt.imshow(np.zeros((1944, 2592)))
+
+plt.grid(color='white', ls='solid')
+
+```
+
+
+
+### System Details
+
+<!-- Even if you do not think this is necessary, it is useful information for the maintainers.
+
+Please run the following snippet and paste the output below:
+
+import platform; print(platform.platform())
+
+import sys; print("Python", sys.version)
+
+import numpy; print("Numpy", numpy.__version__)
+
+import astropy; print("astropy", astropy.__version__)
+
+import scipy; print("Scipy", scipy.__version__)
+
+import matplotlib; print("Matplotlib", matplotlib.__version__)
+
+-->
+
+```
+
+>>> import platform; print(platform.platform())
+
+Linux-5.11.10-arch1-1-x86_64-with-glibc2.33
+
+>>> import sys; print("Python", sys.version)
+
+Python 3.9.2 (default, Feb 20 2021, 18:40:11) 
+
+[GCC 10.2.0]
+
+>>> import numpy; print("Numpy", numpy.__version__)
+
+Numpy 1.20.2
+
+>>> import astropy; print("astropy", astropy.__version__)
+
+astropy 4.3.dev690+g7811614f8
+
+>>> import scipy; print("Scipy", scipy.__version__)
+
+Scipy 1.6.1
+
+>>> import matplotlib; print("Matplotlib", matplotlib.__version__)
+
+Matplotlib 3.3.4
+
+```
+'WCS.all_world2pix' failed to converge when plotting WCS with non linear distortions
+<!-- This comments are hidden when you submit the issue,
+
+so you do not need to remove them! -->
+
+
+
+<!-- Please be sure to check out our contributing guidelines,
+
+https://github.com/astropy/astropy/blob/master/CONTRIBUTING.md .
+
+Please be sure to check out our code of conduct,
+
+https://github.com/astropy/astropy/blob/master/CODE_OF_CONDUCT.md . -->
+
+
+
+<!-- Please have a search on our GitHub repository to see if a similar
+
+issue has already been posted.
+
+If a similar issue is closed, have a quick look to see if you are satisfied
+
+by the resolution.
+
+If not please go ahead and open an issue! -->
+
+
+
+<!-- Please check that the development version still produces the same bug.
+
+You can install development version with
+
+pip install git+https://github.com/astropy/astropy
+
+command. -->
+
+
+
+### Description
+
+When trying to plot an image with a WCS as projection that contains non linear Distortions it fails with a `NoConvergence` error.
+
+
+
+### Expected behavior
+
+When I add `quiet=True` as parameter to the call 
+
+```pixel = self.all_world2pix(*world_arrays, 0)``` 
+
+at line 326 of `astropy/wcs/wcsapi/fitswcs.py` I get the good enough looking plot below:
+
+
+
+![bugreport](https://user-images.githubusercontent.com/64231/112940287-37c2c800-912d-11eb-8ce8-56fd284bb8e7.png)
+
+
+
+It would be nice if there was a way of getting that plot without having to hack the library code like that.
+
+### Actual behavior
+
+<!-- What actually happened. -->
+
+<!-- Was the output confusing or poorly described? -->
+
+The call to plotting the grid fails with the following error (last few lines, can provide more if necessary):
+
+
+
+```
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcsapi/fitswcs.py in world_to_pixel_values(self, *world_arrays)
+
+    324 
+
+    325     def world_to_pixel_values(self, *world_arrays):
+
+--> 326         pixel = self.all_world2pix(*world_arrays, 0)
+
+    327         return pixel[0] if self.pixel_n_dim == 1 else tuple(pixel)
+
+    328 
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/utils/decorators.py in wrapper(*args, **kwargs)
+
+    534                     warnings.warn(message, warning_type, stacklevel=2)
+
+    535 
+
+--> 536             return function(*args, **kwargs)
+
+    537 
+
+    538         return wrapper
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in all_world2pix(self, tolerance, maxiter, adaptive, detect_divergence, quiet, *args, **kwargs)
+
+   1886             raise ValueError("No basic WCS settings were created.")
+
+   1887 
+
+-> 1888         return self._array_converter(
+
+   1889             lambda *args, **kwargs:
+
+   1890             self._all_world2pix(
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in _array_converter(self, func, sky, ra_dec_order, *args)
+
+   1335                     "a 1-D array for each axis, followed by an origin.")
+
+   1336 
+
+-> 1337             return _return_list_of_arrays(axes, origin)
+
+   1338 
+
+   1339         raise TypeError(
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in _return_list_of_arrays(axes, origin)
+
+   1289             if ra_dec_order and sky == 'input':
+
+   1290                 xy = self._denormalize_sky(xy)
+
+-> 1291             output = func(xy, origin)
+
+   1292             if ra_dec_order and sky == 'output':
+
+   1293                 output = self._normalize_sky(output)
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in <lambda>(*args, **kwargs)
+
+   1888         return self._array_converter(
+
+   1889             lambda *args, **kwargs:
+
+-> 1890             self._all_world2pix(
+
+   1891                 *args, tolerance=tolerance, maxiter=maxiter,
+
+   1892                 adaptive=adaptive, detect_divergence=detect_divergence,
+
+
+
+~/work/develop/env/lib/python3.9/site-packages/astropy/wcs/wcs.py in _all_world2pix(self, world, origin, tolerance, maxiter, adaptive, detect_divergence, quiet)
+
+   1869                     slow_conv=ind, divergent=None)
+
+   1870             else:
+
+-> 1871                 raise NoConvergence(
+
+   1872                     "'WCS.all_world2pix' failed to "
+
+   1873                     "converge to the requested accuracy.\n"
+
+
+
+NoConvergence: 'WCS.all_world2pix' failed to converge to the requested accuracy.
+
+After 20 iterations, the solution is diverging at least for one input point.
+
+```
+
+
+
+### Steps to Reproduce
+
+<!-- Ideally a code example could be provided so we can run it ourselves. -->
+
+<!-- If you are pasting code, use triple backticks (```) around
+
+your code snippet. -->
+
+<!-- If necessary, sanitize your screen output to be pasted so you do not
+
+reveal secrets like tokens and passwords. -->
+
+
+
+Here is the code to reproduce the problem:
+
+```
+
+from astropy.wcs import WCS, Sip
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+
+
+wcs = WCS(naxis=2)
+
+a = [[ 0.00000000e+00,  0.00000000e+00,  6.77532513e-07,
+
+        -1.76632141e-10],
+
+       [ 0.00000000e+00,  9.49130161e-06, -1.50614321e-07,
+
+         0.00000000e+00],
+
+       [ 7.37260409e-06,  2.07020239e-09,  0.00000000e+00,
+
+         0.00000000e+00],
+
+       [-1.20116753e-07,  0.00000000e+00,  0.00000000e+00,
+
+         0.00000000e+00]]
+
+b = [[ 0.00000000e+00,  0.00000000e+00,  1.34606617e-05,
+
+        -1.41919055e-07],
+
+       [ 0.00000000e+00,  5.85158316e-06, -1.10382462e-09,
+
+         0.00000000e+00],
+
+       [ 1.06306407e-05, -1.36469008e-07,  0.00000000e+00,
+
+         0.00000000e+00],
+
+       [ 3.27391123e-09,  0.00000000e+00,  0.00000000e+00,
+
+         0.00000000e+00]]
+
+crpix = [1221.87375165,  994.90917378]
+
+ap = bp = np.zeros((4, 4))
+
+
+
+wcs.sip = Sip(a, b, ap, bp, crpix)
+
+
+
+plt.subplot(projection=wcs)
+
+plt.imshow(np.zeros((1944, 2592)))
+
+plt.grid(color='white', ls='solid')
+
+```
+
+
+
+### System Details
+
+<!-- Even if you do not think this is necessary, it is useful information for the maintainers.
+
+Please run the following snippet and paste the output below:
+
+import platform; print(platform.platform())
+
+import sys; print("Python", sys.version)
+
+import numpy; print("Numpy", numpy.__version__)
+
+import astropy; print("astropy", astropy.__version__)
+
+import scipy; print("Scipy", scipy.__version__)
+
+import matplotlib; print("Matplotlib", matplotlib.__version__)
+
+-->
+
+```
+
+>>> import platform; print(platform.platform())
+
+Linux-5.11.10-arch1-1-x86_64-with-glibc2.33
+
+>>> import sys; print("Python", sys.version)
+
+Python 3.9.2 (default, Feb 20 2021, 18:40:11) 
+
+[GCC 10.2.0]
+
+>>> import numpy; print("Numpy", numpy.__version__)
+
+Numpy 1.20.2
+
+>>> import astropy; print("astropy", astropy.__version__)
+
+astropy 4.3.dev690+g7811614f8
+
+>>> import scipy; print("Scipy", scipy.__version__)
+
+Scipy 1.6.1
+
+>>> import matplotlib; print("Matplotlib", matplotlib.__version__)
+
+Matplotlib 3.3.4
+
+```
+
+</issue>
+<code>
+[start of README.rst]
+1 =======
+2 Astropy
+3 =======
+4 
+5 |Actions Status| |CircleCI Status| |Azure Status| |Coverage Status| |PyPI Status| |Documentation Status| |Zenodo|
+6 
+7 The Astropy Project (http://astropy.org/) is a community effort to develop a
+8 single core package for Astronomy in Python and foster interoperability between
+9 Python astronomy packages. This repository contains the core package which is
+10 intended to contain much of the core functionality and some common tools needed
+11 for performing astronomy and astrophysics with Python.
+12 
+13 Releases are `registered on PyPI <https://pypi.org/project/astropy>`_,
+14 and development is occurring at the
+15 `project's GitHub page <http://github.com/astropy/astropy>`_.
+16 
+17 For installation instructions, see the `online documentation <https://docs.astropy.org/>`_
+18 or  `docs/install.rst <docs/install.rst>`_ in this source distribution.
+19 
+20 Contributing Code, Documentation, or Feedback
+21 ---------------------------------------------
+22 
+23 The Astropy Project is made both by and for its users, so we welcome and
+24 encourage contributions of many kinds. Our goal is to keep this a positive,
+25 inclusive, successful, and growing community by abiding with the
+26 `Astropy Community Code of Conduct <http://www.astropy.org/about.html#codeofconduct>`_.
+27 
+28 More detailed information on contributing to the project or submitting feedback
+29 can be found on the `contributions <http://www.astropy.org/contribute.html>`_
+30 page. A `summary of contribution guidelines <CONTRIBUTING.md>`_ can also be
+31 used as a quick reference when you are ready to start writing or validating
+32 code for submission.
+33 
+34 Supporting the Project
+35 ----------------------
+36 
+37 |NumFOCUS| |Donate|
+38 
+39 The Astropy Project is sponsored by NumFOCUS, a 501(c)(3) nonprofit in the
+40 United States. You can donate to the project by using the link above, and this
+41 donation will support our mission to promote sustainable, high-level code base
+42 for the astronomy community, open code development, educational materials, and
+43 reproducible scientific research.
+44 
+45 License
+46 -------
+47 
+48 Astropy is licensed under a 3-clause BSD style license - see the
+49 `LICENSE.rst <LICENSE.rst>`_ file.
+50 
+51 .. |Actions Status| image:: https://github.com/astropy/astropy/workflows/CI/badge.svg
+52     :target: https://github.com/astropy/astropy/actions
+53     :alt: Astropy's GitHub Actions CI Status
+54 
+55 .. |CircleCI Status| image::  https://img.shields.io/circleci/build/github/astropy/astropy/main?logo=circleci&label=CircleCI
+56     :target: https://circleci.com/gh/astropy/astropy
+57     :alt: Astropy's CircleCI Status
+58 
+59 .. |Azure Status| image:: https://dev.azure.com/astropy-project/astropy/_apis/build/status/astropy.astropy?repoName=astropy%2Fastropy&branchName=main
+60     :target: https://dev.azure.com/astropy-project/astropy
+61     :alt: Astropy's Azure Pipelines Status
+62 
+63 .. |Coverage Status| image:: https://codecov.io/gh/astropy/astropy/branch/main/graph/badge.svg
+64     :target: https://codecov.io/gh/astropy/astropy
+65     :alt: Astropy's Coverage Status
+66 
+67 .. |PyPI Status| image:: https://img.shields.io/pypi/v/astropy.svg
+68     :target: https://pypi.org/project/astropy
+69     :alt: Astropy's PyPI Status
+70 
+71 .. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4670728.svg
+72    :target: https://doi.org/10.5281/zenodo.4670728
+73    :alt: Zenodo DOI
+74 
+75 .. |Documentation Status| image:: https://img.shields.io/readthedocs/astropy/latest.svg?logo=read%20the%20docs&logoColor=white&label=Docs&version=stable
+76     :target: https://docs.astropy.org/en/stable/?badge=stable
+77     :alt: Documentation Status
+78 
+79 .. |NumFOCUS| image:: https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A
+80     :target: http://numfocus.org
+81     :alt: Powered by NumFOCUS
+82 
+83 .. |Donate| image:: https://img.shields.io/badge/Donate-to%20Astropy-brightgreen.svg
+84     :target: https://numfocus.salsalabs.org/donate-to-astropy/index.html
+85 
+86 
+87 If you locally cloned this repo before 7 Apr 2021
+88 -------------------------------------------------
+89 
+90 The primary branch for this repo has been transitioned from ``master`` to
+91 ``main``.  If you have a local clone of this repository and want to keep your
+92 local branch in sync with this repo, you'll need to do the following in your
+93 local clone from your terminal::
+94 
+95    git fetch --all --prune
+96    # you can stop here if you don't use your local "master"/"main" branch
+97    git branch -m master main
+98    git branch -u origin/main main
+99 
+100 If you are using a GUI to manage your repos you'll have to find the equivalent
+101 commands as it's different for different programs. Alternatively, you can just
+102 delete your local clone and re-clone!
+103 
+[end of README.rst]
+[start of astropy/time/formats.py]
+1 # -*- coding: utf-8 -*-
+2 # Licensed under a 3-clause BSD style license - see LICENSE.rst
+3 import fnmatch
+4 import time
+5 import re
+6 import datetime
+7 import warnings
+8 from decimal import Decimal
+9 from collections import OrderedDict, defaultdict
+10 
+11 import numpy as np
+12 import erfa
+13 
+14 from astropy.utils.decorators import lazyproperty, classproperty
+15 from astropy.utils.exceptions import AstropyDeprecationWarning
+16 import astropy.units as u
+17 
+18 from . import _parse_times
+19 from . import utils
+20 from .utils import day_frac, quantity_day_frac, two_sum, two_product
+21 from . import conf
+22 
+23 __all__ = ['TimeFormat', 'TimeJD', 'TimeMJD', 'TimeFromEpoch', 'TimeUnix',
+24            'TimeUnixTai', 'TimeCxcSec', 'TimeGPS', 'TimeDecimalYear',
+25            'TimePlotDate', 'TimeUnique', 'TimeDatetime', 'TimeString',
+26            'TimeISO', 'TimeISOT', 'TimeFITS', 'TimeYearDayTime',
+27            'TimeEpochDate', 'TimeBesselianEpoch', 'TimeJulianEpoch',
+28            'TimeDeltaFormat', 'TimeDeltaSec', 'TimeDeltaJD',
+29            'TimeEpochDateString', 'TimeBesselianEpochString',
+30            'TimeJulianEpochString', 'TIME_FORMATS', 'TIME_DELTA_FORMATS',
+31            'TimezoneInfo', 'TimeDeltaDatetime', 'TimeDatetime64', 'TimeYMDHMS',
+32            'TimeNumeric', 'TimeDeltaNumeric']
+33 
+34 __doctest_skip__ = ['TimePlotDate']
+35 
+36 # These both get filled in at end after TimeFormat subclasses defined.
+37 # Use an OrderedDict to fix the order in which formats are tried.
+38 # This ensures, e.g., that 'isot' gets tried before 'fits'.
+39 TIME_FORMATS = OrderedDict()
+40 TIME_DELTA_FORMATS = OrderedDict()
+41 
+42 # Translations between deprecated FITS timescales defined by
+43 # Rots et al. 2015, A&A 574:A36, and timescales used here.
+44 FITS_DEPRECATED_SCALES = {'TDT': 'tt', 'ET': 'tt',
+45                           'GMT': 'utc', 'UT': 'utc', 'IAT': 'tai'}
+46 
+47 
+48 def _regexify_subfmts(subfmts):
+49     """
+50     Iterate through each of the sub-formats and try substituting simple
+51     regular expressions for the strptime codes for year, month, day-of-month,
+52     hour, minute, second.  If no % characters remain then turn the final string
+53     into a compiled regex.  This assumes time formats do not have a % in them.
+54 
+55     This is done both to speed up parsing of strings and to allow mixed formats
+56     where strptime does not quite work well enough.
+57     """
+58     new_subfmts = []
+59     for subfmt_tuple in subfmts:
+60         subfmt_in = subfmt_tuple[1]
+61         if isinstance(subfmt_in, str):
+62             for strptime_code, regex in (('%Y', r'(?P<year>\d\d\d\d)'),
+63                                          ('%m', r'(?P<mon>\d{1,2})'),
+64                                          ('%d', r'(?P<mday>\d{1,2})'),
+65                                          ('%H', r'(?P<hour>\d{1,2})'),
+66                                          ('%M', r'(?P<min>\d{1,2})'),
+67                                          ('%S', r'(?P<sec>\d{1,2})')):
+68                 subfmt_in = subfmt_in.replace(strptime_code, regex)
+69 
+70             if '%' not in subfmt_in:
+71                 subfmt_tuple = (subfmt_tuple[0],
+72                                 re.compile(subfmt_in + '$'),
+73                                 subfmt_tuple[2])
+74         new_subfmts.append(subfmt_tuple)
+75 
+76     return tuple(new_subfmts)
+77 
+78 
+79 class TimeFormat:
+80     """
+81     Base class for time representations.
+82 
+83     Parameters
+84     ----------
+85     val1 : numpy ndarray, list, number, str, or bytes
+86         Values to initialize the time or times.  Bytes are decoded as ascii.
+87     val2 : numpy ndarray, list, or number; optional
+88         Value(s) to initialize the time or times.  Only used for numerical
+89         input, to help preserve precision.
+90     scale : str
+91         Time scale of input value(s)
+92     precision : int
+93         Precision for seconds as floating point
+94     in_subfmt : str
+95         Select subformat for inputting string times
+96     out_subfmt : str
+97         Select subformat for outputting string times
+98     from_jd : bool
+99         If true then val1, val2 are jd1, jd2
+100     """
+101 
+102     _default_scale = 'utc'  # As of astropy 0.4
+103     subfmts = ()
+104     _registry = TIME_FORMATS
+105 
+106     def __init__(self, val1, val2, scale, precision,
+107                  in_subfmt, out_subfmt, from_jd=False):
+108         self.scale = scale  # validation of scale done later with _check_scale
+109         self.precision = precision
+110         self.in_subfmt = in_subfmt
+111         self.out_subfmt = out_subfmt
+112 
+113         self._jd1, self._jd2 = None, None
+114 
+115         if from_jd:
+116             self.jd1 = val1
+117             self.jd2 = val2
+118         else:
+119             val1, val2 = self._check_val_type(val1, val2)
+120             self.set_jds(val1, val2)
+121 
+122     def __init_subclass__(cls, **kwargs):
+123         # Register time formats that define a name, but leave out astropy_time since
+124         # it is not a user-accessible format and is only used for initialization into
+125         # a different format.
+126         if 'name' in cls.__dict__ and cls.name != 'astropy_time':
+127             # FIXME: check here that we're not introducing a collision with
+128             # an existing method or attribute; problem is it could be either
+129             # astropy.time.Time or astropy.time.TimeDelta, and at the point
+130             # where this is run neither of those classes have necessarily been
+131             # constructed yet.
+132             if 'value' in cls.__dict__ and not hasattr(cls.value, "fget"):
+133                 raise ValueError("If defined, 'value' must be a property")
+134 
+135             cls._registry[cls.name] = cls
+136 
+137         # If this class defines its own subfmts, preprocess the definitions.
+138         if 'subfmts' in cls.__dict__:
+139             cls.subfmts = _regexify_subfmts(cls.subfmts)
+140 
+141         return super().__init_subclass__(**kwargs)
+142 
+143     @classmethod
+144     def _get_allowed_subfmt(cls, subfmt):
+145         """Get an allowed subfmt for this class, either the input ``subfmt``
+146         if this is valid or '*' as a default.  This method gets used in situations
+147         where the format of an existing Time object is changing and so the
+148         out_ or in_subfmt may need to be coerced to the default '*' if that
+149         ``subfmt`` is no longer valid.
+150         """
+151         try:
+152             cls._select_subfmts(subfmt)
+153         except ValueError:
+154             subfmt = '*'
+155         return subfmt
+156 
+157     @property
+158     def in_subfmt(self):
+159         return self._in_subfmt
+160 
+161     @in_subfmt.setter
+162     def in_subfmt(self, subfmt):
+163         # Validate subfmt value for this class, raises ValueError if not.
+164         self._select_subfmts(subfmt)
+165         self._in_subfmt = subfmt
+166 
+167     @property
+168     def out_subfmt(self):
+169         return self._out_subfmt
+170 
+171     @out_subfmt.setter
+172     def out_subfmt(self, subfmt):
+173         # Validate subfmt value for this class, raises ValueError if not.
+174         self._select_subfmts(subfmt)
+175         self._out_subfmt = subfmt
+176 
+177     @property
+178     def jd1(self):
+179         return self._jd1
+180 
+181     @jd1.setter
+182     def jd1(self, jd1):
+183         self._jd1 = _validate_jd_for_storage(jd1)
+184         if self._jd2 is not None:
+185             self._jd1, self._jd2 = _broadcast_writeable(self._jd1, self._jd2)
+186 
+187     @property
+188     def jd2(self):
+189         return self._jd2
+190 
+191     @jd2.setter
+192     def jd2(self, jd2):
+193         self._jd2 = _validate_jd_for_storage(jd2)
+194         if self._jd1 is not None:
+195             self._jd1, self._jd2 = _broadcast_writeable(self._jd1, self._jd2)
+196 
+197     def __len__(self):
+198         return len(self.jd1)
+199 
+200     @property
+201     def scale(self):
+202         """Time scale"""
+203         self._scale = self._check_scale(self._scale)
+204         return self._scale
+205 
+206     @scale.setter
+207     def scale(self, val):
+208         self._scale = val
+209 
+210     def mask_if_needed(self, value):
+211         if self.masked:
+212             value = np.ma.array(value, mask=self.mask, copy=False)
+213         return value
+214 
+215     @property
+216     def mask(self):
+217         if 'mask' not in self.cache:
+218             self.cache['mask'] = np.isnan(self.jd2)
+219             if self.cache['mask'].shape:
+220                 self.cache['mask'].flags.writeable = False
+221         return self.cache['mask']
+222 
+223     @property
+224     def masked(self):
+225         if 'masked' not in self.cache:
+226             self.cache['masked'] = bool(np.any(self.mask))
+227         return self.cache['masked']
+228 
+229     @property
+230     def jd2_filled(self):
+231         return np.nan_to_num(self.jd2) if self.masked else self.jd2
+232 
+233     @lazyproperty
+234     def cache(self):
+235         """
+236         Return the cache associated with this instance.
+237         """
+238         return defaultdict(dict)
+239 
+240     def _check_val_type(self, val1, val2):
+241         """Input value validation, typically overridden by derived classes"""
+242         # val1 cannot contain nan, but val2 can contain nan
+243         isfinite1 = np.isfinite(val1)
+244         if val1.size > 1:  # Calling .all() on a scalar is surprisingly slow
+245             isfinite1 = isfinite1.all()  # Note: arr.all() about 3x faster than np.all(arr)
+246         elif val1.size == 0:
+247             isfinite1 = False
+248         ok1 = (val1.dtype.kind == 'f' and val1.dtype.itemsize >= 8
+249                and isfinite1 or val1.size == 0)
+250         ok2 = val2 is None or (
+251             val2.dtype.kind == 'f' and val2.dtype.itemsize >= 8
+252             and not np.any(np.isinf(val2))) or val2.size == 0
+253         if not (ok1 and ok2):
+254             raise TypeError('Input values for {} class must be finite doubles'
+255                             .format(self.name))
+256 
+257         if getattr(val1, 'unit', None) is not None:
+258             # Convert any quantity-likes to days first, attempting to be
+259             # careful with the conversion, so that, e.g., large numbers of
+260             # seconds get converted without losing precision because
+261             # 1/86400 is not exactly representable as a float.
+262             val1 = u.Quantity(val1, copy=False)
+263             if val2 is not None:
+264                 val2 = u.Quantity(val2, copy=False)
+265 
+266             try:
+267                 val1, val2 = quantity_day_frac(val1, val2)
+268             except u.UnitsError:
+269                 raise u.UnitConversionError(
+270                     "only quantities with time units can be "
+271                     "used to instantiate Time instances.")
+272             # We now have days, but the format may expect another unit.
+273             # On purpose, multiply with 1./day_unit because typically it is
+274             # 1./erfa.DAYSEC, and inverting it recovers the integer.
+275             # (This conversion will get undone in format's set_jds, hence
+276             # there may be room for optimizing this.)
+277             factor = 1. / getattr(self, 'unit', 1.)
+278             if factor != 1.:
+279                 val1, carry = two_product(val1, factor)
+280                 carry += val2 * factor
+281                 val1, val2 = two_sum(val1, carry)
+282 
+283         elif getattr(val2, 'unit', None) is not None:
+284             raise TypeError('Cannot mix float and Quantity inputs')
+285 
+286         if val2 is None:
+287             val2 = np.array(0, dtype=val1.dtype)
+288 
+289         def asarray_or_scalar(val):
+290             """
+291             Remove ndarray subclasses since for jd1/jd2 we want a pure ndarray
+292             or a Python or numpy scalar.
+293             """
+294             return np.asarray(val) if isinstance(val, np.ndarray) else val
+295 
+296         return asarray_or_scalar(val1), asarray_or_scalar(val2)
+297 
+298     def _check_scale(self, scale):
+299         """
+300         Return a validated scale value.
+301 
+302         If there is a class attribute 'scale' then that defines the default /
+303         required time scale for this format.  In this case if a scale value was
+304         provided that needs to match the class default, otherwise return
+305         the class default.
+306 
+307         Otherwise just make sure that scale is in the allowed list of
+308         scales.  Provide a different error message if `None` (no value) was
+309         supplied.
+310         """
+311         if scale is None:
+312             scale = self._default_scale
+313 
+314         if scale not in TIME_SCALES:
+315             raise ScaleValueError("Scale value '{}' not in "
+316                                   "allowed values {}"
+317                                   .format(scale, TIME_SCALES))
+318 
+319         return scale
+320 
+321     def set_jds(self, val1, val2):
+322         """
+323         Set internal jd1 and jd2 from val1 and val2.  Must be provided
+324         by derived classes.
+325         """
+326         raise NotImplementedError
+327 
+328     def to_value(self, parent=None, out_subfmt=None):
+329         """
+330         Return time representation from internal jd1 and jd2 in specified
+331         ``out_subfmt``.
+332 
+333         This is the base method that ignores ``parent`` and uses the ``value``
+334         property to compute the output. This is done by temporarily setting
+335         ``self.out_subfmt`` and calling ``self.value``. This is required for
+336         legacy Format subclasses prior to astropy 4.0  New code should instead
+337         implement the value functionality in ``to_value()`` and then make the
+338         ``value`` property be a simple call to ``self.to_value()``.
+339 
+340         Parameters
+341         ----------
+342         parent : object
+343             Parent `~astropy.time.Time` object associated with this
+344             `~astropy.time.TimeFormat` object
+345         out_subfmt : str or None
+346             Output subformt (use existing self.out_subfmt if `None`)
+347 
+348         Returns
+349         -------
+350         value : numpy.array, numpy.ma.array
+351             Array or masked array of formatted time representation values
+352         """
+353         # Get value via ``value`` property, overriding out_subfmt temporarily if needed.
+354         if out_subfmt is not None:
+355             out_subfmt_orig = self.out_subfmt
+356             try:
+357                 self.out_subfmt = out_subfmt
+358                 value = self.value
+359             finally:
+360                 self.out_subfmt = out_subfmt_orig
+361         else:
+362             value = self.value
+363 
+364         return self.mask_if_needed(value)
+365 
+366     @property
+367     def value(self):
+368         raise NotImplementedError
+369 
+370     @classmethod
+371     def _select_subfmts(cls, pattern):
+372         """
+373         Return a list of subformats where name matches ``pattern`` using
+374         fnmatch.
+375 
+376         If no subformat matches pattern then a ValueError is raised.  A special
+377         case is a format with no allowed subformats, i.e. subfmts=(), and
+378         pattern='*'.  This is OK and happens when this method is used for
+379         validation of an out_subfmt.
+380         """
+381         if not isinstance(pattern, str):
+382             raise ValueError('subfmt attribute must be a string')
+383         elif pattern == '*':
+384             return cls.subfmts
+385 
+386         subfmts = [x for x in cls.subfmts if fnmatch.fnmatchcase(x[0], pattern)]
+387         if len(subfmts) == 0:
+388             if len(cls.subfmts) == 0:
+389                 raise ValueError(f'subformat not allowed for format {cls.name}')
+390             else:
+391                 subfmt_names = [x[0] for x in cls.subfmts]
+392                 raise ValueError(f'subformat {pattern!r} must match one of '
+393                                  f'{subfmt_names} for format {cls.name}')
+394 
+395         return subfmts
+396 
+397 
+398 class TimeNumeric(TimeFormat):
+399     subfmts = (
+400         ('float', np.float64, None, np.add),
+401         ('long', np.longdouble, utils.longdouble_to_twoval,
+402          utils.twoval_to_longdouble),
+403         ('decimal', np.object_, utils.decimal_to_twoval,
+404          utils.twoval_to_decimal),
+405         ('str', np.str_, utils.decimal_to_twoval, utils.twoval_to_string),
+406         ('bytes', np.bytes_, utils.bytes_to_twoval, utils.twoval_to_bytes),
+407     )
+408 
+409     def _check_val_type(self, val1, val2):
+410         """Input value validation, typically overridden by derived classes"""
+411         # Save original state of val2 because the super()._check_val_type below
+412         # may change val2 from None to np.array(0). The value is saved in order
+413         # to prevent a useless and slow call to np.result_type() below in the
+414         # most common use-case of providing only val1.
+415         orig_val2_is_none = val2 is None
+416 
+417         if val1.dtype.kind == 'f':
+418             val1, val2 = super()._check_val_type(val1, val2)
+419         elif (not orig_val2_is_none
+420               or not (val1.dtype.kind in 'US'
+421                       or (val1.dtype.kind == 'O'
+422                           and all(isinstance(v, Decimal) for v in val1.flat)))):
+423             raise TypeError(
+424                 'for {} class, input should be doubles, string, or Decimal, '
+425                 'and second values are only allowed for doubles.'
+426                 .format(self.name))
+427 
+428         val_dtype = (val1.dtype if orig_val2_is_none else
+429                      np.result_type(val1.dtype, val2.dtype))
+430         subfmts = self._select_subfmts(self.in_subfmt)
+431         for subfmt, dtype, convert, _ in subfmts:
+432             if np.issubdtype(val_dtype, dtype):
+433                 break
+434         else:
+435             raise ValueError('input type not among selected sub-formats.')
+436 
+437         if convert is not None:
+438             try:
+439                 val1, val2 = convert(val1, val2)
+440             except Exception:
+441                 raise TypeError(
+442                     'for {} class, input should be (long) doubles, string, '
+443                     'or Decimal, and second values are only allowed for '
+444                     '(long) doubles.'.format(self.name))
+445 
+446         return val1, val2
+447 
+448     def to_value(self, jd1=None, jd2=None, parent=None, out_subfmt=None):
+449         """
+450         Return time representation from internal jd1 and jd2.
+451         Subclasses that require ``parent`` or to adjust the jds should
+452         override this method.
+453         """
+454         # TODO: do this in __init_subclass__?
+455         if self.__class__.value.fget is not self.__class__.to_value:
+456             return self.value
+457 
+458         if jd1 is None:
+459             jd1 = self.jd1
+460         if jd2 is None:
+461             jd2 = self.jd2
+462         if out_subfmt is None:
+463             out_subfmt = self.out_subfmt
+464         subfmt = self._select_subfmts(out_subfmt)[0]
+465         kwargs = {}
+466         if subfmt[0] in ('str', 'bytes'):
+467             unit = getattr(self, 'unit', 1)
+468             digits = int(np.ceil(np.log10(unit / np.finfo(float).eps)))
+469             # TODO: allow a way to override the format.
+470             kwargs['fmt'] = f'.{digits}f'
+471         value = subfmt[3](jd1, jd2, **kwargs)
+472         return self.mask_if_needed(value)
+473 
+474     value = property(to_value)
+475 
+476 
+477 class TimeJD(TimeNumeric):
+478     """
+479     Julian Date time format.
+480     This represents the number of days since the beginning of
+481     the Julian Period.
+482     For example, 2451544.5 in JD is midnight on January 1, 2000.
+483     """
+484     name = 'jd'
+485 
+486     def set_jds(self, val1, val2):
+487         self._check_scale(self._scale)  # Validate scale.
+488         self.jd1, self.jd2 = day_frac(val1, val2)
+489 
+490 
+491 class TimeMJD(TimeNumeric):
+492     """
+493     Modified Julian Date time format.
+494     This represents the number of days since midnight on November 17, 1858.
+495     For example, 51544.0 in MJD is midnight on January 1, 2000.
+496     """
+497     name = 'mjd'
+498 
+499     def set_jds(self, val1, val2):
+500         self._check_scale(self._scale)  # Validate scale.
+501         jd1, jd2 = day_frac(val1, val2)
+502         jd1 += erfa.DJM0  # erfa.DJM0=2400000.5 (from erfam.h).
+503         self.jd1, self.jd2 = day_frac(jd1, jd2)
+504 
+505     def to_value(self, **kwargs):
+506         jd1 = self.jd1 - erfa.DJM0  # This cannot lose precision.
+507         jd2 = self.jd2
+508         return super().to_value(jd1=jd1, jd2=jd2, **kwargs)
+509 
+510     value = property(to_value)
+511 
+512 
+513 class TimeDecimalYear(TimeNumeric):
+514     """
+515     Time as a decimal year, with integer values corresponding to midnight
+516     of the first day of each year.  For example 2000.5 corresponds to the
+517     ISO time '2000-07-02 00:00:00'.
+518     """
+519     name = 'decimalyear'
+520 
+521     def set_jds(self, val1, val2):
+522         self._check_scale(self._scale)  # Validate scale.
+523 
+524         sum12, err12 = two_sum(val1, val2)
+525         iy_start = np.trunc(sum12).astype(int)
+526         extra, y_frac = two_sum(sum12, -iy_start)
+527         y_frac += extra + err12
+528 
+529         val = (val1 + val2).astype(np.double)
+530         iy_start = np.trunc(val).astype(int)
+531 
+532         imon = np.ones_like(iy_start)
+533         iday = np.ones_like(iy_start)
+534         ihr = np.zeros_like(iy_start)
+535         imin = np.zeros_like(iy_start)
+536         isec = np.zeros_like(y_frac)
+537 
+538         # Possible enhancement: use np.unique to only compute start, stop
+539         # for unique values of iy_start.
+540         scale = self.scale.upper().encode('ascii')
+541         jd1_start, jd2_start = erfa.dtf2d(scale, iy_start, imon, iday,
+542                                           ihr, imin, isec)
+543         jd1_end, jd2_end = erfa.dtf2d(scale, iy_start + 1, imon, iday,
+544                                       ihr, imin, isec)
+545 
+546         t_start = Time(jd1_start, jd2_start, scale=self.scale, format='jd')
+547         t_end = Time(jd1_end, jd2_end, scale=self.scale, format='jd')
+548         t_frac = t_start + (t_end - t_start) * y_frac
+549 
+550         self.jd1, self.jd2 = day_frac(t_frac.jd1, t_frac.jd2)
+551 
+552     def to_value(self, **kwargs):
+553         scale = self.scale.upper().encode('ascii')
+554         iy_start, ims, ids, ihmsfs = erfa.d2dtf(scale, 0,  # precision=0
+555                                                 self.jd1, self.jd2_filled)
+556         imon = np.ones_like(iy_start)
+557         iday = np.ones_like(iy_start)
+558         ihr = np.zeros_like(iy_start)
+559         imin = np.zeros_like(iy_start)
+560         isec = np.zeros_like(self.jd1)
+561 
+562         # Possible enhancement: use np.unique to only compute start, stop
+563         # for unique values of iy_start.
+564         scale = self.scale.upper().encode('ascii')
+565         jd1_start, jd2_start = erfa.dtf2d(scale, iy_start, imon, iday,
+566                                           ihr, imin, isec)
+567         jd1_end, jd2_end = erfa.dtf2d(scale, iy_start + 1, imon, iday,
+568                                       ihr, imin, isec)
+569         # Trying to be precise, but more than float64 not useful.
+570         dt = (self.jd1 - jd1_start) + (self.jd2 - jd2_start)
+571         dt_end = (jd1_end - jd1_start) + (jd2_end - jd2_start)
+572         decimalyear = iy_start + dt / dt_end
+573 
+574         return super().to_value(jd1=decimalyear, jd2=np.float64(0.0), **kwargs)
+575 
+576     value = property(to_value)
+577 
+578 
+579 class TimeFromEpoch(TimeNumeric):
+580     """
+581     Base class for times that represent the interval from a particular
+582     epoch as a floating point multiple of a unit time interval (e.g. seconds
+583     or days).
+584     """
+585 
+586     @classproperty(lazy=True)
+587     def _epoch(cls):
+588         # Ideally we would use `def epoch(cls)` here and not have the instance
+589         # property below. However, this breaks the sphinx API docs generation
+590         # in a way that was not resolved. See #10406 for details.
+591         return Time(cls.epoch_val, cls.epoch_val2, scale=cls.epoch_scale,
+592                     format=cls.epoch_format)
+593 
+594     @property
+595     def epoch(self):
+596         """Reference epoch time from which the time interval is measured"""
+597         return self._epoch
+598 
+599     def set_jds(self, val1, val2):
+600         """
+601         Initialize the internal jd1 and jd2 attributes given val1 and val2.
+602         For an TimeFromEpoch subclass like TimeUnix these will be floats giving
+603         the effective seconds since an epoch time (e.g. 1970-01-01 00:00:00).
+604         """
+605         # Form new JDs based on epoch time + time from epoch (converted to JD).
+606         # One subtlety that might not be obvious is that 1.000 Julian days in
+607         # UTC can be 86400 or 86401 seconds.  For the TimeUnix format the
+608         # assumption is that every day is exactly 86400 seconds, so this is, in
+609         # principle, doing the math incorrectly, *except* that it matches the
+610         # definition of Unix time which does not include leap seconds.
+611 
+612         # note: use divisor=1./self.unit, since this is either 1 or 1/86400,
+613         # and 1/86400 is not exactly representable as a float64, so multiplying
+614         # by that will cause rounding errors. (But inverting it as a float64
+615         # recovers the exact number)
+616         day, frac = day_frac(val1, val2, divisor=1. / self.unit)
+617 
+618         jd1 = self.epoch.jd1 + day
+619         jd2 = self.epoch.jd2 + frac
+620 
+621         # For the usual case that scale is the same as epoch_scale, we only need
+622         # to ensure that abs(jd2) <= 0.5. Since abs(self.epoch.jd2) <= 0.5 and
+623         # abs(frac) <= 0.5, we can do simple (fast) checks and arithmetic here
+624         # without another call to day_frac(). Note also that `round(jd2.item())`
+625         # is about 10x faster than `np.round(jd2)`` for a scalar.
+626         if self.epoch.scale == self.scale:
+627             jd1_extra = np.round(jd2) if jd2.shape else round(jd2.item())
+628             jd1 += jd1_extra
+629             jd2 -= jd1_extra
+630 
+631             self.jd1, self.jd2 = jd1, jd2
+632             return
+633 
+634         # Create a temporary Time object corresponding to the new (jd1, jd2) in
+635         # the epoch scale (e.g. UTC for TimeUnix) then convert that to the
+636         # desired time scale for this object.
+637         #
+638         # A known limitation is that the transform from self.epoch_scale to
+639         # self.scale cannot involve any metadata like lat or lon.
+640         try:
+641             tm = getattr(Time(jd1, jd2, scale=self.epoch_scale,
+642                               format='jd'), self.scale)
+643         except Exception as err:
+644             raise ScaleValueError("Cannot convert from '{}' epoch scale '{}'"
+645                                   "to specified scale '{}', got error:\n{}"
+646                                   .format(self.name, self.epoch_scale,
+647                                           self.scale, err)) from err
+648 
+649         self.jd1, self.jd2 = day_frac(tm._time.jd1, tm._time.jd2)
+650 
+651     def to_value(self, parent=None, **kwargs):
+652         # Make sure that scale is the same as epoch scale so we can just
+653         # subtract the epoch and convert
+654         if self.scale != self.epoch_scale:
+655             if parent is None:
+656                 raise ValueError('cannot compute value without parent Time object')
+657             try:
+658                 tm = getattr(parent, self.epoch_scale)
+659             except Exception as err:
+660                 raise ScaleValueError("Cannot convert from '{}' epoch scale '{}'"
+661                                       "to specified scale '{}', got error:\n{}"
+662                                       .format(self.name, self.epoch_scale,
+663                                               self.scale, err)) from err
+664 
+665             jd1, jd2 = tm._time.jd1, tm._time.jd2
+666         else:
+667             jd1, jd2 = self.jd1, self.jd2
+668 
+669         # This factor is guaranteed to be exactly representable, which
+670         # means time_from_epoch1 is calculated exactly.
+671         factor = 1. / self.unit
+672         time_from_epoch1 = (jd1 - self.epoch.jd1) * factor
+673         time_from_epoch2 = (jd2 - self.epoch.jd2) * factor
+674 
+675         return super().to_value(jd1=time_from_epoch1, jd2=time_from_epoch2, **kwargs)
+676 
+677     value = property(to_value)
+678 
+679     @property
+680     def _default_scale(self):
+681         return self.epoch_scale
+682 
+683 
+684 class TimeUnix(TimeFromEpoch):
+685     """
+686     Unix time (UTC): seconds from 1970-01-01 00:00:00 UTC, ignoring leap seconds.
+687 
+688     For example, 946684800.0 in Unix time is midnight on January 1, 2000.
+689 
+690     NOTE: this quantity is not exactly unix time and differs from the strict
+691     POSIX definition by up to 1 second on days with a leap second.  POSIX
+692     unix time actually jumps backward by 1 second at midnight on leap second
+693     days while this class value is monotonically increasing at 86400 seconds
+694     per UTC day.
+695     """
+696     name = 'unix'
+697     unit = 1.0 / erfa.DAYSEC  # in days (1 day == 86400 seconds)
+698     epoch_val = '1970-01-01 00:00:00'
+699     epoch_val2 = None
+700     epoch_scale = 'utc'
+701     epoch_format = 'iso'
+702 
+703 
+704 class TimeUnixTai(TimeUnix):
+705     """
+706     Unix time (TAI): SI seconds elapsed since 1970-01-01 00:00:00 TAI (see caveats).
+707 
+708     This will generally differ from standard (UTC) Unix time by the cumulative
+709     integral number of leap seconds introduced into UTC since 1972-01-01 UTC
+710     plus the initial offset of 10 seconds at that date.
+711 
+712     This convention matches the definition of linux CLOCK_TAI
+713     (https://www.cl.cam.ac.uk/~mgk25/posix-clocks.html),
+714     and the Precision Time Protocol
+715     (https://en.wikipedia.org/wiki/Precision_Time_Protocol), which
+716     is also used by the White Rabbit protocol in High Energy Physics:
+717     https://white-rabbit.web.cern.ch.
+718 
+719     Caveats:
+720 
+721     - Before 1972, fractional adjustments to UTC were made, so the difference
+722       between ``unix`` and ``unix_tai`` time is no longer an integer.
+723     - Because of the fractional adjustments, to be very precise, ``unix_tai``
+724       is the number of seconds since ``1970-01-01 00:00:00 TAI`` or equivalently
+725       ``1969-12-31 23:59:51.999918 UTC``.  The difference between TAI and UTC
+726       at that epoch was 8.000082 sec.
+727     - On the day of a positive leap second the difference between ``unix`` and
+728       ``unix_tai`` times increases linearly through the day by 1.0. See also the
+729       documentation for the `~astropy.time.TimeUnix` class.
+730     - Negative leap seconds are possible, though none have been needed to date.
+731 
+732     Examples
+733     --------
+734 
+735       >>> # get the current offset between TAI and UTC
+736       >>> from astropy.time import Time
+737       >>> t = Time('2020-01-01', scale='utc')
+738       >>> t.unix_tai - t.unix
+739       37.0
+740 
+741       >>> # Before 1972, the offset between TAI and UTC was not integer
+742       >>> t = Time('1970-01-01', scale='utc')
+743       >>> t.unix_tai - t.unix  # doctest: +FLOAT_CMP
+744       8.000082
+745 
+746       >>> # Initial offset of 10 seconds in 1972
+747       >>> t = Time('1972-01-01', scale='utc')
+748       >>> t.unix_tai - t.unix
+749       10.0
+750     """
+751     name = 'unix_tai'
+752     epoch_val = '1970-01-01 00:00:00'
+753     epoch_scale = 'tai'
+754 
+755 
+756 class TimeCxcSec(TimeFromEpoch):
+757     """
+758     Chandra X-ray Center seconds from 1998-01-01 00:00:00 TT.
+759     For example, 63072064.184 is midnight on January 1, 2000.
+760     """
+761     name = 'cxcsec'
+762     unit = 1.0 / erfa.DAYSEC  # in days (1 day == 86400 seconds)
+763     epoch_val = '1998-01-01 00:00:00'
+764     epoch_val2 = None
+765     epoch_scale = 'tt'
+766     epoch_format = 'iso'
+767 
+768 
+769 class TimeGPS(TimeFromEpoch):
+770     """GPS time: seconds from 1980-01-06 00:00:00 UTC
+771     For example, 630720013.0 is midnight on January 1, 2000.
+772 
+773     Notes
+774     =====
+775     This implementation is strictly a representation of the number of seconds
+776     (including leap seconds) since midnight UTC on 1980-01-06.  GPS can also be
+777     considered as a time scale which is ahead of TAI by a fixed offset
+778     (to within about 100 nanoseconds).
+779 
+780     For details, see https://www.usno.navy.mil/USNO/time/gps/usno-gps-time-transfer
+781     """
+782     name = 'gps'
+783     unit = 1.0 / erfa.DAYSEC  # in days (1 day == 86400 seconds)
+784     epoch_val = '1980-01-06 00:00:19'
+785     # above epoch is the same as Time('1980-01-06 00:00:00', scale='utc').tai
+786     epoch_val2 = None
+787     epoch_scale = 'tai'
+788     epoch_format = 'iso'
+789 
+790 
+791 class TimePlotDate(TimeFromEpoch):
+792     """
+793     Matplotlib `~matplotlib.pyplot.plot_date` input:
+794     1 + number of days from 0001-01-01 00:00:00 UTC
+795 
+796     This can be used directly in the matplotlib `~matplotlib.pyplot.plot_date`
+797     function::
+798 
+799       >>> import matplotlib.pyplot as plt
+800       >>> jyear = np.linspace(2000, 2001, 20)
+801       >>> t = Time(jyear, format='jyear', scale='utc')
+802       >>> plt.plot_date(t.plot_date, jyear)
+803       >>> plt.gcf().autofmt_xdate()  # orient date labels at a slant
+804       >>> plt.draw()
+805 
+806     For example, 730120.0003703703 is midnight on January 1, 2000.
+807     """
+808     # This corresponds to the zero reference time for matplotlib plot_date().
+809     # Note that TAI and UTC are equivalent at the reference time.
+810     name = 'plot_date'
+811     unit = 1.0
+812     epoch_val = 1721424.5  # Time('0001-01-01 00:00:00', scale='tai').jd - 1
+813     epoch_val2 = None
+814     epoch_scale = 'utc'
+815     epoch_format = 'jd'
+816 
+817     @lazyproperty
+818     def epoch(self):
+819         """Reference epoch time from which the time interval is measured"""
+820         try:
+821             # Matplotlib >= 3.3 has a get_epoch() function
+822             from matplotlib.dates import get_epoch
+823         except ImportError:
+824             # If no get_epoch() then the epoch is '0001-01-01'
+825             _epoch = self._epoch
+826         else:
+827             # Get the matplotlib date epoch as an ISOT string in UTC
+828             epoch_utc = get_epoch()
+829             from erfa import ErfaWarning
+830             with warnings.catch_warnings():
+831                 # Catch possible dubious year warnings from erfa
+832                 warnings.filterwarnings('ignore', category=ErfaWarning)
+833                 _epoch = Time(epoch_utc, scale='utc', format='isot')
+834             _epoch.format = 'jd'
+835 
+836         return _epoch
+837 
+838 
+839 class TimeStardate(TimeFromEpoch):
+840     """
+841     Stardate: date units from 2318-07-05 12:00:00 UTC.
+842     For example, stardate 41153.7 is 00:52 on April 30, 2363.
+843     See http://trekguide.com/Stardates.htm#TNG for calculations and reference points
+844     """
+845     name = 'stardate'
+846     unit = 0.397766856  # Stardate units per day
+847     epoch_val = '2318-07-05 11:00:00'  # Date and time of stardate 00000.00
+848     epoch_val2 = None
+849     epoch_scale = 'tai'
+850     epoch_format = 'iso'
+851 
+852 
+853 class TimeUnique(TimeFormat):
+854     """
+855     Base class for time formats that can uniquely create a time object
+856     without requiring an explicit format specifier.  This class does
+857     nothing but provide inheritance to identify a class as unique.
+858     """
+859 
+860 
+861 class TimeAstropyTime(TimeUnique):
+862     """
+863     Instantiate date from an Astropy Time object (or list thereof).
+864 
+865     This is purely for instantiating from a Time object.  The output
+866     format is the same as the first time instance.
+867     """
+868     name = 'astropy_time'
+869 
+870     def __new__(cls, val1, val2, scale, precision,
+871                 in_subfmt, out_subfmt, from_jd=False):
+872         """
+873         Use __new__ instead of __init__ to output a class instance that
+874         is the same as the class of the first Time object in the list.
+875         """
+876         val1_0 = val1.flat[0]
+877         if not (isinstance(val1_0, Time) and all(type(val) is type(val1_0)
+878                                                  for val in val1.flat)):
+879             raise TypeError('Input values for {} class must all be same '
+880                             'astropy Time type.'.format(cls.name))
+881 
+882         if scale is None:
+883             scale = val1_0.scale
+884 
+885         if val1.shape:
+886             vals = [getattr(val, scale)._time for val in val1]
+887             jd1 = np.concatenate([np.atleast_1d(val.jd1) for val in vals])
+888             jd2 = np.concatenate([np.atleast_1d(val.jd2) for val in vals])
+889 
+890             # Collect individual location values and merge into a single location.
+891             if any(tm.location is not None for tm in val1):
+892                 if any(tm.location is None for tm in val1):
+893                     raise ValueError('cannot concatenate times unless all locations '
+894                                      'are set or no locations are set')
+895                 locations = []
+896                 for tm in val1:
+897                     location = np.broadcast_to(tm.location, tm._time.jd1.shape,
+898                                                subok=True)
+899                     locations.append(np.atleast_1d(location))
+900 
+901                 location = np.concatenate(locations)
+902 
+903             else:
+904                 location = None
+905         else:
+906             val = getattr(val1_0, scale)._time
+907             jd1, jd2 = val.jd1, val.jd2
+908             location = val1_0.location
+909 
+910         OutTimeFormat = val1_0._time.__class__
+911         self = OutTimeFormat(jd1, jd2, scale, precision, in_subfmt, out_subfmt,
+912                              from_jd=True)
+913 
+914         # Make a temporary hidden attribute to transfer location back to the
+915         # parent Time object where it needs to live.
+916         self._location = location
+917 
+918         return self
+919 
+920 
+921 class TimeDatetime(TimeUnique):
+922     """
+923     Represent date as Python standard library `~datetime.datetime` object
+924 
+925     Example::
+926 
+927       >>> from astropy.time import Time
+928       >>> from datetime import datetime
+929       >>> t = Time(datetime(2000, 1, 2, 12, 0, 0), scale='utc')
+930       >>> t.iso
+931       '2000-01-02 12:00:00.000'
+932       >>> t.tt.datetime
+933       datetime.datetime(2000, 1, 2, 12, 1, 4, 184000)
+934     """
+935     name = 'datetime'
+936 
+937     def _check_val_type(self, val1, val2):
+938         if not all(isinstance(val, datetime.datetime) for val in val1.flat):
+939             raise TypeError('Input values for {} class must be '
+940                             'datetime objects'.format(self.name))
+941         if val2 is not None:
+942             raise ValueError(
+943                 f'{self.name} objects do not accept a val2 but you provided {val2}')
+944         return val1, None
+945 
+946     def set_jds(self, val1, val2):
+947         """Convert datetime object contained in val1 to jd1, jd2"""
+948         # Iterate through the datetime objects, getting year, month, etc.
+949         iterator = np.nditer([val1, None, None, None, None, None, None],
+950                              flags=['refs_ok', 'zerosize_ok'],
+951                              op_dtypes=[None] + 5*[np.intc] + [np.double])
+952         for val, iy, im, id, ihr, imin, dsec in iterator:
+953             dt = val.item()
+954 
+955             if dt.tzinfo is not None:
+956                 dt = (dt - dt.utcoffset()).replace(tzinfo=None)
+957 
+958             iy[...] = dt.year
+959             im[...] = dt.month
+960             id[...] = dt.day
+961             ihr[...] = dt.hour
+962             imin[...] = dt.minute
+963             dsec[...] = dt.second + dt.microsecond / 1e6
+964 
+965         jd1, jd2 = erfa.dtf2d(self.scale.upper().encode('ascii'),
+966                               *iterator.operands[1:])
+967         self.jd1, self.jd2 = day_frac(jd1, jd2)
+968 
+969     def to_value(self, timezone=None, parent=None, out_subfmt=None):
+970         """
+971         Convert to (potentially timezone-aware) `~datetime.datetime` object.
+972 
+973         If ``timezone`` is not ``None``, return a timezone-aware datetime
+974         object.
+975 
+976         Parameters
+977         ----------
+978         timezone : {`~datetime.tzinfo`, None}, optional
+979             If not `None`, return timezone-aware datetime.
+980 
+981         Returns
+982         -------
+983         `~datetime.datetime`
+984             If ``timezone`` is not ``None``, output will be timezone-aware.
+985         """
+986         if out_subfmt is not None:
+987             # Out_subfmt not allowed for this format, so raise the standard
+988             # exception by trying to validate the value.
+989             self._select_subfmts(out_subfmt)
+990 
+991         if timezone is not None:
+992             if self._scale != 'utc':
+993                 raise ScaleValueError("scale is {}, must be 'utc' when timezone "
+994                                       "is supplied.".format(self._scale))
+995 
+996         # Rather than define a value property directly, we have a function,
+997         # since we want to be able to pass in timezone information.
+998         scale = self.scale.upper().encode('ascii')
+999         iys, ims, ids, ihmsfs = erfa.d2dtf(scale, 6,  # 6 for microsec
+1000                                            self.jd1, self.jd2_filled)
+1001         ihrs = ihmsfs['h']
+1002         imins = ihmsfs['m']
+1003         isecs = ihmsfs['s']
+1004         ifracs = ihmsfs['f']
+1005         iterator = np.nditer([iys, ims, ids, ihrs, imins, isecs, ifracs, None],
+1006                              flags=['refs_ok', 'zerosize_ok'],
+1007                              op_dtypes=7*[None] + [object])
+1008 
+1009         for iy, im, id, ihr, imin, isec, ifracsec, out in iterator:
+1010             if isec >= 60:
+1011                 raise ValueError('Time {} is within a leap second but datetime '
+1012                                  'does not support leap seconds'
+1013                                  .format((iy, im, id, ihr, imin, isec, ifracsec)))
+1014             if timezone is not None:
+1015                 out[...] = datetime.datetime(iy, im, id, ihr, imin, isec, ifracsec,
+1016                                              tzinfo=TimezoneInfo()).astimezone(timezone)
+1017             else:
+1018                 out[...] = datetime.datetime(iy, im, id, ihr, imin, isec, ifracsec)
+1019 
+1020         return self.mask_if_needed(iterator.operands[-1])
+1021 
+1022     value = property(to_value)
+1023 
+1024 
+1025 class TimeYMDHMS(TimeUnique):
+1026     """
+1027     ymdhms: A Time format to represent Time as year, month, day, hour,
+1028     minute, second (thus the name ymdhms).
+1029 
+1030     Acceptable inputs must have keys or column names in the "YMDHMS" set of
+1031     ``year``, ``month``, ``day`` ``hour``, ``minute``, ``second``:
+1032 
+1033     - Dict with keys in the YMDHMS set
+1034     - NumPy structured array, record array or astropy Table, or single row
+1035       of those types, with column names in the YMDHMS set
+1036 
+1037     One can supply a subset of the YMDHMS values, for instance only 'year',
+1038     'month', and 'day'.  Inputs have the following defaults::
+1039 
+1040       'month': 1, 'day': 1, 'hour': 0, 'minute': 0, 'second': 0
+1041 
+1042     When the input is supplied as a ``dict`` then each value can be either a
+1043     scalar value or an array.  The values will be broadcast to a common shape.
+1044 
+1045     Example::
+1046 
+1047       >>> from astropy.time import Time
+1048       >>> t = Time({'year': 2015, 'month': 2, 'day': 3,
+1049       ...           'hour': 12, 'minute': 13, 'second': 14.567},
+1050       ...           scale='utc')
+1051       >>> t.iso
+1052       '2015-02-03 12:13:14.567'
+1053       >>> t.ymdhms.year
+1054       2015
+1055     """
+1056     name = 'ymdhms'
+1057 
+1058     def _check_val_type(self, val1, val2):
+1059         """
+1060         This checks inputs for the YMDHMS format.
+1061 
+1062         It is bit more complex than most format checkers because of the flexible
+1063         input that is allowed.  Also, it actually coerces ``val1`` into an appropriate
+1064         dict of ndarrays that can be used easily by ``set_jds()``.  This is useful
+1065         because it makes it easy to get default values in that routine.
+1066 
+1067         Parameters
+1068         ----------
+1069         val1 : ndarray or None
+1070         val2 : ndarray or None
+1071 
+1072         Returns
+1073         -------
+1074         val1_as_dict, val2 : val1 as dict or None, val2 is always None
+1075 
+1076         """
+1077         if val2 is not None:
+1078             raise ValueError('val2 must be None for ymdhms format')
+1079 
+1080         ymdhms = ['year', 'month', 'day', 'hour', 'minute', 'second']
+1081 
+1082         if val1.dtype.names:
+1083             # Convert to a dict of ndarray
+1084             val1_as_dict = {name: val1[name] for name in val1.dtype.names}
+1085 
+1086         elif val1.shape == (0,):
+1087             # Input was empty list [], so set to None and set_jds will handle this
+1088             return None, None
+1089 
+1090         elif (val1.dtype.kind == 'O'
+1091               and val1.shape == ()
+1092               and isinstance(val1.item(), dict)):
+1093             # Code gets here for input as a dict.  The dict input
+1094             # can be either scalar values or N-d arrays.
+1095 
+1096             # Extract the item (which is a dict) and broadcast values to the
+1097             # same shape here.
+1098             names = val1.item().keys()
+1099             values = val1.item().values()
+1100             val1_as_dict = {name: value for name, value
+1101                             in zip(names, np.broadcast_arrays(*values))}
+1102 
+1103         else:
+1104             raise ValueError('input must be dict or table-like')
+1105 
+1106         # Check that the key names now are good.
+1107         names = val1_as_dict.keys()
+1108         required_names = ymdhms[:len(names)]
+1109 
+1110         def comma_repr(vals):
+1111             return ', '.join(repr(val) for val in vals)
+1112 
+1113         bad_names = set(names) - set(ymdhms)
+1114         if bad_names:
+1115             raise ValueError(f'{comma_repr(bad_names)} not allowed as YMDHMS key name(s)')
+1116 
+1117         if set(names) != set(required_names):
+1118             raise ValueError(f'for {len(names)} input key names '
+1119                              f'you must supply {comma_repr(required_names)}')
+1120 
+1121         return val1_as_dict, val2
+1122 
+1123     def set_jds(self, val1, val2):
+1124         if val1 is None:
+1125             # Input was empty list []
+1126             jd1 = np.array([], dtype=np.float64)
+1127             jd2 = np.array([], dtype=np.float64)
+1128 
+1129         else:
+1130             jd1, jd2 = erfa.dtf2d(self.scale.upper().encode('ascii'),
+1131                                   val1['year'],
+1132                                   val1.get('month', 1),
+1133                                   val1.get('day', 1),
+1134                                   val1.get('hour', 0),
+1135                                   val1.get('minute', 0),
+1136                                   val1.get('second', 0))
+1137 
+1138         self.jd1, self.jd2 = day_frac(jd1, jd2)
+1139 
+1140     @property
+1141     def value(self):
+1142         scale = self.scale.upper().encode('ascii')
+1143         iys, ims, ids, ihmsfs = erfa.d2dtf(scale, 9,
+1144                                            self.jd1, self.jd2_filled)
+1145 
+1146         out = np.empty(self.jd1.shape, dtype=[('year', 'i4'),
+1147                                               ('month', 'i4'),
+1148                                               ('day', 'i4'),
+1149                                               ('hour', 'i4'),
+1150                                               ('minute', 'i4'),
+1151                                               ('second', 'f8')])
+1152         out['year'] = iys
+1153         out['month'] = ims
+1154         out['day'] = ids
+1155         out['hour'] = ihmsfs['h']
+1156         out['minute'] = ihmsfs['m']
+1157         out['second'] = ihmsfs['s'] + ihmsfs['f'] * 10**(-9)
+1158         out = out.view(np.recarray)
+1159 
+1160         return self.mask_if_needed(out)
+1161 
+1162 
+1163 class TimezoneInfo(datetime.tzinfo):
+1164     """
+1165     Subclass of the `~datetime.tzinfo` object, used in the
+1166     to_datetime method to specify timezones.
+1167 
+1168     It may be safer in most cases to use a timezone database package like
+1169     pytz rather than defining your own timezones - this class is mainly
+1170     a workaround for users without pytz.
+1171     """
+1172     @u.quantity_input(utc_offset=u.day, dst=u.day)
+1173     def __init__(self, utc_offset=0 * u.day, dst=0 * u.day, tzname=None):
+1174         """
+1175         Parameters
+1176         ----------
+1177         utc_offset : `~astropy.units.Quantity`, optional
+1178             Offset from UTC in days. Defaults to zero.
+1179         dst : `~astropy.units.Quantity`, optional
+1180             Daylight Savings Time offset in days. Defaults to zero
+1181             (no daylight savings).
+1182         tzname : str or None, optional
+1183             Name of timezone
+1184 
+1185         Examples
+1186         --------
+1187         >>> from datetime import datetime
+1188         >>> from astropy.time import TimezoneInfo  # Specifies a timezone
+1189         >>> import astropy.units as u
+1190         >>> utc = TimezoneInfo()    # Defaults to UTC
+1191         >>> utc_plus_one_hour = TimezoneInfo(utc_offset=1*u.hour)  # UTC+1
+1192         >>> dt_aware = datetime(2000, 1, 1, 0, 0, 0, tzinfo=utc_plus_one_hour)
+1193         >>> print(dt_aware)
+1194         2000-01-01 00:00:00+01:00
+1195         >>> print(dt_aware.astimezone(utc))
+1196         1999-12-31 23:00:00+00:00
+1197         """
+1198         if utc_offset == 0 and dst == 0 and tzname is None:
+1199             tzname = 'UTC'
+1200         self._utcoffset = datetime.timedelta(utc_offset.to_value(u.day))
+1201         self._tzname = tzname
+1202         self._dst = datetime.timedelta(dst.to_value(u.day))
+1203 
+1204     def utcoffset(self, dt):
+1205         return self._utcoffset
+1206 
+1207     def tzname(self, dt):
+1208         return str(self._tzname)
+1209 
+1210     def dst(self, dt):
+1211         return self._dst
+1212 
+1213 
+1214 class TimeString(TimeUnique):
+1215     """
+1216     Base class for string-like time representations.
+1217 
+1218     This class assumes that anything following the last decimal point to the
+1219     right is a fraction of a second.
+1220 
+1221     **Fast C-based parser**
+1222 
+1223     Time format classes can take advantage of a fast C-based parser if the times
+1224     are represented as fixed-format strings with year, month, day-of-month,
+1225     hour, minute, second, OR year, day-of-year, hour, minute, second. This can
+1226     be a factor of 20 or more faster than the pure Python parser.
+1227 
+1228     Fixed format means that the components always have the same number of
+1229     characters. The Python parser will accept ``2001-9-2`` as a date, but the C
+1230     parser would require ``2001-09-02``.
+1231 
+1232     A subclass in this case must define a class attribute ``fast_parser_pars``
+1233     which is a `dict` with all of the keys below. An inherited attribute is not
+1234     checked, only an attribute in the class ``__dict__``.
+1235 
+1236     - ``delims`` (tuple of int): ASCII code for character at corresponding
+1237       ``starts`` position (0 => no character)
+1238 
+1239     - ``starts`` (tuple of int): position where component starts (including
+1240       delimiter if present). Use -1 for the month component for format that use
+1241       day of year.
+1242 
+1243     - ``stops`` (tuple of int): position where component ends. Use -1 to
+1244       continue to end of string, or for the month component for formats that use
+1245       day of year.
+1246 
+1247     - ``break_allowed`` (tuple of int): if true (1) then the time string can
+1248           legally end just before the corresponding component (e.g. "2000-01-01"
+1249           is a valid time but "2000-01-01 12" is not).
+1250 
+1251     - ``has_day_of_year`` (int): 0 if dates have year, month, day; 1 if year,
+1252       day-of-year
+1253     """
+1254 
+1255     def __init_subclass__(cls, **kwargs):
+1256         if 'fast_parser_pars' in cls.__dict__:
+1257             fpp = cls.fast_parser_pars
+1258             fpp = np.array(list(zip(map(chr, fpp['delims']),
+1259                                     fpp['starts'],
+1260                                     fpp['stops'],
+1261                                     fpp['break_allowed'])),
+1262                            _parse_times.dt_pars)
+1263             if cls.fast_parser_pars['has_day_of_year']:
+1264                 fpp['start'][1] = fpp['stop'][1] = -1
+1265             cls._fast_parser = _parse_times.create_parser(fpp)
+1266 
+1267         super().__init_subclass__(**kwargs)
+1268 
+1269     def _check_val_type(self, val1, val2):
+1270         if val1.dtype.kind not in ('S', 'U') and val1.size:
+1271             raise TypeError(f'Input values for {self.name} class must be strings')
+1272         if val2 is not None:
+1273             raise ValueError(
+1274                 f'{self.name} objects do not accept a val2 but you provided {val2}')
+1275         return val1, None
+1276 
+1277     def parse_string(self, timestr, subfmts):
+1278         """Read time from a single string, using a set of possible formats."""
+1279         # Datetime components required for conversion to JD by ERFA, along
+1280         # with the default values.
+1281         components = ('year', 'mon', 'mday', 'hour', 'min', 'sec')
+1282         defaults = (None, 1, 1, 0, 0, 0)
+1283         # Assume that anything following "." on the right side is a
+1284         # floating fraction of a second.
+1285         try:
+1286             idot = timestr.rindex('.')
+1287         except Exception:
+1288             fracsec = 0.0
+1289         else:
+1290             timestr, fracsec = timestr[:idot], timestr[idot:]
+1291             fracsec = float(fracsec)
+1292 
+1293         for _, strptime_fmt_or_regex, _ in subfmts:
+1294             if isinstance(strptime_fmt_or_regex, str):
+1295                 try:
+1296                     tm = time.strptime(timestr, strptime_fmt_or_regex)
+1297                 except ValueError:
+1298                     continue
+1299                 else:
+1300                     vals = [getattr(tm, 'tm_' + component)
+1301                             for component in components]
+1302 
+1303             else:
+1304                 tm = re.match(strptime_fmt_or_regex, timestr)
+1305                 if tm is None:
+1306                     continue
+1307                 tm = tm.groupdict()
+1308                 vals = [int(tm.get(component, default)) for component, default
+1309                         in zip(components, defaults)]
+1310 
+1311             # Add fractional seconds
+1312             vals[-1] = vals[-1] + fracsec
+1313             return vals
+1314         else:
+1315             raise ValueError(f'Time {timestr} does not match {self.name} format')
+1316 
+1317     def set_jds(self, val1, val2):
+1318         """Parse the time strings contained in val1 and set jd1, jd2"""
+1319         # If specific input subformat is required then use the Python parser.
+1320         # Also do this if Time format class does not define `use_fast_parser` or
+1321         # if the fast parser is entirely disabled. Note that `use_fast_parser`
+1322         # is ignored for format classes that don't have a fast parser.
+1323         if (self.in_subfmt != '*'
+1324                 or '_fast_parser' not in self.__class__.__dict__
+1325                 or conf.use_fast_parser == 'False'):
+1326             jd1, jd2 = self.get_jds_python(val1, val2)
+1327         else:
+1328             try:
+1329                 jd1, jd2 = self.get_jds_fast(val1, val2)
+1330             except Exception:
+1331                 # Fall through to the Python parser unless fast is forced.
+1332                 if conf.use_fast_parser == 'force':
+1333                     raise
+1334                 else:
+1335                     jd1, jd2 = self.get_jds_python(val1, val2)
+1336 
+1337         self.jd1 = jd1
+1338         self.jd2 = jd2
+1339 
+1340     def get_jds_python(self, val1, val2):
+1341         """Parse the time strings contained in val1 and get jd1, jd2"""
+1342         # Select subformats based on current self.in_subfmt
+1343         subfmts = self._select_subfmts(self.in_subfmt)
+1344         # Be liberal in what we accept: convert bytes to ascii.
+1345         # Here .item() is needed for arrays with entries of unequal length,
+1346         # to strip trailing 0 bytes.
+1347         to_string = (str if val1.dtype.kind == 'U' else
+1348                      lambda x: str(x.item(), encoding='ascii'))
+1349         iterator = np.nditer([val1, None, None, None, None, None, None],
+1350                              flags=['zerosize_ok'],
+1351                              op_dtypes=[None] + 5 * [np.intc] + [np.double])
+1352         for val, iy, im, id, ihr, imin, dsec in iterator:
+1353             val = to_string(val)
+1354             iy[...], im[...], id[...], ihr[...], imin[...], dsec[...] = (
+1355                 self.parse_string(val, subfmts))
+1356 
+1357         jd1, jd2 = erfa.dtf2d(self.scale.upper().encode('ascii'),
+1358                               *iterator.operands[1:])
+1359         jd1, jd2 = day_frac(jd1, jd2)
+1360 
+1361         return jd1, jd2
+1362 
+1363     def get_jds_fast(self, val1, val2):
+1364         """Use fast C parser to parse time strings in val1 and get jd1, jd2"""
+1365         # Handle bytes or str input and convert to uint8.  We need to the
+1366         # dtype _parse_times.dt_u1 instead of uint8, since otherwise it is
+1367         # not possible to create a gufunc with structured dtype output.
+1368         # See note about ufunc type resolver in pyerfa/erfa/ufunc.c.templ.
+1369         if val1.dtype.kind == 'U':
+1370             # Note: val1.astype('S') is *very* slow, so we check ourselves
+1371             # that the input is pure ASCII.
+1372             val1_uint32 = val1.view((np.uint32, val1.dtype.itemsize // 4))
+1373             if np.any(val1_uint32 > 127):
+1374                 raise ValueError('input is not pure ASCII')
+1375 
+1376             # It might be possible to avoid making a copy via astype with
+1377             # cleverness in parse_times.c but leave that for another day.
+1378             chars = val1_uint32.astype(_parse_times.dt_u1)
+1379 
+1380         else:
+1381             chars = val1.view((_parse_times.dt_u1, val1.dtype.itemsize))
+1382 
+1383         # Call the fast parsing ufunc.
+1384         time_struct = self._fast_parser(chars)
+1385         jd1, jd2 = erfa.dtf2d(self.scale.upper().encode('ascii'),
+1386                               time_struct['year'],
+1387                               time_struct['month'],
+1388                               time_struct['day'],
+1389                               time_struct['hour'],
+1390                               time_struct['minute'],
+1391                               time_struct['second'])
+1392         return day_frac(jd1, jd2)
+1393 
+1394     def str_kwargs(self):
+1395         """
+1396         Generator that yields a dict of values corresponding to the
+1397         calendar date and time for the internal JD values.
+1398         """
+1399         scale = self.scale.upper().encode('ascii'),
+1400         iys, ims, ids, ihmsfs = erfa.d2dtf(scale, self.precision,
+1401                                            self.jd1, self.jd2_filled)
+1402 
+1403         # Get the str_fmt element of the first allowed output subformat
+1404         _, _, str_fmt = self._select_subfmts(self.out_subfmt)[0]
+1405 
+1406         yday = None
+1407         has_yday = '{yday:' in str_fmt
+1408 
+1409         ihrs = ihmsfs['h']
+1410         imins = ihmsfs['m']
+1411         isecs = ihmsfs['s']
+1412         ifracs = ihmsfs['f']
+1413         for iy, im, id, ihr, imin, isec, ifracsec in np.nditer(
+1414                 [iys, ims, ids, ihrs, imins, isecs, ifracs],
+1415                 flags=['zerosize_ok']):
+1416             if has_yday:
+1417                 yday = datetime.datetime(iy, im, id).timetuple().tm_yday
+1418 
+1419             yield {'year': int(iy), 'mon': int(im), 'day': int(id),
+1420                    'hour': int(ihr), 'min': int(imin), 'sec': int(isec),
+1421                    'fracsec': int(ifracsec), 'yday': yday}
+1422 
+1423     def format_string(self, str_fmt, **kwargs):
+1424         """Write time to a string using a given format.
+1425 
+1426         By default, just interprets str_fmt as a format string,
+1427         but subclasses can add to this.
+1428         """
+1429         return str_fmt.format(**kwargs)
+1430 
+1431     @property
+1432     def value(self):
+1433         # Select the first available subformat based on current
+1434         # self.out_subfmt
+1435         subfmts = self._select_subfmts(self.out_subfmt)
+1436         _, _, str_fmt = subfmts[0]
+1437 
+1438         # TODO: fix this ugly hack
+1439         if self.precision > 0 and str_fmt.endswith('{sec:02d}'):
+1440             str_fmt += '.{fracsec:0' + str(self.precision) + 'd}'
+1441 
+1442         # Try to optimize this later.  Can't pre-allocate because length of
+1443         # output could change, e.g. year rolls from 999 to 1000.
+1444         outs = []
+1445         for kwargs in self.str_kwargs():
+1446             outs.append(str(self.format_string(str_fmt, **kwargs)))
+1447 
+1448         return np.array(outs).reshape(self.jd1.shape)
+1449 
+1450 
+1451 class TimeISO(TimeString):
+1452     """
+1453     ISO 8601 compliant date-time format "YYYY-MM-DD HH:MM:SS.sss...".
+1454     For example, 2000-01-01 00:00:00.000 is midnight on January 1, 2000.
+1455 
+1456     The allowed subformats are:
+1457 
+1458     - 'date_hms': date + hours, mins, secs (and optional fractional secs)
+1459     - 'date_hm': date + hours, mins
+1460     - 'date': date
+1461     """
+1462 
+1463     name = 'iso'
+1464     subfmts = (('date_hms',
+1465                 '%Y-%m-%d %H:%M:%S',
+1466                 # XXX To Do - use strftime for output ??
+1467                 '{year:d}-{mon:02d}-{day:02d} {hour:02d}:{min:02d}:{sec:02d}'),
+1468                ('date_hm',
+1469                 '%Y-%m-%d %H:%M',
+1470                 '{year:d}-{mon:02d}-{day:02d} {hour:02d}:{min:02d}'),
+1471                ('date',
+1472                 '%Y-%m-%d',
+1473                 '{year:d}-{mon:02d}-{day:02d}'))
+1474 
+1475     # Define positions and starting delimiter for year, month, day, hour,
+1476     # minute, seconds components of an ISO time. This is used by the fast
+1477     # C-parser parse_ymdhms_times()
+1478     #
+1479     #  "2000-01-12 13:14:15.678"
+1480     #   01234567890123456789012
+1481     #   yyyy-mm-dd hh:mm:ss.fff
+1482     # Parsed as ('yyyy', '-mm', '-dd', ' hh', ':mm', ':ss', '.fff')
+1483     fast_parser_pars = dict(
+1484         delims=(0, ord('-'), ord('-'), ord(' '), ord(':'), ord(':'), ord('.')),
+1485         starts=(0, 4, 7, 10, 13, 16, 19),
+1486         stops=(3, 6, 9, 12, 15, 18, -1),
+1487         # Break allowed *before*
+1488         #              y  m  d  h  m  s  f
+1489         break_allowed=(0, 0, 0, 1, 0, 1, 1),
+1490         has_day_of_year=0)
+1491 
+1492     def parse_string(self, timestr, subfmts):
+1493         # Handle trailing 'Z' for UTC time
+1494         if timestr.endswith('Z'):
+1495             if self.scale != 'utc':
+1496                 raise ValueError("Time input terminating in 'Z' must have "
+1497                                  "scale='UTC'")
+1498             timestr = timestr[:-1]
+1499         return super().parse_string(timestr, subfmts)
+1500 
+1501 
+1502 class TimeISOT(TimeISO):
+1503     """
+1504     ISO 8601 compliant date-time format "YYYY-MM-DDTHH:MM:SS.sss...".
+1505     This is the same as TimeISO except for a "T" instead of space between
+1506     the date and time.
+1507     For example, 2000-01-01T00:00:00.000 is midnight on January 1, 2000.
+1508 
+1509     The allowed subformats are:
+1510 
+1511     - 'date_hms': date + hours, mins, secs (and optional fractional secs)
+1512     - 'date_hm': date + hours, mins
+1513     - 'date': date
+1514     """
+1515 
+1516     name = 'isot'
+1517     subfmts = (('date_hms',
+1518                 '%Y-%m-%dT%H:%M:%S',
+1519                 '{year:d}-{mon:02d}-{day:02d}T{hour:02d}:{min:02d}:{sec:02d}'),
+1520                ('date_hm',
+1521                 '%Y-%m-%dT%H:%M',
+1522                 '{year:d}-{mon:02d}-{day:02d}T{hour:02d}:{min:02d}'),
+1523                ('date',
+1524                 '%Y-%m-%d',
+1525                 '{year:d}-{mon:02d}-{day:02d}'))
+1526 
+1527     # See TimeISO for explanation
+1528     fast_parser_pars = dict(
+1529         delims=(0, ord('-'), ord('-'), ord('T'), ord(':'), ord(':'), ord('.')),
+1530         starts=(0, 4, 7, 10, 13, 16, 19),
+1531         stops=(3, 6, 9, 12, 15, 18, -1),
+1532         # Break allowed *before*
+1533         #              y  m  d  h  m  s  f
+1534         break_allowed=(0, 0, 0, 1, 0, 1, 1),
+1535         has_day_of_year=0)
+1536 
+1537 
+1538 class TimeYearDayTime(TimeISO):
+1539     """
+1540     Year, day-of-year and time as "YYYY:DOY:HH:MM:SS.sss...".
+1541     The day-of-year (DOY) goes from 001 to 365 (366 in leap years).
+1542     For example, 2000:001:00:00:00.000 is midnight on January 1, 2000.
+1543 
+1544     The allowed subformats are:
+1545 
+1546     - 'date_hms': date + hours, mins, secs (and optional fractional secs)
+1547     - 'date_hm': date + hours, mins
+1548     - 'date': date
+1549     """
+1550 
+1551     name = 'yday'
+1552     subfmts = (('date_hms',
+1553                 '%Y:%j:%H:%M:%S',
+1554                 '{year:d}:{yday:03d}:{hour:02d}:{min:02d}:{sec:02d}'),
+1555                ('date_hm',
+1556                 '%Y:%j:%H:%M',
+1557                 '{year:d}:{yday:03d}:{hour:02d}:{min:02d}'),
+1558                ('date',
+1559                 '%Y:%j',
+1560                 '{year:d}:{yday:03d}'))
+1561 
+1562     # Define positions and starting delimiter for year, month, day, hour,
+1563     # minute, seconds components of an ISO time. This is used by the fast
+1564     # C-parser parse_ymdhms_times()
+1565     #
+1566     #  "2000:123:13:14:15.678"
+1567     #   012345678901234567890
+1568     #   yyyy:ddd:hh:mm:ss.fff
+1569     # Parsed as ('yyyy', ':ddd', ':hh', ':mm', ':ss', '.fff')
+1570     #
+1571     # delims: character at corresponding `starts` position (0 => no character)
+1572     # starts: position where component starts (including delimiter if present)
+1573     # stops: position where component ends (-1 => continue to end of string)
+1574 
+1575     fast_parser_pars = dict(
+1576         delims=(0, 0, ord(':'), ord(':'), ord(':'), ord(':'), ord('.')),
+1577         starts=(0, -1, 4, 8, 11, 14, 17),
+1578         stops=(3, -1, 7, 10, 13, 16, -1),
+1579         # Break allowed before:
+1580         #              y  m  d  h  m  s  f
+1581         break_allowed=(0, 0, 0, 1, 0, 1, 1),
+1582         has_day_of_year=1)
+1583 
+1584 
+1585 class TimeDatetime64(TimeISOT):
+1586     name = 'datetime64'
+1587 
+1588     def _check_val_type(self, val1, val2):
+1589         if not val1.dtype.kind == 'M':
+1590             if val1.size > 0:
+1591                 raise TypeError('Input values for {} class must be '
+1592                                 'datetime64 objects'.format(self.name))
+1593             else:
+1594                 val1 = np.array([], 'datetime64[D]')
+1595         if val2 is not None:
+1596             raise ValueError(
+1597                 f'{self.name} objects do not accept a val2 but you provided {val2}')
+1598 
+1599         return val1, None
+1600 
+1601     def set_jds(self, val1, val2):
+1602         # If there are any masked values in the ``val1`` datetime64 array
+1603         # ('NaT') then stub them with a valid date so downstream parse_string
+1604         # will work.  The value under the mask is arbitrary but a "modern" date
+1605         # is good.
+1606         mask = np.isnat(val1)
+1607         masked = np.any(mask)
+1608         if masked:
+1609             val1 = val1.copy()
+1610             val1[mask] = '2000'
+1611 
+1612         # Make sure M(onth) and Y(ear) dates will parse and convert to bytestring
+1613         if val1.dtype.name in ['datetime64[M]', 'datetime64[Y]']:
+1614             val1 = val1.astype('datetime64[D]')
+1615         val1 = val1.astype('S')
+1616 
+1617         # Standard ISO string parsing now
+1618         super().set_jds(val1, val2)
+1619 
+1620         # Finally apply mask if necessary
+1621         if masked:
+1622             self.jd2[mask] = np.nan
+1623 
+1624     @property
+1625     def value(self):
+1626         precision = self.precision
+1627         self.precision = 9
+1628         ret = super().value
+1629         self.precision = precision
+1630         return ret.astype('datetime64')
+1631 
+1632 
+1633 class TimeFITS(TimeString):
+1634     """
+1635     FITS format: "[±Y]YYYY-MM-DD[THH:MM:SS[.sss]]".
+1636 
+1637     ISOT but can give signed five-digit year (mostly for negative years);
+1638 
+1639     The allowed subformats are:
+1640 
+1641     - 'date_hms': date + hours, mins, secs (and optional fractional secs)
+1642     - 'date': date
+1643     - 'longdate_hms': as 'date_hms', but with signed 5-digit year
+1644     - 'longdate': as 'date', but with signed 5-digit year
+1645 
+1646     See Rots et al., 2015, A&A 574:A36 (arXiv:1409.7583).
+1647     """
+1648     name = 'fits'
+1649     subfmts = (
+1650         ('date_hms',
+1651          (r'(?P<year>\d{4})-(?P<mon>\d\d)-(?P<mday>\d\d)T'
+1652           r'(?P<hour>\d\d):(?P<min>\d\d):(?P<sec>\d\d(\.\d*)?)'),
+1653          '{year:04d}-{mon:02d}-{day:02d}T{hour:02d}:{min:02d}:{sec:02d}'),
+1654         ('date',
+1655          r'(?P<year>\d{4})-(?P<mon>\d\d)-(?P<mday>\d\d)',
+1656          '{year:04d}-{mon:02d}-{day:02d}'),
+1657         ('longdate_hms',
+1658          (r'(?P<year>[+-]\d{5})-(?P<mon>\d\d)-(?P<mday>\d\d)T'
+1659           r'(?P<hour>\d\d):(?P<min>\d\d):(?P<sec>\d\d(\.\d*)?)'),
+1660          '{year:+06d}-{mon:02d}-{day:02d}T{hour:02d}:{min:02d}:{sec:02d}'),
+1661         ('longdate',
+1662          r'(?P<year>[+-]\d{5})-(?P<mon>\d\d)-(?P<mday>\d\d)',
+1663          '{year:+06d}-{mon:02d}-{day:02d}'))
+1664     # Add the regex that parses the scale and possible realization.
+1665     # Support for this is deprecated.  Read old style but no longer write
+1666     # in this style.
+1667     subfmts = tuple(
+1668         (subfmt[0],
+1669          subfmt[1] + r'(\((?P<scale>\w+)(\((?P<realization>\w+)\))?\))?',
+1670          subfmt[2]) for subfmt in subfmts)
+1671 
+1672     def parse_string(self, timestr, subfmts):
+1673         """Read time and deprecated scale if present"""
+1674         # Try parsing with any of the allowed sub-formats.
+1675         for _, regex, _ in subfmts:
+1676             tm = re.match(regex, timestr)
+1677             if tm:
+1678                 break
+1679         else:
+1680             raise ValueError(f'Time {timestr} does not match {self.name} format')
+1681         tm = tm.groupdict()
+1682         # Scale and realization are deprecated and strings in this form
+1683         # are no longer created.  We issue a warning but still use the value.
+1684         if tm['scale'] is not None:
+1685             warnings.warn("FITS time strings should no longer have embedded time scale.",
+1686                           AstropyDeprecationWarning)
+1687             # If a scale was given, translate from a possible deprecated
+1688             # timescale identifier to the scale used by Time.
+1689             fits_scale = tm['scale'].upper()
+1690             scale = FITS_DEPRECATED_SCALES.get(fits_scale, fits_scale.lower())
+1691             if scale not in TIME_SCALES:
+1692                 raise ValueError("Scale {!r} is not in the allowed scales {}"
+1693                                  .format(scale, sorted(TIME_SCALES)))
+1694             # If no scale was given in the initialiser, set the scale to
+1695             # that given in the string.  Realization is ignored
+1696             # and is only supported to allow old-style strings to be
+1697             # parsed.
+1698             if self._scale is None:
+1699                 self._scale = scale
+1700             if scale != self.scale:
+1701                 raise ValueError("Input strings for {} class must all "
+1702                                  "have consistent time scales."
+1703                                  .format(self.name))
+1704         return [int(tm['year']), int(tm['mon']), int(tm['mday']),
+1705                 int(tm.get('hour', 0)), int(tm.get('min', 0)),
+1706                 float(tm.get('sec', 0.))]
+1707 
+1708     @property
+1709     def value(self):
+1710         """Convert times to strings, using signed 5 digit if necessary."""
+1711         if 'long' not in self.out_subfmt:
+1712             # If we have times before year 0 or after year 9999, we can
+1713             # output only in a "long" format, using signed 5-digit years.
+1714             jd = self.jd1 + self.jd2
+1715             if jd.size and (jd.min() < 1721425.5 or jd.max() >= 5373484.5):
+1716                 self.out_subfmt = 'long' + self.out_subfmt
+1717         return super().value
+1718 
+1719 
+1720 class TimeEpochDate(TimeNumeric):
+1721     """
+1722     Base class for support floating point Besselian and Julian epoch dates
+1723     """
+1724     _default_scale = 'tt'  # As of astropy 3.2, this is no longer 'utc'.
+1725 
+1726     def set_jds(self, val1, val2):
+1727         self._check_scale(self._scale)  # validate scale.
+1728         epoch_to_jd = getattr(erfa, self.epoch_to_jd)
+1729         jd1, jd2 = epoch_to_jd(val1 + val2)
+1730         self.jd1, self.jd2 = day_frac(jd1, jd2)
+1731 
+1732     def to_value(self, **kwargs):
+1733         jd_to_epoch = getattr(erfa, self.jd_to_epoch)
+1734         value = jd_to_epoch(self.jd1, self.jd2)
+1735         return super().to_value(jd1=value, jd2=np.float64(0.0), **kwargs)
+1736 
+1737     value = property(to_value)
+1738 
+1739 
+1740 class TimeBesselianEpoch(TimeEpochDate):
+1741     """Besselian Epoch year as floating point value(s) like 1950.0"""
+1742     name = 'byear'
+1743     epoch_to_jd = 'epb2jd'
+1744     jd_to_epoch = 'epb'
+1745 
+1746     def _check_val_type(self, val1, val2):
+1747         """Input value validation, typically overridden by derived classes"""
+1748         if hasattr(val1, 'to') and hasattr(val1, 'unit'):
+1749             raise ValueError("Cannot use Quantities for 'byear' format, "
+1750                              "as the interpretation would be ambiguous. "
+1751                              "Use float with Besselian year instead. ")
+1752         # FIXME: is val2 really okay here?
+1753         return super()._check_val_type(val1, val2)
+1754 
+1755 
+1756 class TimeJulianEpoch(TimeEpochDate):
+1757     """Julian Epoch year as floating point value(s) like 2000.0"""
+1758     name = 'jyear'
+1759     unit = erfa.DJY  # 365.25, the Julian year, for conversion to quantities
+1760     epoch_to_jd = 'epj2jd'
+1761     jd_to_epoch = 'epj'
+1762 
+1763 
+1764 class TimeEpochDateString(TimeString):
+1765     """
+1766     Base class to support string Besselian and Julian epoch dates
+1767     such as 'B1950.0' or 'J2000.0' respectively.
+1768     """
+1769     _default_scale = 'tt'  # As of astropy 3.2, this is no longer 'utc'.
+1770 
+1771     def set_jds(self, val1, val2):
+1772         epoch_prefix = self.epoch_prefix
+1773         # Be liberal in what we accept: convert bytes to ascii.
+1774         to_string = (str if val1.dtype.kind == 'U' else
+1775                      lambda x: str(x.item(), encoding='ascii'))
+1776         iterator = np.nditer([val1, None], op_dtypes=[val1.dtype, np.double],
+1777                              flags=['zerosize_ok'])
+1778         for val, years in iterator:
+1779             try:
+1780                 time_str = to_string(val)
+1781                 epoch_type, year_str = time_str[0], time_str[1:]
+1782                 year = float(year_str)
+1783                 if epoch_type.upper() != epoch_prefix:
+1784                     raise ValueError
+1785             except (IndexError, ValueError, UnicodeEncodeError):
+1786                 raise ValueError(f'Time {val} does not match {self.name} format')
+1787             else:
+1788                 years[...] = year
+1789 
+1790         self._check_scale(self._scale)  # validate scale.
+1791         epoch_to_jd = getattr(erfa, self.epoch_to_jd)
+1792         jd1, jd2 = epoch_to_jd(iterator.operands[-1])
+1793         self.jd1, self.jd2 = day_frac(jd1, jd2)
+1794 
+1795     @property
+1796     def value(self):
+1797         jd_to_epoch = getattr(erfa, self.jd_to_epoch)
+1798         years = jd_to_epoch(self.jd1, self.jd2)
+1799         # Use old-style format since it is a factor of 2 faster
+1800         str_fmt = self.epoch_prefix + '%.' + str(self.precision) + 'f'
+1801         outs = [str_fmt % year for year in years.flat]
+1802         return np.array(outs).reshape(self.jd1.shape)
+1803 
+1804 
+1805 class TimeBesselianEpochString(TimeEpochDateString):
+1806     """Besselian Epoch year as string value(s) like 'B1950.0'"""
+1807     name = 'byear_str'
+1808     epoch_to_jd = 'epb2jd'
+1809     jd_to_epoch = 'epb'
+1810     epoch_prefix = 'B'
+1811 
+1812 
+1813 class TimeJulianEpochString(TimeEpochDateString):
+1814     """Julian Epoch year as string value(s) like 'J2000.0'"""
+1815     name = 'jyear_str'
+1816     epoch_to_jd = 'epj2jd'
+1817     jd_to_epoch = 'epj'
+1818     epoch_prefix = 'J'
+1819 
+1820 
+1821 class TimeDeltaFormat(TimeFormat):
+1822     """Base class for time delta representations"""
+1823 
+1824     _registry = TIME_DELTA_FORMATS
+1825 
+1826     def _check_scale(self, scale):
+1827         """
+1828         Check that the scale is in the allowed list of scales, or is `None`
+1829         """
+1830         if scale is not None and scale not in TIME_DELTA_SCALES:
+1831             raise ScaleValueError("Scale value '{}' not in "
+1832                                   "allowed values {}"
+1833                                   .format(scale, TIME_DELTA_SCALES))
+1834 
+1835         return scale
+1836 
+1837 
+1838 class TimeDeltaNumeric(TimeDeltaFormat, TimeNumeric):
+1839 
+1840     def set_jds(self, val1, val2):
+1841         self._check_scale(self._scale)  # Validate scale.
+1842         self.jd1, self.jd2 = day_frac(val1, val2, divisor=1. / self.unit)
+1843 
+1844     def to_value(self, **kwargs):
+1845         # Note that 1/unit is always exactly representable, so the
+1846         # following multiplications are exact.
+1847         factor = 1. / self.unit
+1848         jd1 = self.jd1 * factor
+1849         jd2 = self.jd2 * factor
+1850         return super().to_value(jd1=jd1, jd2=jd2, **kwargs)
+1851 
+1852     value = property(to_value)
+1853 
+1854 
+1855 class TimeDeltaSec(TimeDeltaNumeric):
+1856     """Time delta in SI seconds"""
+1857     name = 'sec'
+1858     unit = 1. / erfa.DAYSEC  # for quantity input
+1859 
+1860 
+1861 class TimeDeltaJD(TimeDeltaNumeric):
+1862     """Time delta in Julian days (86400 SI seconds)"""
+1863     name = 'jd'
+1864     unit = 1.
+1865 
+1866 
+1867 class TimeDeltaDatetime(TimeDeltaFormat, TimeUnique):
+1868     """Time delta in datetime.timedelta"""
+1869     name = 'datetime'
+1870 
+1871     def _check_val_type(self, val1, val2):
+1872         if not all(isinstance(val, datetime.timedelta) for val in val1.flat):
+1873             raise TypeError('Input values for {} class must be '
+1874                             'datetime.timedelta objects'.format(self.name))
+1875         if val2 is not None:
+1876             raise ValueError(
+1877                 f'{self.name} objects do not accept a val2 but you provided {val2}')
+1878         return val1, None
+1879 
+1880     def set_jds(self, val1, val2):
+1881         self._check_scale(self._scale)  # Validate scale.
+1882         iterator = np.nditer([val1, None, None],
+1883                              flags=['refs_ok', 'zerosize_ok'],
+1884                              op_dtypes=[None, np.double, np.double])
+1885 
+1886         day = datetime.timedelta(days=1)
+1887         for val, jd1, jd2 in iterator:
+1888             jd1[...], other = divmod(val.item(), day)
+1889             jd2[...] = other / day
+1890 
+1891         self.jd1, self.jd2 = day_frac(iterator.operands[-2],
+1892                                       iterator.operands[-1])
+1893 
+1894     @property
+1895     def value(self):
+1896         iterator = np.nditer([self.jd1, self.jd2, None],
+1897                              flags=['refs_ok', 'zerosize_ok'],
+1898                              op_dtypes=[None, None, object])
+1899 
+1900         for jd1, jd2, out in iterator:
+1901             jd1_, jd2_ = day_frac(jd1, jd2)
+1902             out[...] = datetime.timedelta(days=jd1_,
+1903                                           microseconds=jd2_ * 86400 * 1e6)
+1904 
+1905         return self.mask_if_needed(iterator.operands[-1])
+1906 
+1907 
+1908 def _validate_jd_for_storage(jd):
+1909     if isinstance(jd, (float, int)):
+1910         return np.array(jd, dtype=np.float_)
+1911     if (isinstance(jd, np.generic)
+1912         and (jd.dtype.kind == 'f' and jd.dtype.itemsize <= 8
+1913              or jd.dtype.kind in 'iu')):
+1914         return np.array(jd, dtype=np.float_)
+1915     elif (isinstance(jd, np.ndarray)
+1916           and jd.dtype.kind == 'f'
+1917           and jd.dtype.itemsize == 8):
+1918         return jd
+1919     else:
+1920         raise TypeError(
+1921             f"JD values must be arrays (possibly zero-dimensional) "
+1922             f"of floats but we got {jd!r} of type {type(jd)}")
+1923 
+1924 
+1925 def _broadcast_writeable(jd1, jd2):
+1926     if jd1.shape == jd2.shape:
+1927         return jd1, jd2
+1928     # When using broadcast_arrays, *both* are flagged with
+1929     # warn-on-write, even the one that wasn't modified, and
+1930     # require "C" only clears the flag if it actually copied
+1931     # anything.
+1932     shape = np.broadcast(jd1, jd2).shape
+1933     if jd1.shape == shape:
+1934         s_jd1 = jd1
+1935     else:
+1936         s_jd1 = np.require(np.broadcast_to(jd1, shape),
+1937                            requirements=["C", "W"])
+1938     if jd2.shape == shape:
+1939         s_jd2 = jd2
+1940     else:
+1941         s_jd2 = np.require(np.broadcast_to(jd2, shape),
+1942                            requirements=["C", "W"])
+1943     return s_jd1, s_jd2
+1944 
+1945 
+1946 # Import symbols from core.py that are used in this module. This succeeds
+1947 # because __init__.py imports format.py just before core.py.
+1948 from .core import Time, TIME_SCALES, TIME_DELTA_SCALES, ScaleValueError  # noqa
+1949 
+[end of astropy/time/formats.py]
+[start of docs/conf.py]
+1 # -*- coding: utf-8 -*-
+2 # Licensed under a 3-clause BSD style license - see LICENSE.rst
+3 #
+4 # Astropy documentation build configuration file.
+5 #
+6 # This file is execfile()d with the current directory set to its containing dir.
+7 #
+8 # Note that not all possible configuration values are present in this file.
+9 #
+10 # All configuration values have a default. Some values are defined in
+11 # the global Astropy configuration which is loaded here before anything else.
+12 
+13 # If extensions (or modules to document with autodoc) are in another directory,
+14 # add these directories to sys.path here. If the directory is relative to the
+15 # documentation root, use os.path.abspath to make it absolute, like shown here.
+16 # sys.path.insert(0, os.path.abspath('..'))
+17 # IMPORTANT: the above commented section was generated by sphinx-quickstart, but
+18 # is *NOT* appropriate for astropy or Astropy affiliated packages. It is left
+19 # commented out with this explanation to make it clear why this should not be
+20 # done. If the sys.path entry above is added, when the astropy.sphinx.conf
+21 # import occurs, it will import the *source* version of astropy instead of the
+22 # version installed (if invoked as "make html" or directly with sphinx), or the
+23 # version in the build directory.
+24 # Thus, any C-extensions that are needed to build the documentation will *not*
+25 # be accessible, and the documentation will not build correctly.
+26 # See sphinx_astropy.conf for which values are set there.
+27 
+28 import os
+29 import sys
+30 import configparser
+31 from datetime import datetime
+32 from importlib import metadata
+33 
+34 import doctest
+35 from packaging.requirements import Requirement
+36 from packaging.specifiers import SpecifierSet
+37 
+38 # -- Check for missing dependencies -------------------------------------------
+39 missing_requirements = {}
+40 for line in metadata.requires('astropy'):
+41     if 'extra == "docs"' in line:
+42         req = Requirement(line.split(';')[0])
+43         req_package = req.name.lower()
+44         req_specifier = str(req.specifier)
+45 
+46         try:
+47             version = metadata.version(req_package)
+48         except metadata.PackageNotFoundError:
+49             missing_requirements[req_package] = req_specifier
+50 
+51         if version not in SpecifierSet(req_specifier, prereleases=True):
+52             missing_requirements[req_package] = req_specifier
+53 
+54 if missing_requirements:
+55     print('The following packages could not be found and are required to '
+56           'build the documentation:')
+57     for key, val in missing_requirements.items():
+58         print(f'    * {key} {val}')
+59     print('Please install the "docs" requirements.')
+60     sys.exit(1)
+61 
+62 from sphinx_astropy.conf.v1 import *  # noqa
+63 
+64 # -- Plot configuration -------------------------------------------------------
+65 plot_rcparams = {}
+66 plot_rcparams['figure.figsize'] = (6, 6)
+67 plot_rcparams['savefig.facecolor'] = 'none'
+68 plot_rcparams['savefig.bbox'] = 'tight'
+69 plot_rcparams['axes.labelsize'] = 'large'
+70 plot_rcparams['figure.subplot.hspace'] = 0.5
+71 
+72 plot_apply_rcparams = True
+73 plot_html_show_source_link = False
+74 plot_formats = ['png', 'svg', 'pdf']
+75 # Don't use the default - which includes a numpy and matplotlib import
+76 plot_pre_code = ""
+77 
+78 # -- General configuration ----------------------------------------------------
+79 
+80 # If your documentation needs a minimal Sphinx version, state it here.
+81 needs_sphinx = '1.7'
+82 
+83 # To perform a Sphinx version check that needs to be more specific than
+84 # major.minor, call `check_sphinx_version("X.Y.Z")` here.
+85 check_sphinx_version("1.2.1")  # noqa: F405
+86 
+87 # The intersphinx_mapping in sphinx_astropy.sphinx refers to astropy for
+88 # the benefit of other packages who want to refer to objects in the
+89 # astropy core.  However, we don't want to cyclically reference astropy in its
+90 # own build so we remove it here.
+91 del intersphinx_mapping['astropy']  # noqa: F405
+92 
+93 # add any custom intersphinx for astropy
+94 intersphinx_mapping['astropy-dev'] = ('https://docs.astropy.org/en/latest/', None)  # noqa: F405
+95 intersphinx_mapping['pyerfa'] = ('https://pyerfa.readthedocs.io/en/stable/', None)  # noqa: F405
+96 intersphinx_mapping['pytest'] = ('https://docs.pytest.org/en/stable/', None)  # noqa: F405
+97 intersphinx_mapping['ipython'] = ('https://ipython.readthedocs.io/en/stable/', None)  # noqa: F405
+98 intersphinx_mapping['pandas'] = ('https://pandas.pydata.org/pandas-docs/stable/', None)  # noqa: F405, E501
+99 intersphinx_mapping['sphinx_automodapi'] = ('https://sphinx-automodapi.readthedocs.io/en/stable/', None)  # noqa: F405, E501
+100 intersphinx_mapping['packagetemplate'] = ('https://docs.astropy.org/projects/package-template/en/latest/', None)  # noqa: F405, E501
+101 intersphinx_mapping['h5py'] = ('https://docs.h5py.org/en/stable/', None)  # noqa: F405
+102 intersphinx_mapping['asdf-astropy'] = ('https://asdf-astropy.readthedocs.io/en/latest/', None)  # noqa: F405
+103 
+104 # List of patterns, relative to source directory, that match files and
+105 # directories to ignore when looking for source files.
+106 exclude_patterns.append('_templates')  # noqa: F405
+107 exclude_patterns.append('changes')  # noqa: F405
+108 exclude_patterns.append('_pkgtemplate.rst')  # noqa: F405
+109 exclude_patterns.append('**/*.inc.rst')  # .inc.rst mean *include* files, don't have sphinx process them  # noqa: F405, E501
+110 
+111 # Add any paths that contain templates here, relative to this directory.
+112 if 'templates_path' not in locals():  # in case parent conf.py defines it
+113     templates_path = []
+114 templates_path.append('_templates')
+115 
+116 
+117 extensions += ["sphinx_changelog"]  # noqa: F405
+118 
+119 # Grab minversion from setup.cfg
+120 setup_cfg = configparser.ConfigParser()
+121 setup_cfg.read(os.path.join(os.path.pardir, 'setup.cfg'))
+122 __minimum_python_version__ = setup_cfg['options']['python_requires'].replace('>=', '')
+123 project = u'Astropy'
+124 
+125 min_versions = {}
+126 for line in metadata.requires('astropy'):
+127     req = Requirement(line.split(';')[0])
+128     min_versions[req.name.lower()] = str(req.specifier)
+129 
+130 
+131 # This is added to the end of RST files - a good place to put substitutions to
+132 # be used globally.
+133 with open("common_links.txt", "r") as cl:
+134     rst_epilog += cl.read().format(minimum_python=__minimum_python_version__,
+135                                    **min_versions)
+136 
+137 # Manually register doctest options since matplotlib 3.5 messed up allowing them
+138 # from pytest-doctestplus
+139 IGNORE_OUTPUT = doctest.register_optionflag('IGNORE_OUTPUT')
+140 REMOTE_DATA = doctest.register_optionflag('REMOTE_DATA')
+141 FLOAT_CMP = doctest.register_optionflag('FLOAT_CMP')
+142 
+143 # Whether to create cross-references for the parameter types in the
+144 # Parameters, Other Parameters, Returns and Yields sections of the docstring.
+145 numpydoc_xref_param_type = True
+146 
+147 # Words not to cross-reference. Most likely, these are common words used in
+148 # parameter type descriptions that may be confused for classes of the same
+149 # name. The base set comes from sphinx-astropy. We add more here.
+150 numpydoc_xref_ignore.update({
+151     "mixin",
+152     "Any",  # aka something that would be annotated with `typing.Any`
+153     # needed in subclassing numpy  # TODO! revisit
+154     "Arguments", "Path",
+155     # TODO! not need to ignore.
+156     "flag", "bits",
+157 })
+158 
+159 # Mappings to fully qualified paths (or correct ReST references) for the
+160 # aliases/shortcuts used when specifying the types of parameters.
+161 # Numpy provides some defaults
+162 # https://github.com/numpy/numpydoc/blob/b352cd7635f2ea7748722f410a31f937d92545cc/numpydoc/xref.py#L62-L94
+163 # and a base set comes from sphinx-astropy.
+164 # so here we mostly need to define Astropy-specific x-refs
+165 numpydoc_xref_aliases.update({
+166     # python & adjacent
+167     "Any": "`~typing.Any`",
+168     "file-like": ":term:`python:file-like object`",
+169     "file": ":term:`python:file object`",
+170     "path-like": ":term:`python:path-like object`",
+171     "module": ":term:`python:module`",
+172     "buffer-like": ":term:buffer-like",
+173     "hashable": ":term:`python:hashable`",
+174     # for matplotlib
+175     "color": ":term:`color`",
+176     # for numpy
+177     "ints": ":class:`python:int`",
+178     # for astropy
+179     "number": ":term:`number`",
+180     "Representation": ":class:`~astropy.coordinates.BaseRepresentation`",
+181     "writable": ":term:`writable file-like object`",
+182     "readable": ":term:`readable file-like object`",
+183     "BaseHDU": ":doc:`HDU </io/fits/api/hdus>`"
+184 })
+185 # Add from sphinx-astropy 1) glossary aliases 2) physical types.
+186 numpydoc_xref_aliases.update(numpydoc_xref_astropy_aliases)
+187 
+188 
+189 # -- Project information ------------------------------------------------------
+190 
+191 author = u'The Astropy Developers'
+192 copyright = f'2011–{datetime.utcnow().year}, ' + author
+193 
+194 # The version info for the project you're documenting, acts as replacement for
+195 # |version| and |release|, also used in various other places throughout the
+196 # built documents.
+197 
+198 # The full version, including alpha/beta/rc tags.
+199 release = metadata.version(project)
+200 # The short X.Y version.
+201 version = '.'.join(release.split('.')[:2])
+202 
+203 # Only include dev docs in dev version.
+204 dev = 'dev' in release
+205 if not dev:
+206     exclude_patterns.append('development/*')  # noqa: F405
+207     exclude_patterns.append('testhelpers.rst')  # noqa: F405
+208 
+209 # -- Options for the module index ---------------------------------------------
+210 
+211 modindex_common_prefix = ['astropy.']
+212 
+213 
+214 # -- Options for HTML output ---------------------------------------------------
+215 
+216 # A NOTE ON HTML THEMES
+217 #
+218 # The global astropy configuration uses a custom theme,
+219 # 'bootstrap-astropy', which is installed along with astropy. The
+220 # theme has options for controlling the text of the logo in the upper
+221 # left corner. This is how you would specify the options in order to
+222 # override the theme defaults (The following options *are* the
+223 # defaults, so we do not actually need to set them here.)
+224 
+225 # html_theme_options = {
+226 #    'logotext1': 'astro',  # white,  semi-bold
+227 #    'logotext2': 'py',     # orange, light
+228 #    'logotext3': ':docs'   # white,  light
+229 #    }
+230 
+231 # A different theme can be used, or other parts of this theme can be
+232 # modified, by overriding some of the variables set in the global
+233 # configuration. The variables set in the global configuration are
+234 # listed below, commented out.
+235 
+236 # Add any paths that contain custom themes here, relative to this directory.
+237 # To use a different custom theme, add the directory containing the theme.
+238 # html_theme_path = []
+239 
+240 # The theme to use for HTML and HTML Help pages.  See the documentation for
+241 # a list of builtin themes. To override the custom theme, set this to the
+242 # name of a builtin theme or the name of a custom theme in html_theme_path.
+243 # html_theme = None
+244 
+245 # Custom sidebar templates, maps document names to template names.
+246 # html_sidebars = {}
+247 
+248 # The name of an image file (within the static path) to use as favicon of the
+249 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
+250 # pixels large.
+251 # html_favicon = ''
+252 
+253 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+254 # using the given strftime format.
+255 # html_last_updated_fmt = ''
+256 
+257 # The name for this set of Sphinx documents.  If None, it defaults to
+258 # "<project> v<release> documentation".
+259 html_title = f'{project} v{release}'
+260 
+261 # Output file base name for HTML help builder.
+262 htmlhelp_basename = project + 'doc'
+263 
+264 # A dictionary of values to pass into the template engine’s context for all pages.
+265 html_context = {
+266     'to_be_indexed': ['stable', 'latest'],
+267     'is_development': dev
+268 }
+269 
+270 # -- Options for LaTeX output --------------------------------------------------
+271 
+272 # Grouping the document tree into LaTeX files. List of tuples
+273 # (source start file, target name, title, author, documentclass [howto/manual]).
+274 latex_documents = [('index', project + '.tex', project + u' Documentation',
+275                     author, 'manual')]
+276 
+277 latex_logo = '_static/astropy_logo.pdf'
+278 
+279 
+280 # -- Options for manual page output --------------------------------------------
+281 
+282 # One entry per manual page. List of tuples
+283 # (source start file, name, description, authors, manual section).
+284 man_pages = [('index', project.lower(), project + u' Documentation',
+285               [author], 1)]
+286 
+287 # Setting this URL is requited by sphinx-astropy
+288 github_issues_url = 'https://github.com/astropy/astropy/issues/'
+289 edit_on_github_branch = 'main'
+290 
+291 # Enable nitpicky mode - which ensures that all references in the docs
+292 # resolve.
+293 
+294 nitpicky = True
+295 # This is not used. See docs/nitpick-exceptions file for the actual listing.
+296 nitpick_ignore = []
+297 
+298 for line in open('nitpick-exceptions'):
+299     if line.strip() == "" or line.startswith("#"):
+300         continue
+301     dtype, target = line.split(None, 1)
+302     target = target.strip()
+303     nitpick_ignore.append((dtype, target))
+304 
+305 # -- Options for the Sphinx gallery -------------------------------------------
+306 
+307 try:
+308     import warnings
+309 
+310     import sphinx_gallery  # noqa: F401
+311     extensions += ["sphinx_gallery.gen_gallery"]  # noqa: F405
+312 
+313     sphinx_gallery_conf = {
+314         'backreferences_dir': 'generated/modules',  # path to store the module using example template  # noqa: E501
+315         'filename_pattern': '^((?!skip_).)*$',  # execute all examples except those that start with "skip_"  # noqa: E501
+316         'examples_dirs': f'..{os.sep}examples',  # path to the examples scripts
+317         'gallery_dirs': 'generated/examples',  # path to save gallery generated examples
+318         'reference_url': {
+319             'astropy': None,
+320             'matplotlib': 'https://matplotlib.org/stable/',
+321             'numpy': 'https://numpy.org/doc/stable/',
+322         },
+323         'abort_on_example_error': True
+324     }
+325 
+326     # Filter out backend-related warnings as described in
+327     # https://github.com/sphinx-gallery/sphinx-gallery/pull/564
+328     warnings.filterwarnings("ignore", category=UserWarning,
+329                             message='Matplotlib is currently using agg, which is a'
+330                                     ' non-GUI backend, so cannot show the figure.')
+331 
+332 except ImportError:
+333     sphinx_gallery = None
+334 
+335 
+336 # -- Options for linkcheck output -------------------------------------------
+337 linkcheck_retry = 5
+338 linkcheck_ignore = ['https://journals.aas.org/manuscript-preparation/',
+339                     'https://maia.usno.navy.mil/',
+340                     'https://www.usno.navy.mil/USNO/time/gps/usno-gps-time-transfer',
+341                     'https://aa.usno.navy.mil/publications/docs/Circular_179.php',
+342                     'http://data.astropy.org',
+343                     'https://doi.org/10.1017/S0251107X00002406',  # internal server error
+344                     'https://doi.org/10.1017/pasa.2013.31',  # internal server error
+345                     r'https://github\.com/astropy/astropy/(?:issues|pull)/\d+']
+346 linkcheck_timeout = 180
+347 linkcheck_anchors = False
+348 
+349 # Add any extra paths that contain custom files (such as robots.txt or
+350 # .htaccess) here, relative to this directory. These files are copied
+351 # directly to the root of the documentation.
+352 html_extra_path = ['robots.txt']
+353 
+354 
+355 def rstjinja(app, docname, source):
+356     """Render pages as a jinja template to hide/show dev docs. """
+357     # Make sure we're outputting HTML
+358     if app.builder.format != 'html':
+359         return
+360     files_to_render = ["index", "install"]
+361     if docname in files_to_render:
+362         print(f"Jinja rendering {docname}")
+363         rendered = app.builder.templates.render_string(
+364             source[0], app.config.html_context)
+365         source[0] = rendered
+366 
+367 
+368 def resolve_astropy_and_dev_reference(app, env, node, contnode):
+369     """
+370     Reference targets for ``astropy:`` and ``astropy-dev:`` are special cases.
+371 
+372     Documentation links in astropy can be set up as intersphinx links so that
+373     affiliate packages do not have to override the docstrings when building
+374     the docs.
+375 
+376     If we are building the development docs it is a local ref targeting the
+377     label ``astropy-dev:<label>``, but for stable docs it should be an
+378     intersphinx resolution to the development docs.
+379 
+380     See https://github.com/astropy/astropy/issues/11366
+381     """
+382     # should the node be processed?
+383     reftarget = node.get('reftarget')  # str or None
+384     if str(reftarget).startswith('astropy:'):
+385         # This allows Astropy to use intersphinx links to itself and have
+386         # them resolve to local links. Downstream packages will see intersphinx.
+387         # TODO! deprecate this if sphinx-doc/sphinx/issues/9169 is implemented.
+388         process, replace = True, 'astropy:'
+389     elif dev and str(reftarget).startswith('astropy-dev:'):
+390         process, replace = True, 'astropy-dev:'
+391     else:
+392         process, replace = False, ''
+393 
+394     # make link local
+395     if process:
+396         reftype = node.get('reftype')
+397         refdoc = node.get('refdoc', app.env.docname)
+398         # convert astropy intersphinx targets to local links.
+399         # there are a few types of intersphinx link patters, as described in
+400         # https://docs.readthedocs.io/en/stable/guides/intersphinx.html
+401         reftarget = reftarget.replace(replace, '')
+402         if reftype == "doc":  # also need to replace the doc link
+403             node.replace_attr("reftarget", reftarget)
+404         # Delegate to the ref node's original domain/target (typically :ref:)
+405         try:
+406             domain = app.env.domains[node['refdomain']]
+407             return domain.resolve_xref(app.env, refdoc, app.builder,
+408                                        reftype, reftarget, node, contnode)
+409         except Exception:
+410             pass
+411 
+412         # Otherwise return None which should delegate to intersphinx
+413 
+414 
+415 def setup(app):
+416     if sphinx_gallery is None:
+417         msg = ('The sphinx_gallery extension is not installed, so the '
+418                'gallery will not be built.  You will probably see '
+419                'additional warnings about undefined references due '
+420                'to this.')
+421         try:
+422             app.warn(msg)
+423         except AttributeError:
+424             # Sphinx 1.6+
+425             from sphinx.util import logging
+426             logger = logging.getLogger(__name__)
+427             logger.warning(msg)
+428 
+429     # Generate the page from Jinja template
+430     app.connect("source-read", rstjinja)
+431     # Set this to higher priority than intersphinx; this way when building
+432     # dev docs astropy-dev: targets will go to the local docs instead of the
+433     # intersphinx mapping
+434     app.connect("missing-reference", resolve_astropy_and_dev_reference,
+435                 priority=400)
+436 
+[end of docs/conf.py]
+</code>
+I need you to solve this issue by generating a single patch file that I can apply directly to this repository using git apply. Please respond with a single patch file in the following format.
+<patch>
+--- a/file.py
++++ b/file.py
+@@ -1,27 +1,35 @@
+ def euclidean(a, b):
+-    while b:
+-        a, b = b, a % b
+-    return a
++    if b == 0:
++        return a
++    return euclidean(b, a % b)
+ 
+ 
+ def bresenham(x0, y0, x1, y1):
+     points = []
+     dx = abs(x1 - x0)
+     dy = abs(y1 - y0)
+-    sx = 1 if x0 < x1 else -1
+-    sy = 1 if y0 < y1 else -1
+-    err = dx - dy
++    x, y = x0, y0
++    sx = -1 if x0 > x1 else 1
++    sy = -1 if y0 > y1 else 1
+ 
+-    while True:
+-        points.append((x0, y0))
+-        if x0 == x1 and y0 == y1:
+-            break
+-        e2 = 2 * err
+-        if e2 > -dy:
++    if dx > dy:
++        err = dx / 2.0
++        while x != x1:
++            points.append((x, y))
+             err -= dy
+-            x0 += sx
+-        if e2 < dx:
+-            err += dx
+-            y0 += sy
++            if err < 0:
++                y += sy
++                err += dx
++            x += sx
++    else:
++        err = dy / 2.0
++        while y != y1:
++            points.append((x, y))
++            err -= dx
++            if err < 0:
++                x += sx
++                err += dy
++            y += sy
+ 
++    points.append((x, y))
+     return points
+</patch>
