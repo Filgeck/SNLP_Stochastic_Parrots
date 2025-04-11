@@ -1,11 +1,12 @@
-import ollama
-import os
+from datasets import load_dataset
 import google.generativeai as genai
 from google.generativeai.types import GenerateContentResponse
 from google.generativeai.types.safety_types import HarmCategory, HarmBlockThreshold
-from datasets import load_dataset
+import ollama
+import os
+from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
-from typing import List, Callable
+from typing import Callable, List, Optional, Type
 import traceback
 
 
@@ -38,21 +39,39 @@ class ModelClient(Retries):
         super().__init__(max_retries=max_retries)
         self.model_name = model_name
 
-    def query(self, prompt: str) -> str:
+    def query(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
+        """
+        Query the model
+    
+        args
+        - prompt: 
+            The text prompt to supply to the model
+        - structure=None:
+            The structure to provide the LLM for structured output.
+            This must be a pydantic BaseModel for a JSON scehma - refer to the docs here:
+
+            https://ai.google.dev/gemini-api/docs/structured-output?lang=python
+        """
         if self.model_name in {"llama3.2", "deepseek-r1:8b"}:
-            return self._func_with_retries(self._query_local_ollama, prompt)
+            return self._func_with_retries(self._query_local_ollama, prompt, structure=structure)
         elif self.model_name in {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}:
-            return self._func_with_retries(self._query_gemini, prompt)
+            return self._func_with_retries(self._query_gemini, prompt, structure=structure)
         else:
             raise ValueError(f"Model {self.model_name} not supported")
 
-    def _query_local_ollama(self, prompt: str) -> str:
+    def _query_local_ollama(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
+        """
+        Queries a local ollama model
+
+        args: read ModelClient.query()
+        """
         client = ollama.Client()
 
         response = client.chat(
             model=self.model_name,
             messages=[{"role": "user", "content": prompt}],
             stream=True,
+            format=structure.model_json_schema() if structure else None
         )
 
         response_content = ""
@@ -65,20 +84,36 @@ class ModelClient(Retries):
             response_content += content
             if len(response_content) > 50000:
                 raise ValueError(
-                    f"Error: Response from model {self.model_name} exceeded 50,000 characters. Likely model is repeating itself"
+                    f"Error: Response from model {self.model_name} exceeded 50,000 characters. " \
+                    "Likely model is repeating itself"
                 )
 
         return response_content
 
-    def _query_gemini(self, prompt: str) -> str:
+    def _query_gemini(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
+        """
+        Queries the Gemini API model
+
+        args: read ModelClient.query()
+        """
         genai.configure(api_key=GOOGLE_API_KEY)
 
-        generation_config = genai.GenerationConfig(
-            temperature=0.7,
-            top_p=0.9,
-            top_k=40,
-            max_output_tokens=16384,
-        )
+        if structure is not None:
+            generation_config = genai.GenerationConfig(
+                temperature=0.7,
+                top_p=0.9,
+                top_k=40,
+                max_output_tokens=16384,
+                response_mime_type='application/json',
+                response_schema=structure
+            )
+        else:
+            generation_config = genai.GenerationConfig(
+                temperature=0.7,
+                top_p=0.9,
+                top_k=40,
+                max_output_tokens=16384,
+            )
 
         safety_settings = {
             HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
@@ -93,9 +128,7 @@ class ModelClient(Retries):
             safety_settings=safety_settings,
         )
 
-        response: GenerateContentResponse = model.generate_content(
-            prompt,
-        )
+        response: GenerateContentResponse = model.generate_content(prompt)
         response_content = response.text
 
         return response_content
@@ -109,7 +142,9 @@ class RagClient(Retries):
         self.encoder = SentenceTransformer(model_name)
 
     def query(self, issue_description: str, num_retrieve: int = 10) -> List[str]:
-        """Find the most similar problems to the given issue using precomputed embeddings."""
+        """
+        Find the most similar problems to the given issue using precomputed embeddings.
+        """
         import numpy as np
         import pandas as pd
         import torch
