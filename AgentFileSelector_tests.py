@@ -104,9 +104,9 @@ class TestAgentFileSelector(unittest.TestCase):
                     return_value="\n".join(expected_files)
                 ) as mock_query:
                     
-                    # Create patch for _get_files
+                    # Create patch for AgentFileSelector's _get_files
                     with patch.object(
-                        Agent, 
+                        AgentFileSelector, 
                         '_get_files', 
                         return_value=self._parse_files_to_dict(files_text)
                     ) as mock_get_files:
@@ -174,9 +174,9 @@ class TestAgentFileSelector(unittest.TestCase):
                     side_effect=responses
                 ) as mock_query:
                     
-                    # Create patch for _get_files
+                    # Create patch for AgentFileSelector's _get_files
                     with patch.object(
-                        Agent, 
+                        AgentFileSelector, 
                         '_get_files', 
                         return_value=self._parse_files_to_dict(files_text)
                     ) as mock_get_files:
@@ -226,6 +226,7 @@ class TestAgentFileSelector(unittest.TestCase):
                 issue_text = self._extract_issue(test_file)
                 files_text = self._extract_code(test_file)
                 expected_files = self.expected_files_by_test[test_idx]
+                files_dict = self._parse_files_to_dict(files_text)
                 
                 # Create patch for _extract_tag
                 with patch.object(
@@ -234,31 +235,42 @@ class TestAgentFileSelector(unittest.TestCase):
                     side_effect=[issue_text, files_text]
                 ) as mock_extract_tag:
                     
-                    # Create patch for _select_by_batch
+                    # Create patch for AgentFileSelector's _get_files 
                     with patch.object(
-                        AgentFileSelector, 
-                        '_select_by_batch', 
-                        return_value=expected_files
-                    ) as mock_select_by_batch:
-                        
-                        # Create patch for _format_output
+                        AgentFileSelector,
+                        '_get_files',
+                        return_value=files_dict
+                    ) as mock_get_files:
+                    
+                        # Create patch for _select_by_batch
                         with patch.object(
                             AgentFileSelector, 
-                            '_format_output', 
-                            return_value="test output"
-                        ) as mock_format_output:
+                            '_select_by_batch', 
+                            return_value=expected_files
+                        ) as mock_select_by_batch:
                             
-                            # Call the method
-                            selected_files, output_text = self.agent.forward(
-                                text=test_file,
-                                method="batch"
-                            )
+                            # Create patch for _format_output
+                            with patch.object(
+                                AgentFileSelector, 
+                                '_format_output', 
+                                return_value="test output"
+                            ) as mock_format_output:
+                                
+                                # Call the method
+                                selected_files, output_text = self.agent.forward(
+                                    text=test_file,
+                                    method="batch"
+                                )
+                                
+                                # Verify results
+                                self.assertEqual(selected_files, expected_files)
+                                self.assertEqual(output_text, "test output")
+                                mock_select_by_batch.assert_called_once_with(issue_text, files_text)
+                                # Update assertion to match actual call
+                                mock_format_output.assert_called_once_with(
+                                    test_file, files_text, expected_files, files_dict
+                                )
                             
-                            # Verify results
-                            self.assertEqual(selected_files, expected_files)
-                            self.assertEqual(output_text, "test output")
-                            mock_select_by_batch.assert_called_once_with(issue_text, files_text)
-
     def test_forward_individual_method(self):
         """Test the forward method with individual selection."""
         for test_idx, test_file in enumerate(self.test_files):
@@ -266,6 +278,7 @@ class TestAgentFileSelector(unittest.TestCase):
                 issue_text = self._extract_issue(test_file)
                 files_text = self._extract_code(test_file)
                 expected_files = self.expected_files_by_test[test_idx]
+                files_dict = self._parse_files_to_dict(files_text)
                 
                 # Create patch for _extract_tag
                 with patch.object(
@@ -274,31 +287,42 @@ class TestAgentFileSelector(unittest.TestCase):
                     side_effect=[issue_text, files_text]
                 ) as mock_extract_tag:
                     
-                    # Create patch for _select_by_individual
+                    # Create patch for AgentFileSelector's _get_files
                     with patch.object(
-                        AgentFileSelector, 
-                        '_select_by_individual', 
-                        return_value=expected_files
-                    ) as mock_select_by_individual:
-                        
-                        # Create patch for _format_output
+                        AgentFileSelector,
+                        '_get_files',
+                        return_value=files_dict
+                    ) as mock_get_files:
+                    
+                        # Create patch for _select_by_individual
                         with patch.object(
                             AgentFileSelector, 
-                            '_format_output', 
-                            return_value="test output"
-                        ) as mock_format_output:
+                            '_select_by_individual', 
+                            return_value=expected_files
+                        ) as mock_select_by_individual:
                             
-                            # Call the method
-                            selected_files, output_text = self.agent.forward(
-                                text=test_file,
-                                method="individual"
-                            )
-                            
-                            # Verify results
-                            self.assertEqual(selected_files, expected_files)
-                            self.assertEqual(output_text, "test output")
-                            mock_select_by_individual.assert_called_once_with(issue_text, files_text)
-
+                            # Create patch for _format_output
+                            with patch.object(
+                                AgentFileSelector,
+                                '_format_output', 
+                                return_value="test output"
+                            ) as mock_format_output:
+                                
+                                # Call the method
+                                selected_files, output_text = self.agent.forward(
+                                    text=test_file,
+                                    method="individual"
+                                )
+                                
+                                # Verify results
+                                self.assertEqual(selected_files, expected_files)
+                                self.assertEqual(output_text, "test output")
+                                mock_select_by_individual.assert_called_once_with(issue_text, files_text)
+                                # Update assertion to match actual call
+                                mock_format_output.assert_called_once_with(
+                                    test_file, files_text, expected_files, files_dict
+                                )
+                                
     def test_forward_invalid_method(self):
         """Test forward method with an invalid selection method."""
         for test_idx, test_file in enumerate(self.test_files):
@@ -363,13 +387,14 @@ class TestAgentFileSelector(unittest.TestCase):
                     
                     self.assertIn("Could not extract <code> tag", str(context.exception))
 
-    def test_forward_with_custom_issue(self):
+    def test_forward_custom_issue(self):
         """Test forward method with a custom issue."""
         for test_idx, test_file in enumerate(self.test_files):
             with self.subTest(f"Testing with test file {test_idx + 1}"):
                 files_text = self._extract_code(test_file)
                 expected_files = self.expected_files_by_test[test_idx]
                 custom_issue = "This is a custom issue"
+                files_dict = self._parse_files_to_dict(files_text)
                 
                 # Create patch for _extract_tag
                 with patch.object(
@@ -378,29 +403,36 @@ class TestAgentFileSelector(unittest.TestCase):
                     return_value=files_text
                 ) as mock_extract_tag:
                     
-                    # Create patch for _select_by_batch
+                    # Create patch for AgentFileSelector's _get_files
                     with patch.object(
-                        AgentFileSelector, 
-                        '_select_by_batch', 
-                        return_value=expected_files
-                    ) as mock_select_by_batch:
-                        
-                        # Create patch for _format_output
+                        AgentFileSelector,
+                        '_get_files',
+                        return_value=files_dict
+                    ) as mock_get_files:
+                    
+                        # Create patch for _select_by_batch
                         with patch.object(
                             AgentFileSelector, 
-                            '_format_output', 
-                            return_value="test output"
-                        ) as mock_format_output:
+                            '_select_by_batch', 
+                            return_value=expected_files
+                        ) as mock_select_by_batch:
                             
-                            # Call the method
-                            selected_files, _ = self.agent.forward(
-                                text=test_file,
-                                method="batch",
-                                custom_issue=custom_issue
-                            )
-                            
-                            # Verify that the custom issue was used instead of extracted issue
-                            mock_select_by_batch.assert_called_once_with(custom_issue, files_text)
+                            # Create patch for _format_output
+                            with patch.object(
+                                AgentFileSelector, 
+                                '_format_output', 
+                                return_value="test output"
+                            ) as mock_format_output:
+                                
+                                # Call the method
+                                selected_files, _ = self.agent.forward(
+                                    text=test_file,
+                                    method="batch",
+                                    custom_issue=custom_issue
+                                )
+                                
+                                # Verify that the custom issue was used instead of extracted issue
+                                mock_select_by_batch.assert_called_once_with(custom_issue, files_text)
 
     def test_format_output_return_full_text(self):
         """Test _format_output with return_full_text=True."""
@@ -408,6 +440,7 @@ class TestAgentFileSelector(unittest.TestCase):
             with self.subTest(f"Testing with test file {test_idx + 1}"):
                 files_text = self._extract_code(test_file)
                 expected_files = self.expected_files_by_test[test_idx]
+                files_dict = self._parse_files_to_dict(files_text)
                 
                 # Set up the agent with return_full_text=True
                 agent = AgentFileSelector(
@@ -420,7 +453,8 @@ class TestAgentFileSelector(unittest.TestCase):
                 output = agent._format_output(
                     test_file,
                     files_text,
-                    expected_files
+                    expected_files,
+                    files_dict
                 )
                 
                 # Verify output
@@ -443,6 +477,7 @@ class TestAgentFileSelector(unittest.TestCase):
             with self.subTest(f"Testing with test file {test_idx + 1}"):
                 files_text = self._extract_code(test_file)
                 expected_files = self.expected_files_by_test[test_idx]
+                files_dict = self._parse_files_to_dict(files_text)
                 
                 if not expected_files:
                     self.skipTest("No expected files for this test case")
@@ -458,7 +493,8 @@ class TestAgentFileSelector(unittest.TestCase):
                 output = agent._format_output(
                     test_file,
                     files_text,
-                    expected_files
+                    expected_files,
+                    files_dict
                 )
                 
                 # Verify output
@@ -482,12 +518,14 @@ class TestAgentFileSelector(unittest.TestCase):
         for test_idx, test_file in enumerate(self.test_files):
             with self.subTest(f"Testing with test file {test_idx + 1}"):
                 files_text = self._extract_code(test_file)
+                files_dict = self._parse_files_to_dict(files_text)
                 
                 # Call the method with empty selected files list
                 output = self.agent._format_output(
                     test_file,
                     files_text,
-                    []
+                    [],
+                    files_dict
                 )
                 
                 # Verify output has empty code block
@@ -506,13 +544,15 @@ class TestAgentFileSelector(unittest.TestCase):
         """Test _format_output with input that doesn't contain code block."""
         # Create test input without code block
         input_without_code = "<issue>Test issue</issue>"
+        files_dict = {"file1.py": "Sample content"}
         
         # Expect ValueError when no code block is found
         with self.assertRaises(ValueError) as context:
             self.agent._format_output(
                 input_without_code,
                 "Some files text",
-                ["file1.py"]
+                ["file1.py"],
+                files_dict
             )
         
         self.assertIn("Could not find the <code> block", str(context.exception))
@@ -577,31 +617,6 @@ class TestAgentFileSelector(unittest.TestCase):
                         self.assertTrue(len(lines_with_numbers) > 0, 
                                     f"No line numbers found in content for {file_path}")
 
-    def _add_line_numbers_to_files(self, files_text):
-        """Helper method to add line numbers to files for testing."""
-        # Find all file blocks
-        file_block_pattern = r"(\[start of (.*?)\]\s*?\n)(.*?)(\n\[end of \2\])"
-        
-        def add_numbers_to_block(match):
-            start = match.group(1)
-            file_path = match.group(2)
-            content = match.group(3)
-            end = match.group(4)
-            
-            # Add line numbers to each line of content
-            lines = content.splitlines()
-            numbered_lines = []
-            for i, line in enumerate(lines, 1):
-                if line.strip():  # Only number non-empty lines
-                    numbered_lines.append(f"{i} {line}")
-                else:
-                    numbered_lines.append(line)
-            
-            numbered_content = "\n".join(numbered_lines)
-            return f"{start}{numbered_content}{end}"
-        
-        return re.sub(file_block_pattern, add_numbers_to_block, files_text, flags=re.DOTALL)
-
     def test_select_by_batch_with_strip_line_num(self):
         """Test that _select_by_batch correctly handles line numbers based on strip_line_num."""
         for test_idx, test_file in enumerate(self.test_files):
@@ -610,9 +625,6 @@ class TestAgentFileSelector(unittest.TestCase):
                 files_text = self._extract_code(test_file)
                 
                 files_text_with_line_nums = files_text
-                # Add line numbers to files_text
-                #files_text_with_line_nums = self._add_line_numbers_to_files(files_text)
-                #print(files_text_with_line_nums)
                 
                 # Expected files for this test
                 expected_files = self.expected_files_by_test[test_idx]
@@ -633,10 +645,18 @@ class TestAgentFileSelector(unittest.TestCase):
                     strip_line_num=True
                 )
                 
-                # Use side_effect to properly mock _get_files
-                with patch.object(Agent, '_get_files', return_value=files_dict_stripped) as mock_get_files:
+                # Mock AgentFileSelector._get_files to be called and return files_dict_stripped
+                with patch.object(
+                    AgentFileSelector, 
+                    '_get_files', 
+                    return_value=files_dict_stripped
+                ) as mock_get_files:
                     # Mock _query_and_extract to return fixed result
-                    with patch.object(Agent, '_query_and_extract', return_value="\n".join(expected_files)) as mock_query:
+                    with patch.object(
+                        Agent, 
+                        '_query_and_extract', 
+                        return_value="\n".join(expected_files)
+                    ) as mock_query:
                         
                         # Call the method
                         result = agent_strip._select_by_batch(issue_text, files_text_with_line_nums)
@@ -644,6 +664,7 @@ class TestAgentFileSelector(unittest.TestCase):
                         # Verify strip_line_num parameter was passed
                         mock_get_files.assert_called_once()
                         self.assertEqual(mock_get_files.call_args[0][1], True)
+                        self.assertEqual(result, expected_files)
                 
                 # Test with strip_line_num=False
                 agent_no_strip = AgentFileSelector(
@@ -652,10 +673,18 @@ class TestAgentFileSelector(unittest.TestCase):
                     strip_line_num=False
                 )
                 
-                # Use side_effect to properly mock _get_files
-                with patch.object(Agent, '_get_files', return_value=files_dict_with_nums) as mock_get_files:
+                # Mock AgentFileSelector._get_files to be called and return files_dict_with_nums
+                with patch.object(
+                    AgentFileSelector, 
+                    '_get_files', 
+                    return_value=files_dict_with_nums
+                ) as mock_get_files:
                     # Mock _query_and_extract to return fixed result
-                    with patch.object(Agent, '_query_and_extract', return_value="\n".join(expected_files)) as mock_query:
+                    with patch.object(
+                        Agent, 
+                        '_query_and_extract', 
+                        return_value="\n".join(expected_files)
+                    ) as mock_query:
                         
                         # Call the method
                         result = agent_no_strip._select_by_batch(issue_text, files_text_with_line_nums)
@@ -663,32 +692,19 @@ class TestAgentFileSelector(unittest.TestCase):
                         # Verify strip_line_num parameter was passed
                         mock_get_files.assert_called_once()
                         self.assertEqual(mock_get_files.call_args[0][1], False)
-                        
-                        # Verify at least some file has line numbers
-                        found_line_numbers = False
-                        for file_path, content in files_dict_with_nums.items():
-                            content_lines = [line for line in content.splitlines() if line.strip()]
-                            if any(re.match(r'^\d+ ', line) for line in content_lines):
-                                found_line_numbers = True
-                                break
-                        
-                        self.assertTrue(found_line_numbers, "No line numbers found in any file content")
-
+                        self.assertEqual(result, expected_files)
+    
     def test_select_by_individual_with_strip_line_num(self):
         """Test that _select_by_individual correctly handles line numbers based on strip_line_num."""
         for test_idx, test_file in enumerate(self.test_files):
             with self.subTest(f"Testing with test file {test_idx + 1}"):
                 issue_text = self._extract_issue(test_file)
                 files_text = self._extract_code(test_file)
-                file_paths = self._extract_file_paths(files_text)
-                
-                if not file_paths:
-                    self.skipTest("No files found in this test file")
                 
                 files_text_with_line_nums = files_text
-                # Add line numbers to files_text
-                #files_text_with_line_nums = self._add_line_numbers_to_files(files_text)
-                #print(files_text_with_line_nums)
+                
+                # Expected files for this test
+                expected_files = self.expected_files_by_test[test_idx]
                 
                 # Create a dictionary from the files_text for both tests
                 files_dict_with_nums = self._parse_files_to_dict(files_text_with_line_nums)
@@ -699,17 +715,6 @@ class TestAgentFileSelector(unittest.TestCase):
                     stripped_content = '\n'.join([re.sub(r'^\d+ ', '', line) for line in content.splitlines()])
                     files_dict_stripped[path] = stripped_content
                 
-                # Expected files for this test
-                expected_files = self.expected_files_by_test[test_idx]
-                
-                # Get responses based on expected files
-                responses = []
-                for file_path in file_paths:
-                    if file_path in expected_files:
-                        responses.append("Yes")
-                    else:
-                        responses.append("No")
-                
                 # Test with strip_line_num=True
                 agent_strip = AgentFileSelector(
                     model_client=self.model_client,
@@ -717,10 +722,27 @@ class TestAgentFileSelector(unittest.TestCase):
                     strip_line_num=True
                 )
                 
-                # Use return_value to properly mock _get_files
-                with patch.object(Agent, '_get_files', return_value=files_dict_stripped) as mock_get_files:
-                    # Mock _query_and_extract to return appropriate responses
-                    with patch.object(Agent, '_query_and_extract', side_effect=responses) as mock_query:
+                # Create responses based on expected files
+                responses = []
+                file_paths = list(files_dict_stripped.keys())
+                for file_path in file_paths:
+                    if file_path in expected_files:
+                        responses.append("Yes")
+                    else:
+                        responses.append("No")
+                
+                # Mock AgentFileSelector._get_files to be called and return files_dict_stripped
+                with patch.object(
+                    AgentFileSelector, 
+                    '_get_files', 
+                    return_value=files_dict_stripped
+                ) as mock_get_files:
+                    # Mock _query_and_extract to return fixed result
+                    with patch.object(
+                        Agent, 
+                        '_query_and_extract', 
+                        side_effect=responses
+                    ) as mock_query:
                         
                         # Call the method
                         result = agent_strip._select_by_individual(issue_text, files_text_with_line_nums)
@@ -728,6 +750,7 @@ class TestAgentFileSelector(unittest.TestCase):
                         # Verify strip_line_num parameter was passed
                         mock_get_files.assert_called_once()
                         self.assertEqual(mock_get_files.call_args[0][1], True)
+                        self.assertEqual(result, expected_files)
                 
                 # Test with strip_line_num=False
                 agent_no_strip = AgentFileSelector(
@@ -736,10 +759,18 @@ class TestAgentFileSelector(unittest.TestCase):
                     strip_line_num=False
                 )
                 
-                # Use return_value to properly mock _get_files
-                with patch.object(Agent, '_get_files', return_value=files_dict_with_nums) as mock_get_files:
-                    # Mock _query_and_extract to return appropriate responses
-                    with patch.object(Agent, '_query_and_extract', side_effect=responses) as mock_query:
+                # Mock AgentFileSelector._get_files to be called and return files_dict_with_nums
+                with patch.object(
+                    AgentFileSelector, 
+                    '_get_files', 
+                    return_value=files_dict_with_nums
+                ) as mock_get_files:
+                    # Mock _query_and_extract to return fixed result
+                    with patch.object(
+                        Agent, 
+                        '_query_and_extract', 
+                        side_effect=responses
+                    ) as mock_query:
                         
                         # Call the method
                         result = agent_no_strip._select_by_individual(issue_text, files_text_with_line_nums)
@@ -747,17 +778,7 @@ class TestAgentFileSelector(unittest.TestCase):
                         # Verify strip_line_num parameter was passed
                         mock_get_files.assert_called_once()
                         self.assertEqual(mock_get_files.call_args[0][1], False)
-                        
-                        # Verify at least some file has line numbers
-                        found_line_numbers = False
-                        for file_path, content in files_dict_with_nums.items():
-                            content_lines = [line for line in content.splitlines() if line.strip()]
-                            if any(re.match(r'^\d+ ', line) for line in content_lines):
-                                found_line_numbers = True
-                                break
-                        
-                        self.assertTrue(found_line_numbers, "No line numbers found in any file content")
-
-
+                        self.assertEqual(result, expected_files)
+                
 if __name__ == '__main__':
     unittest.main()

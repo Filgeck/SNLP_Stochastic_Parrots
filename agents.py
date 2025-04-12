@@ -297,19 +297,15 @@ class AgentFileSelector(Agent):
         suffix = match.group(3)
 
         if reconstructed_code_content:
-            final_text = (
-                f"{prefix.rstrip()}\\n{reconstructed_code_content}\\n{suffix.lstrip()}"
-            )
-            # clean up possible extra \n around the replaced <code>
-            final_text = final_text.replace(
-                prefix.rstrip() + "\n\n", prefix.rstrip() + "\n"
-            )
-            final_text = final_text.replace(
-                "\n\n" + suffix.lstrip(), "\n" + suffix.lstrip()
-            )
+            final_text = f"{prefix.rstrip()}\n{reconstructed_code_content}\n{suffix.lstrip()}"
+            
+            # Clean up potential double newlines around the inserted content
+            final_text = final_text.replace(f"{prefix.rstrip()}\n\n", f"{prefix.rstrip()}\n")
+            final_text = final_text.replace(f"\n\n{suffix.lstrip()}", f"\n{suffix.lstrip()}")
         else:
-            # case where no files are selected (empty <code> block)
-            final_text = f"{prefix.rstrip()}\\n{suffix.lstrip()}"
+            # Case where no files are selected (empty <code> block)
+            final_text = f"{prefix.rstrip()}\n{suffix.lstrip()}"
+
 
         return final_text
 
