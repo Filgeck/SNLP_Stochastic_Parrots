@@ -1,4 +1,10 @@
 from datasets import load_dataset
+from collections import deque
+from datetime import datetime, timedelta
+import time
+import anthropic
+import ollama
+import os
 import google.generativeai as genai
 from google.generativeai.types import GenerateContentResponse
 from google.generativeai.types.safety_types import HarmCategory, HarmBlockThreshold
@@ -8,10 +14,17 @@ from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from typing import Callable, List, Optional, Type
 import traceback
+import dotenv
+from openai import OpenAI
+
+# Load environment variables from .envrc file
+# put your API keys here
+dotenv.load_dotenv(".envrc")
 
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 class Retries:
     def __init__(self, max_retries: int = 3):
@@ -35,9 +48,19 @@ class Retries:
 
 
 class ModelClient(Retries):
+
     def __init__(self, model_name: str, max_retries: int = 3):
         super().__init__(max_retries=max_retries)
         self.model_name = model_name
+        self.client: OpenAI | None = None
+        self._request_limit_per_minute: float | None = None
+        self.is_openrouter = False
+        if self.model_name.startswith("anthropic"):
+            self.is_openrouter = True
+            self.client = OpenAI(
+                base_url="https://openrouter.ai/api/v1",
+                api_key=OPENROUTER_API_KEY,
+            )
 
     def query(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
         """
@@ -52,7 +75,9 @@ class ModelClient(Retries):
 
             https://ai.google.dev/gemini-api/docs/structured-output?lang=python
         """
-        if self.model_name in {"llama3.2", "deepseek-r1:8b"}:
+        if self.is_openrouter:
+            return self._func_with_retries(self._query_openrouter, prompt, structure=structure)
+        elif self.model_name in {"llama3.2", "deepseek-r1:8b"}:
             return self._func_with_retries(self._query_local_ollama, prompt, structure=structure)
         elif self.model_name in {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}:
             return self._func_with_retries(self._query_gemini, prompt, structure=structure)
@@ -132,6 +157,36 @@ class ModelClient(Retries):
         response_content = response.text
 
         return response_content
+    
+    def _query_openrouter(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
+        assert isinstance(self.client, OpenAI)
+        completion = self.client.chat.completions.create(
+            extra_body={
+                "provider": {
+                    "sort": "throughput"
+                }
+            },
+            model=self.model_name,
+            messages=[
+                {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": prompt
+                    },
+                ]
+                }
+            ],
+            n=1 # number of choices to generate
+        )
+        assert len(completion.choices) == 1
+        message = completion.choices[0].message
+        if message.content is None:
+            raise ValueError(
+                f"Error: Received None content from model {self.model_name}"
+            )
+        return message.content
 
 
 class RagClient(Retries):
