@@ -10,3 +10,4 @@ embeddings/**/*.parquet
 embeddings/cache/
 batch_0_249999.parquet
 .envrc
+logs/

@@ -1,4 +1,7 @@
 from datasets import load_dataset
+from collections import deque
+from datetime import datetime, timedelta
+import time
 import anthropic
 import ollama
 import os
@@ -12,6 +15,7 @@ from sentence_transformers import SentenceTransformer
 from typing import Callable, List, Optional, Type
 import traceback
 import dotenv
+from openai import OpenAI
 
 # Load environment variables from .envrc file
 # put your API keys here
@@ -20,7 +24,11 @@ dotenv.load_dotenv(".envrc")
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
+OLLAMA_MODELS = {"llama3.2", "deepseek-r1:8b"}
+GEMINI_MODELS = {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}
+ANTHROPIC_MODELS = {"claude-3-7-sonnet-20250219"}
 
 class Retries:
     def __init__(self, max_retries: int = 3):
@@ -44,6 +52,7 @@ class Retries:
 
 
 class ModelClient(Retries):
+
     def __init__(self, model_name: str, max_retries: int = 3):
         super().__init__(max_retries=max_retries)
         self.model_name = model_name
@@ -66,7 +75,7 @@ class ModelClient(Retries):
         elif self.model_name in {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}:
             return self._func_with_retries(self._query_gemini, prompt, structure=structure)
         elif self.model_name in {"claude-3-7-sonnet-20250219"}:
-            return self._func_with_retries(self._query_claude, prompt)
+            return self._func_with_retries(self._query_claude, prompt, structure=structure)
         else:
             raise ValueError(f"Model {self.model_name} not supported")
 
@@ -144,9 +153,16 @@ class ModelClient(Retries):
 
         return response_content
     
-    def _query_claude(self, prompt: str) -> str:
+    def _query_claude(self, prompt: str,
+                      structure: Optional[Type[BaseModel]] = None) -> str:
         client = anthropic.Anthropic()
-
+        print("Query claude")
+        print(f"Prompt len: {len(prompt)}")
+        self._wait_if_needed(len(prompt))
+        self._request_history.append({
+            'timestamp': datetime.now(),
+            'request_count': prompt
+        })
         message = client.messages.create(
             model=self.model_name,
             max_tokens=16384,
