@@ -18,6 +18,7 @@ class TestAgentFileSelector(unittest.TestCase):
         """Set up test fixtures before each test method."""
         # Create a mock ModelClient
         self.model_client = MagicMock(spec=ModelClient)
+        #self.model_client = ModelClient(model_name="llama3.2")
         
         # Initialize the AgentFileSelector
         self.agent = AgentFileSelector(

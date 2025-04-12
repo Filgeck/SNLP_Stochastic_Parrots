@@ -70,7 +70,7 @@ class Agent(Retries):
         return files_dict
 
     def _query_and_extract(self, prompt: str, tag_name: str) -> str:
-        """Prompt model, extract tag from models respone, re-querying model if tag extraction fails."""
+        """Prompt model, extract tag from models response, re-querying model if tag extraction fails."""
 
         def helper(prompt_arg: str, tag_name_arg: str) -> str:
             response = self.model_client.query(prompt_arg)
@@ -383,7 +383,7 @@ class AgentProgrammer(Agent):
     ) -> str | None:
         """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
 
-        files_dict = self._get_files(prompt)
+        files_dict = self._get_files(prompt, False)
 
         clean_prompt = prompt
 
@@ -394,7 +394,7 @@ class AgentProgrammer(Agent):
         
         response = self.model_client.query(clean_prompt)
         
-        changed_files = self._get_files(response)
+        changed_files = self._get_files(response, False)
 
         patch = self.create_patch_from_files(files_dict, changed_files, "agent_cache", cleanup=True)
 
@@ -402,7 +402,7 @@ class AgentProgrammer(Agent):
 
         # return self._func_with_retries(helper, prompt)
     
-    def _get_files(self, files_text: str) -> dict:
+    def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
         """
         Extract file content from a string containing file blocks marked with [start of filename] and [end of filename].
         
