@@ -184,7 +184,7 @@ class AgentBenchmark:
 
 if __name__ == "__main__":
     MODELS_TO_BENCHMARK = [
-        "claude-3-7-sonnet-20250219",
+        "anthropic/claude-3.7-sonnet",
         # "deepseek-r1:8b",
         # "llama3.2",
         # "gemini-2.5-pro-exp-03-25",
