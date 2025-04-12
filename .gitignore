@@ -9,3 +9,4 @@ embeddings/**/*.parquet
 
 embeddings/cache/
 .envrc
+logs/
