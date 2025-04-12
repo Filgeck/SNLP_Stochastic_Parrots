@@ -159,7 +159,6 @@ class ModelClient(Retries):
         return response_content
     
     def _query_openrouter(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
-        print("Querying OpenRouter model:", self.model_name)
         assert isinstance(self.client, OpenAI)
         completion = self.client.chat.completions.create(
             extra_body={
@@ -187,7 +186,6 @@ class ModelClient(Retries):
             raise ValueError(
                 f"Error: Received None content from model {self.model_name}"
             )
-        print("Received message")
         return message.content
 
 
