@@ -26,10 +26,6 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-OLLAMA_MODELS = {"llama3.2", "deepseek-r1:8b"}
-GEMINI_MODELS = {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}
-ANTHROPIC_MODELS = {"claude-3-7-sonnet-20250219"}
-
 class Retries:
     def __init__(self, max_retries: int = 3):
         self.max_retries = max_retries
@@ -56,6 +52,15 @@ class ModelClient(Retries):
     def __init__(self, model_name: str, max_retries: int = 3):
         super().__init__(max_retries=max_retries)
         self.model_name = model_name
+        self.client: OpenAI | None = None
+        self._request_limit_per_minute: float | None = None
+        self.is_openrouter = False
+        if self.model_name.startswith("anthropic"):
+            self.is_openrouter = True
+            self.client = OpenAI(
+                base_url="https://openrouter.ai/api/v1",
+                api_key=OPENROUTER_API_KEY,
+            )
 
     def query(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
         """
@@ -70,12 +75,12 @@ class ModelClient(Retries):
 
             https://ai.google.dev/gemini-api/docs/structured-output?lang=python
         """
-        if self.model_name in {"llama3.2", "deepseek-r1:8b"}:
+        if self.is_openrouter:
+            return self._func_with_retries(self._query_openrouter, prompt, structure=structure)
+        elif self.model_name in {"llama3.2", "deepseek-r1:8b"}:
             return self._func_with_retries(self._query_local_ollama, prompt, structure=structure)
         elif self.model_name in {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}:
             return self._func_with_retries(self._query_gemini, prompt, structure=structure)
-        elif self.model_name in {"claude-3-7-sonnet-20250219"}:
-            return self._func_with_retries(self._query_claude, prompt, structure=structure)
         else:
             raise ValueError(f"Model {self.model_name} not supported")
 
@@ -153,38 +158,37 @@ class ModelClient(Retries):
 
         return response_content
     
-    def _query_claude(self, prompt: str,
-                      structure: Optional[Type[BaseModel]] = None) -> str:
-        client = anthropic.Anthropic()
-        print("Query claude")
-        print(f"Prompt len: {len(prompt)}")
-        self._wait_if_needed(len(prompt))
-        self._request_history.append({
-            'timestamp': datetime.now(),
-            'request_count': prompt
-        })
-        message = client.messages.create(
+    def _query_openrouter(self, prompt: str, structure: Optional[Type[BaseModel]] = None) -> str:
+        print("Querying OpenRouter model:", self.model_name)
+        assert isinstance(self.client, OpenAI)
+        completion = self.client.chat.completions.create(
+            extra_body={
+                "provider": {
+                    "sort": "throughput"
+                }
+            },
             model=self.model_name,
-            max_tokens=16384,
-            temperature=1,
             messages=[
                 {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": prompt
-                        }
-                    ]
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": prompt
+                    },
+                ]
                 }
-            ]
+            ],
+            n=1 # number of choices to generate
         )
-
-        response_contents = []
-        for chunk in message.content:
-            assert chunk.type == "text"
-            response_contents.append(chunk.text)
-        return "".join(response_contents)
+        assert len(completion.choices) == 1
+        message = completion.choices[0].message
+        if message.content is None:
+            raise ValueError(
+                f"Error: Received None content from model {self.model_name}"
+            )
+        print("Received message")
+        return message.content
 
 
 class RagClient(Retries):
