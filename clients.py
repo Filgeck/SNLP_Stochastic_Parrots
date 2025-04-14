@@ -25,6 +25,11 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
+OPENROUTER_MODELS = {
+    "deepseek/deepseek-r1-zero:free",
+    "anthropic/claude-3.7-sonnet",
+    "x-ai/grok-3-beta",
+}
 
 class Retries:
     def __init__(self, max_retries: int = 3):
@@ -54,7 +59,7 @@ class ModelClient(Retries):
         self.client: OpenAI | None = None
         self._request_limit_per_minute: float | None = None
         self.is_openrouter = False
-        if self.model_name.startswith("anthropic"):
+        if self.model_name in OPENROUTER_MODELS:
             self.is_openrouter = True
             self.client = OpenAI(
                 base_url="https://openrouter.ai/api/v1",
@@ -170,7 +175,7 @@ class ModelClient(Retries):
     def _query_openrouter(
         self, prompt: str, structure: Optional[Type[BaseModel]] = None
     ) -> str:
-        assert isinstance(self.client, OpenAI)
+        assert self.client is not None
         completion = self.client.chat.completions.create(
             extra_body={"provider": {"sort": "throughput"}},
             model=self.model_name,
