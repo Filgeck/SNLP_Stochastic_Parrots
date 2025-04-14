@@ -185,7 +185,7 @@ class AgentBenchmark:
 if __name__ == "__main__":
     MODELS_TO_BENCHMARK = [
         # "anthropic/claude-3.7-sonnet",
-        "deepseek-r1:8b",
+        "deepseek-r1-8b",
         "llama3.2",
         "gemini-2.5-pro-exp-03-25",
     ]
@@ -201,7 +201,6 @@ if __name__ == "__main__":
             ]
 
             for agent in AGENTS_TO_BENCHMARK:
-                agent = AgentBasic(model, max_retries=10)
                 benchmark = AgentBenchmark(agent)
                 benchmark.generate_preds_precomputed_retrieval(
                     SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
