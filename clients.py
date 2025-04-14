@@ -1,7 +1,7 @@
 import glob
 import os
 import traceback
-from typing import Callable, List, Optional, Type
+from typing import Callable, List, Optional, Type, no_type_check
 
 import dotenv
 import google.generativeai as genai
@@ -172,29 +172,65 @@ class ModelClient(Retries):
 
         return response_content
 
+    @no_type_check # Apologies
     def _query_openrouter(
         self, prompt: str, structure: Optional[Type[BaseModel]] = None
     ) -> str:
-        assert self.client is not None
-        completion = self.client.chat.completions.create(
-            extra_body={"provider": {"sort": "throughput"}},
-            model=self.model_name,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                    ],
+        assert isinstance(self.client, OpenAI)
+
+        # Query parameters
+        extra_body = {"provider": {"sort": "throughput"}}
+        messages = [
+            {
+                "role": "user",
+                "content": [ {"type": "text", "text": prompt} ],
+            }
+        ]
+
+        if structure is not None:
+            structure_json = structure.model_json_schema()
+            properties = {}
+
+            for p_name, p in structure_json["properties"].items():
+                properties[p_name] = {
+                    "description": p.get("description", "<no description given>"),
+                    "type": p["type"]
                 }
-            ],
-            n=1,  # number of choices to generate
-        )
-        assert len(completion.choices) == 1
-        message = completion.choices[0].message
-        if message.content is None:
-            raise ValueError(
-                f"Error: Received None content from model {self.model_name}"
+
+            completion = self.client.chat.completions.create(
+                extra_body=extra_body,
+                model=self.model_name,
+                messages=messages,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": structure_json["title"],
+                        "strict": True,
+                        "schema": {
+                            "type": "object",
+                            "properties": properties,
+                            "required": list(properties),
+                            "additionalProperties": False
+                        }
+                    }
+                },
+                n=1,  # number of choices to generate
             )
+        else:
+            completion = self.client.chat.completions.create(
+                extra_body=extra_body,
+                model=self.model_name,
+                messages=messages,
+                n=1,  # number of choices to generate
+            )
+
+        assert len(completion.choices) == 1
+
+        message = completion.choices[0].message
+
+        if message.content is None:
+            raise ValueError(f"Error: Received None content from model {self.model_name}")
+
         return message.content
 
 
