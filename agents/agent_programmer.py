@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 
@@ -10,35 +11,37 @@ class AgentProgrammer(Agent):
         super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_programmer"
 
-    def forward(
-        self,
-        prompt: str,
-    ) -> str | None:
-        """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
+    def forward(self, prompt: str) -> str | None:
+        """
+        Generates fixed files based on the prompt and creates a patch by diffing original and fixed files.
+        Uses the base Agent's _query_and_extract() for robust querying.
+        """
+        # Extract original files from the prompt (assuming base Agent's _get_files handles this)
+        original_files = self._get_files(prompt, strip_line_num=False)
 
-        files_dict = self._get_files(prompt, False)
-
-        clean_prompt = prompt
-
-        clean_prompt += (
-            "\n\nPlease fix the bugs in the files and return the full fixed files in this format:\n\n"
-            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n"
-            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n"
-            " etc make sure to write out the full file, not just the changes. And do not write line numbers!\n\n"
+        # Append instructions for the model to return full fixed files
+        enhanced_prompt = (
+            f"{prompt}\n\n"
+            "Please fix the bugs in the provided files and return the full fixed files in this format:\n"
+            "[start of FILEPATH]\nCONTENT\n[end of FILEPATH]\n"
+            "For each file, include the complete content, not just changes. "
+            "Do not include line numbers or partial snippets.\n"
         )
 
-        response = self.model_client.query(clean_prompt)
-        changed_files = self._get_files(response, False)
+        # Use base Agent's _query_and_extract to handle retries and parsing
+        response = self._query_and_extract(enhanced_prompt)
         if not response or not response.strip():
             return None
 
+        # Extract fixed files from the response
+        fixed_files = self._get_files(response, strip_line_num=False)
+
+        # Generate patch by comparing original and fixed files
         patch = self.create_patch_from_files(
-            files_dict, changed_files, "agent_cache", cleanup=True
+            original_files, fixed_files, "agent_cache", cleanup=True
         )
 
         return patch
-
-        # return self._func_with_retries(helper, prompt)
 
     def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
         """
