@@ -28,6 +28,11 @@ class AgentFileSelector(Agent):
         - text: the full issues/code text block
         - method: whether to pass each file to the model in a block or sequentially
         - custom_issue: a custom issue not in the text
+
+        returns:
+        A tuple containing
+        1. The file paths of the relevant files
+        2. The string containing the issue and the code, but only with the relevant files
         """
 
         issue_text = custom_issue or self._extract_tag(text, "issue")
