@@ -99,7 +99,7 @@ class Agent(Retries):
         if issue is None:
             s = ""
         else:
-            s = f"<issue>\n{issue}<\issue>"
+            s = f"<issue>\n{issue}</issue>"
 
         s += "\n<code>\n"
 
