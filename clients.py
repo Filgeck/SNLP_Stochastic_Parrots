@@ -1,15 +1,20 @@
-from datasets import load_dataset
-import ollama
+import glob
 import os
+import traceback
+from typing import Callable, List, Optional, Type
+
+import dotenv
 import google.generativeai as genai
+import numpy as np
+import ollama
+import pandas as pd
+from datasets import load_dataset, DatasetDict
 from google.generativeai.types import GenerateContentResponse
-from google.generativeai.types.safety_types import HarmCategory, HarmBlockThreshold
+from google.generativeai.types.safety_types import HarmBlockThreshold, HarmCategory
+from openai import OpenAI
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
-from typing import Callable, List, Optional, Type
-import traceback
-import dotenv
-from openai import OpenAI
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Load environment variables from .envrc file
 # put your API keys here
@@ -29,7 +34,7 @@ class Retries:
         for num_retries in range(self.max_retries):
             try:
                 return func(*args, **kwargs)
-            except Exception as error:
+            except Exception:
                 print(
                     f"Failed attempt {num_retries + 1} of {self.max_retries} running {func}"
                 )
@@ -191,7 +196,9 @@ class ModelClient(Retries):
 class RagClient(Retries):
     def __init__(self, max_retries: int = 3):
         super().__init__(max_retries=max_retries)
-        self.ds = load_dataset("bigscience-data/roots_code_stackexchange")
+        dataset = load_dataset("bigscience-data/roots_code_stackexchange")
+        assert isinstance(dataset, DatasetDict)
+        self.ds: DatasetDict = dataset
         model_name = "all-MiniLM-L6-v2"
         self.encoder = SentenceTransformer(model_name)
 
@@ -199,14 +206,7 @@ class RagClient(Retries):
         """
         Find the most similar problems to the given issue using precomputed embeddings.
         """
-        import numpy as np
-        import pandas as pd
-        import torch
-        import os
-        import glob
-        from sklearn.metrics.pairwise import cosine_similarity
-
-        RAGS = []
+        RAGS: list[str] = []
 
         if not issue_description:
             print("Warning: No issue description provided")
@@ -218,8 +218,8 @@ class RagClient(Retries):
 
         # Initialize structure to track top matches
         top_n = num_retrieve
-        top_indices = []
-        top_similarities = []
+        top_similarities: list[float] = []
+        top_indices: list[int] = []
 
         # Find all parquet files with embeddings
         output_dir = "."  # Default to current directory, adjust as needed
@@ -239,8 +239,8 @@ class RagClient(Retries):
             df_batch = pd.read_parquet(batch_file)
 
             # Process embeddings and calculate similarity
-            batch_similarities = []
-            batch_indices = []
+            batch_similarities_list: list[float] = []
+            batch_indices_list: list[int] = []
 
             for _, row in df_batch.iterrows():
                 idx = row["index"]
@@ -249,12 +249,12 @@ class RagClient(Retries):
                 # Calculate similarity
                 similarity = cosine_similarity(query_embedding_np, embedding)[0][0]
 
-                batch_similarities.append(similarity)
-                batch_indices.append(idx)
+                batch_similarities_list.append(similarity)
+                batch_indices_list.append(idx)
 
             # Convert to numpy arrays for efficient operations
-            batch_similarities = np.array(batch_similarities)
-            batch_indices = np.array(batch_indices)
+            batch_similarities = np.array(batch_similarities_list)
+            batch_indices = np.array(batch_indices_list)
 
             # If we don't have enough matches yet, add all from this batch
             if len(top_indices) < top_n:
