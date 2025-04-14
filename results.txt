@@ -21,7 +21,22 @@ Report written to agent_basic_llama3.2.agent_basic_llama3.2.json
 
 # DeepSeek R1 8B:
 
-<TODO>
+Check (logs/run_evaluation/agent_basic_deepseek-r1-8b/agent_basic_deepseek-r1-8b/sympy__sympy-24909/run_instance.log) for more information.
+300 ran successfully, 0 failed: 100%|████████████████████████████████████████████████████████████████████| 300/300 [1:50:58<00:00, 22.19s/it]
+All instances run.
+Cleaning cached images...
+Removed 0 images.
+Total instances: 300
+Instances submitted: 300
+Instances completed: 5
+Instances incomplete: 0
+Instances resolved: 0
+Instances unresolved: 5
+Instances with empty patches: 0
+Instances with errors: 295
+Unstopped containers: 0
+Unremoved images: 0
+Report written to agent_basic_deepseek-r1-8b.agent_basic_deepseek-r1-8b.json
 
 # Gemini 2.5 Pro:
 
