@@ -6,8 +6,17 @@ from clients import ModelClient, RagClient
 
 
 class AgentMulti(Agent):
-    def __init__(self, model_client: ModelClient, max_retries: int = 3):
-        super().__init__(model_client=model_client, max_retries=max_retries)
+    def __init__(
+        self,
+        model_client: ModelClient,
+        max_retries: int = 3,
+        param_count: str | None = None,
+    ) -> None:
+        super().__init__(
+            model_client=model_client,
+            max_retries=max_retries,
+            param_count=param_count,
+        )
         self.model_client = model_client
 
         file_selector_model_client = ModelClient(model_name="gemini-2.5-pro-exp-03-25")

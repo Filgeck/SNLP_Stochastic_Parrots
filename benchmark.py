@@ -17,8 +17,9 @@ PREDICTIONS_DIR_PATH = Path("predictions")
 
 class AgentBenchmark:
     def __init__(self, agent: Agent):
+        model_name = agent.model_client.model_name.replace("/", "_")
         output_path = Path(
-            f"{PREDICTIONS_DIR_PATH}/{agent.agent_name}/{agent.model_client.model_name}".replace(
+            f"{PREDICTIONS_DIR_PATH}/{agent.agent_name}/{model_name}".replace(
                 ":", "-"
             )
         )
@@ -173,7 +174,8 @@ class AgentBenchmark:
                 with open(self.preds_file_path, "r") as file:
                     existing_preds = [json.loads(line) for line in file]
                 processed_ids = {
-                    (p["instance_id"], p["model_name_or_path"]) for p in existing_preds
+                    (p["instance_id"], p["model_name_or_path"])
+                    for p in existing_preds
                 }
             else:
                 return set()
@@ -182,16 +184,42 @@ class AgentBenchmark:
         return processed_ids
 
 
+def benchmark_deepseek_params() -> None:
+    params_to_models = {
+        "1.5B": "deepseek/deepseek-r1-distill-qwen-1.5b",
+        "8B": "deepseek/deepseek-r1-distill-llama-8b",
+        "14B": "deepseek/deepseek-r1-distill-qwen-14b",
+        "32B": "deepseek/deepseek-r1-distill-qwen-32b",
+        "70B": "deepseek/deepseek-r1-distill-llama-70b",
+        "671B": "deepseek/deepseek-r1-blah-blah-671b",
+    }
+    try:
+        for param_count, model_name in params_to_models.items():
+            model = ModelClient(model_name)
+
+            AGENTS_TO_BENCHMARK = [
+                AgentBasic(model, max_retries=10, param_count=param_count),
+                AgentProgrammer(
+                    model, max_retries=10, param_count=param_count
+                ),
+                AgentMulti(model, max_retries=10, param_count=param_count),
+            ]
+
+            for agent in AGENTS_TO_BENCHMARK:
+                benchmark = AgentBenchmark(agent)
+                benchmark.generate_preds_precomputed_retrieval(
+                    SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+                )
+                benchmark.run_benchmark(max_workers=16)
+
+    except KeyboardInterrupt:
+        print("Benchmarking interrupted by user.")
+
+
 if __name__ == "__main__":
     MODELS_TO_BENCHMARK = [
         # "anthropic/claude-3.7-sonnet",
         "deepseek/deepseek-r1-zero:free",
-        # "deepseek/deepseek-r1",
-        # "deepseek/deepseek-r1-distill-llama-8b",
-        # "deepseek/deepseek-r1-distill-qwen-1.5b",
-        # "deepseek/deepseek-r1-distill-qwen-32b",
-        # "deepseek/deepseek-r1-distill-qwen-14b",
-        # "deepseek/deepseek-r1-distill-llama-70b",
         # "x-ai/grok-3-beta",
         "deepseek-r1-8b",
         "llama3.2",

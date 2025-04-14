@@ -5,16 +5,18 @@ from typing import List, Tuple
 
 from clients import Retries, ModelClient
 
-
 class Agent(Retries):
     def __init__(
         self,
         model_client: ModelClient,
-        max_retries: int = 3
+        max_retries: int = 3,
+        param_count: str | None = None,
     ) -> None:
         super().__init__(max_retries=max_retries)
         self.model_client = model_client
         self.agent_name = "agent"
+        if param_count is not None:
+            self.agent_name += f"_{param_count}"
 
     @abstractmethod
     def forward(self, *inputs):

@@ -1,17 +1,23 @@
 import os
-import re
 import subprocess
 
 from agents.base import Agent
 from clients import ModelClient
 
-import os
-import subprocess
 
 
 class AgentProgrammer(Agent):
-    def __init__(self, model_client: ModelClient, max_retries: int = 3):
-        super().__init__(model_client=model_client, max_retries=max_retries)
+    def __init__(
+        self,
+        model_client: ModelClient,
+        max_retries: int = 3,
+        param_count: str | None = None,
+    ) -> None:
+        super().__init__(
+            model_client=model_client,
+            max_retries=max_retries,
+            param_count=param_count,
+        )
         self.agent_name = "agent_programmer"
 
     def forward(
