@@ -1,15 +1,20 @@
-from datasets import load_dataset
-import ollama
+import glob
 import os
+import traceback
+from typing import Callable, List, Optional, Type, no_type_check
+
+import dotenv
 import google.generativeai as genai
+import numpy as np
+import ollama
+import pandas as pd
+from datasets import load_dataset, DatasetDict
 from google.generativeai.types import GenerateContentResponse
-from google.generativeai.types.safety_types import HarmCategory, HarmBlockThreshold
+from google.generativeai.types.safety_types import HarmBlockThreshold, HarmCategory
+from openai import OpenAI
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
-from typing import Callable, List, Optional, Type
-import traceback
-import dotenv
-from openai import OpenAI
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Load environment variables from .envrc file
 # put your API keys here
@@ -20,6 +25,11 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
+OPENROUTER_MODELS = {
+    "deepseek/deepseek-r1-zero:free",
+    "anthropic/claude-3.7-sonnet",
+    "x-ai/grok-3-beta",
+}
 
 class Retries:
     def __init__(self, max_retries: int = 3):
@@ -29,7 +39,7 @@ class Retries:
         for num_retries in range(self.max_retries):
             try:
                 return func(*args, **kwargs)
-            except Exception as error:
+            except Exception:
                 print(
                     f"Failed attempt {num_retries + 1} of {self.max_retries} running {func}"
                 )
@@ -49,7 +59,7 @@ class ModelClient(Retries):
         self.client: OpenAI | None = None
         self._request_limit_per_minute: float | None = None
         self.is_openrouter = False
-        if self.model_name.startswith("anthropic"):
+        if self.model_name in OPENROUTER_MODELS:
             self.is_openrouter = True
             self.client = OpenAI(
                 base_url="https://openrouter.ai/api/v1",
@@ -162,36 +172,74 @@ class ModelClient(Retries):
 
         return response_content
 
+    @no_type_check # Apologies
     def _query_openrouter(
         self, prompt: str, structure: Optional[Type[BaseModel]] = None
     ) -> str:
         assert isinstance(self.client, OpenAI)
-        completion = self.client.chat.completions.create(
-            extra_body={"provider": {"sort": "throughput"}},
-            model=self.model_name,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                    ],
+
+        # Query parameters
+        extra_body = {"provider": {"sort": "throughput"}}
+        messages = [
+            {
+                "role": "user",
+                "content": [ {"type": "text", "text": prompt} ],
+            }
+        ]
+
+        if structure is not None:
+            structure_json = structure.model_json_schema()
+            properties = {}
+
+            for p_name, p in structure_json["properties"].items():
+                properties[p_name] = {
+                    "description": p.get("description", "<no description given>"),
+                    "type": p["type"]
                 }
-            ],
-            n=1,  # number of choices to generate
-        )
-        assert len(completion.choices) == 1
-        message = completion.choices[0].message
-        if message.content is None:
-            raise ValueError(
-                f"Error: Received None content from model {self.model_name}"
+
+            completion = self.client.chat.completions.create(
+                extra_body=extra_body,
+                model=self.model_name,
+                messages=messages,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": structure_json["title"],
+                        "strict": True,
+                        "schema": {
+                            "type": "object",
+                            "properties": properties,
+                            "required": list(properties),
+                            "additionalProperties": False
+                        }
+                    }
+                },
+                n=1,  # number of choices to generate
             )
+        else:
+            completion = self.client.chat.completions.create(
+                extra_body=extra_body,
+                model=self.model_name,
+                messages=messages,
+                n=1,  # number of choices to generate
+            )
+
+        assert len(completion.choices) == 1
+
+        message = completion.choices[0].message
+
+        if message.content is None:
+            raise ValueError(f"Error: Received None content from model {self.model_name}")
+
         return message.content
 
 
 class RagClient(Retries):
     def __init__(self, max_retries: int = 3):
         super().__init__(max_retries=max_retries)
-        self.ds = load_dataset("bigscience-data/roots_code_stackexchange")
+        dataset = load_dataset("bigscience-data/roots_code_stackexchange")
+        assert isinstance(dataset, DatasetDict)
+        self.ds: DatasetDict = dataset
         model_name = "all-MiniLM-L6-v2"
         self.encoder = SentenceTransformer(model_name)
 
@@ -199,14 +247,7 @@ class RagClient(Retries):
         """
         Find the most similar problems to the given issue using precomputed embeddings.
         """
-        import numpy as np
-        import pandas as pd
-        import torch
-        import os
-        import glob
-        from sklearn.metrics.pairwise import cosine_similarity
-
-        RAGS = []
+        RAGS: list[str] = []
 
         if not issue_description:
             print("Warning: No issue description provided")
@@ -218,8 +259,8 @@ class RagClient(Retries):
 
         # Initialize structure to track top matches
         top_n = num_retrieve
-        top_indices = []
-        top_similarities = []
+        top_similarities: list[float] = []
+        top_indices: list[int] = []
 
         # Find all parquet files with embeddings
         output_dir = "."  # Default to current directory, adjust as needed
@@ -239,8 +280,8 @@ class RagClient(Retries):
             df_batch = pd.read_parquet(batch_file)
 
             # Process embeddings and calculate similarity
-            batch_similarities = []
-            batch_indices = []
+            batch_similarities_list: list[float] = []
+            batch_indices_list: list[int] = []
 
             for _, row in df_batch.iterrows():
                 idx = row["index"]
@@ -249,12 +290,12 @@ class RagClient(Retries):
                 # Calculate similarity
                 similarity = cosine_similarity(query_embedding_np, embedding)[0][0]
 
-                batch_similarities.append(similarity)
-                batch_indices.append(idx)
+                batch_similarities_list.append(similarity)
+                batch_indices_list.append(idx)
 
             # Convert to numpy arrays for efficient operations
-            batch_similarities = np.array(batch_similarities)
-            batch_indices = np.array(batch_indices)
+            batch_similarities = np.array(batch_similarities_list)
+            batch_indices = np.array(batch_indices_list)
 
             # If we don't have enough matches yet, add all from this batch
             if len(top_indices) < top_n:

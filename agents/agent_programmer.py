@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 
@@ -40,9 +41,6 @@ class AgentProgrammer(Agent):
             return ""
 
         changed_files = self._get_files(response, True)
-
-        print("Orig file names:", list(files_dict.keys()))
-        print("Changed file names:", list(changed_files.keys()))
 
         patch = self.create_patch_from_files(
             files_dict, changed_files, "agent_cache", cleanup=False
