@@ -1,12 +1,12 @@
 from clients import RagClient
 from clients import ModelClient
-from architectures import MultiAgent
+from agents import AgentMulti
 from agents import AgentFileSelector
 from agents import AgentExampleRetriever
 from agents import AgentProgrammer
 
 multi_agent_model_client = ModelClient(model_name="gemini-2.5-pro-exp-03-25")
-multi_agent = MultiAgent(
+multi_agent = AgentMulti(
     model_client=multi_agent_model_client,
     max_retries=3,
 )

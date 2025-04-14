@@ -1,10 +1,10 @@
-from agents import Agent
-from agents import AgentFileSelector
-from agents import AgentExampleRetriever
-from agents import AgentProgrammer
+from agents.base import Agent
+from agents.base import AgentFileSelector
+from agents.base import AgentExampleRetriever
+from agents.base import AgentProgrammer
 from clients import ModelClient, RagClient
 
-class MultiAgent(Agent):
+class AgentMulti(Agent):
     def __init__(self, model_client: ModelClient, max_retries: int = 3):
         super().__init__(model_client=model_client, max_retries=max_retries)
         self.model_client = model_client
