@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 from agents.programmer import AgentProgrammer
 from clients import ModelClient
+import re
 
 
 class TestAgentProgrammer(unittest.TestCase):
