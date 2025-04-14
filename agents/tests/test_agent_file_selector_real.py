@@ -4,7 +4,7 @@ from agents import AgentFileSelector
 from clients import ModelClient
 
 # Directory where your example inputs are stored
-TEST_DATA_DIR = Path(__file__).parent / "test_data"
+TEST_DATA_DIR = Path(__file__).parent / "data"
 
 @pytest.fixture
 def model_client():

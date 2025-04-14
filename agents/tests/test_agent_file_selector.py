@@ -29,7 +29,7 @@ class TestAgentFileSelector(unittest.TestCase):
         )
         
         # Find all test files in the directory
-        test_files_dir = "test_data"
+        test_files_dir = "data"
         test_file_pattern = os.path.join(test_files_dir, "*.txt")
         test_file_paths = glob.glob(test_file_pattern)
         

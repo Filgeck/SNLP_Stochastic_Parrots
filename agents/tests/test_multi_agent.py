@@ -12,7 +12,7 @@ multi_agent = AgentMulti(
 )
 
 example_prompt = ""
-with open("example_prompt.txt", "r") as file:
+with open("data/example_prompt.txt", "r") as file:
     example_prompt = file.read()
 
 patch = multi_agent.forward(example_prompt)
