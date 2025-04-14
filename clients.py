@@ -263,19 +263,15 @@ class RagClient(Retries):
         top_indices: list[int] = []
 
         # Find all parquet files with embeddings
-        output_dir = "."  # Default to current directory, adjust as needed
+        output_dir = "./embeddings/code_stack_exchange"  # Default to current directory, adjust as needed
         parquet_files = glob.glob(f"{output_dir}/batch_*.parquet")
 
         if not parquet_files:
             print(f"No precomputed embedding files found in {output_dir}")
             return RAGS
 
-        print(f"Found {len(parquet_files)} embedding batch files")
-
         # Process each batch file to find most similar vectors
         for batch_file in parquet_files:
-            print(f"Processing {batch_file}...")
-
             # Load batch of precomputed embeddings
             df_batch = pd.read_parquet(batch_file)
 
@@ -336,11 +332,9 @@ class RagClient(Retries):
                         top_indices = [x[1] for x in combined]
 
         # Retrieve full texts for top matches
-        print(f"Retrieved {len(top_indices)} most similar questions")
         for i, (idx, similarity) in enumerate(zip(top_indices, top_similarities)):
             idx = int(idx)  # Ensure index is integer
             text = self.ds["train"][idx]["text"]
-            print(f"Match {i + 1} (score: {similarity:.4f}): Original index {idx}")
             RAGS.append(text)
 
         return RAGS
