@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Callable
 from tqdm.auto import tqdm
 from datasets import load_dataset, DatasetDict
-from agents import Agent, AgentBasic
+from agents import Agent, AgentBasic, AgentProgrammer, AgentMulti
 from clients import ModelClient
 import traceback
 import subprocess
@@ -184,19 +184,28 @@ class AgentBenchmark:
 
 if __name__ == "__main__":
     MODELS_TO_BENCHMARK = [
-        "anthropic/claude-3.7-sonnet",
-        # "deepseek-r1:8b",
-        # "llama3.2",
-        # "gemini-2.5-pro-exp-03-25",
+        # "anthropic/claude-3.7-sonnet",
+        "deepseek-r1-8b",
+        "llama3.2",
+        "gemini-2.5-pro-exp-03-25",
     ]
+
     try:
         for model_name in MODELS_TO_BENCHMARK:
-            model = ModelClient(model_name=model_name)
-            agent = AgentBasic(model, max_retries=10)
-            benchmark = AgentBenchmark(agent)
-            benchmark.generate_preds_precomputed_retrieval(
-                SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-            )
-            benchmark.run_benchmark(max_workers=16)
+            model = ModelClient(model_name)
+
+            AGENTS_TO_BENCHMARK = [
+                AgentBasic(model, max_retries=10),
+                AgentProgrammer(model, max_retries=10),
+                AgentMulti(model, max_retries=10),
+            ]
+
+            for agent in AGENTS_TO_BENCHMARK:
+                benchmark = AgentBenchmark(agent)
+                benchmark.generate_preds_precomputed_retrieval(
+                    SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+                )
+                benchmark.run_benchmark(max_workers=16)
+
     except KeyboardInterrupt:
         print("Benchmarking interrupted by user.")

@@ -10,12 +10,13 @@ class AgentExampleRetriever(Agent):
         self.rag_client = rag_client
         self.model_client = model_client
 
-    def forward(self, issue_description: str, num_retrieve: int, num_select: int) -> str:
+    def forward(
+        self, issue_description: str, num_retrieve: int, num_select: int
+    ) -> str:
         """AgentExampleRetriever fetches examples via RAG of stack exchange solutions to questions that are similar to the current issue/errors."""
 
-
         RAGS_unfiltered = self.rag_client.query(
-            issue_description = issue_description,
+            issue_description=issue_description,
             num_retrieve=num_retrieve,
         )
 
@@ -45,7 +46,9 @@ class AgentExampleRetriever(Agent):
             # Add the start and end markers
             example = example.strip()
             if example:
-                RAGS_filtered_output += f"[start of example_{i+1}]\n{example}\n[end of example_{i+1}]\n"
+                RAGS_filtered_output += (
+                    f"[start of example_{i + 1}]\n{example}\n[end of example_{i + 1}]\n"
+                )
         # Add the closing tag
         RAGS_filtered_output = f"<examples>\n{RAGS_filtered_output}</examples>"
 

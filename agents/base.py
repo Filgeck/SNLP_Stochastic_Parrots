@@ -2,6 +2,7 @@ from abc import abstractmethod
 import re
 from typing import List, Tuple
 
+
 from clients import Retries, ModelClient
 
 
@@ -80,6 +81,7 @@ class Agent(Retries):
             return extracted
 
         return self._func_with_retries(helper, prompt, tag_name)
+
 
     def build_tagged_string(
         self, issue: str | None, code: List[Tuple[str, str]], line_numbers=False

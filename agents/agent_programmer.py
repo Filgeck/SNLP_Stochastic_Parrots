@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 
@@ -10,38 +11,45 @@ class AgentProgrammer(Agent):
         super().__init__(model_client=model_client, max_retries=max_retries)
         self.agent_name = "agent_programmer"
 
-    def forward(
-        self,
-        prompt: str,
-    ) -> str | None:
-        """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
+    def forward(self, prompt: str) -> str | None:
+        """
+        Generates fixed files based on the prompt and creates a patch by diffing original and fixed files.
+        Uses the base Agent's _query_and_extract() for robust querying.
+        """
+        # Extract original files from the prompt (assuming base Agent's _get_files handles this)
+        original_files = self._get_files(prompt, strip_line_num=False)
 
-        files_dict = self._get_files(prompt, False)
+        # Append instructions for the model to return full fixed files
+        enhanced_prompt = (
+            f"{prompt}\n\n"
+            "Please fix the bugs in the provided files and return the full fixed files in this format:\n"
+            "[start of FILEPATH]\nCONTENT\n[end of FILEPATH]\n"
+            "For each file, include the complete content, not just changes. "
+            "Do not include line numbers or partial snippets.\n"
+        )
 
-        clean_prompt = prompt
+        # Use base Agent's _query_and_extract to handle retries and parsing
+        response = self._query_and_extract(enhanced_prompt)
+        if not response or not response.strip():
+            return None
 
-        clean_prompt += "\n\nPlease fix the bugs in the files and return the full fixed files in this format:\n\n" \
-            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n" \
-            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n" \
-            " etc make sure to write out the full file, not just the changes. And do not write line numbers!\n\n"
-        
-        response = self.model_client.query(clean_prompt)
-        
-        changed_files = self._get_files(response, False)
+        # Extract fixed files from the response
+        fixed_files = self._get_files(response, strip_line_num=False)
 
-        patch = self.create_patch_from_files(files_dict, changed_files, "agent_cache", cleanup=True)
+        # Generate patch by comparing original and fixed files
+        patch = self.create_patch_from_files(
+            original_files, fixed_files, "agent_cache", cleanup=True
+        )
 
         return patch
 
-        # return self._func_with_retries(helper, prompt)
-    
     def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
         """
         Extract file content from a string containing file blocks marked with [start of filename] and [end of filename].
-        
+
         Args:
             files_text: String containing file blocks
-            
+
         Returns:
             Dictionary mapping file paths to file contents
         """
@@ -81,8 +89,9 @@ class AgentProgrammer(Agent):
 
         return result.stdout
 
-    
-    def create_patch_from_files(self, files_dict: dict, changed_files: dict, cache_dir: str, cleanup=True) -> str:
+    def create_patch_from_files(
+        self, files_dict: dict, changed_files: dict, cache_dir: str, cleanup=True
+    ) -> str:
         """
         Save original and fixed files in the cache directory, generate a patch, and optionally clean up.
         Args:
@@ -95,7 +104,7 @@ class AgentProgrammer(Agent):
         """
         import os
         import subprocess
-        
+
         modified_files = []
         temp_files = {}
 
@@ -112,18 +121,21 @@ class AgentProgrammer(Agent):
                 # KEY CHANGE: Treat an empty "fixed_content" as "no change."
                 # Also skip if the file is unchanged.
                 # -------------------------------------------------------------
-                if (fixed_content.strip() == "" 
-                    or fixed_content == original_content):
+                if fixed_content.strip() == "" or fixed_content == original_content:
                     # This means "no effective changes" => skip
                     continue
 
                 # Otherwise, we do have changes, so create temp files to diff
-                orig_file = os.path.join(cache_dir, f"orig_{os.path.basename(file_path)}")
-                fixed_file = os.path.join(cache_dir, f"fixed_{os.path.basename(file_path)}")
+                orig_file = os.path.join(
+                    cache_dir, f"orig_{os.path.basename(file_path)}"
+                )
+                fixed_file = os.path.join(
+                    cache_dir, f"fixed_{os.path.basename(file_path)}"
+                )
 
-                with open(orig_file, 'w', encoding='utf-8') as f:
+                with open(orig_file, "w", encoding="utf-8") as f:
                     f.write(original_content)
-                with open(fixed_file, 'w', encoding='utf-8') as f:
+                with open(fixed_file, "w", encoding="utf-8") as f:
                     f.write(fixed_content)
 
                 temp_files[file_path] = (orig_file, fixed_file)
@@ -137,7 +149,7 @@ class AgentProgrammer(Agent):
                 result = subprocess.run(
                     ["diff", "-u", orig_file, fixed_file],
                     capture_output=True,
-                    text=True
+                    text=True,
                 )
 
                 # diff returns 1 if files differ, which we do expect

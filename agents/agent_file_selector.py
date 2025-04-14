@@ -126,23 +126,23 @@ class AgentFileSelector(Agent):
                 )
 
         return selected_file_paths
-    
+
     def remove_line_numbers(self, text: str) -> str:
-        lines = text.split('\n')
+        lines = text.split("\n")
         new_lines = []
         for line in lines:
-            new_line = re.sub(r'^\d+\s?', '', line)
+            new_line = re.sub(r"^\d+\s?", "", line)
             new_lines.append(new_line)
-        return '\n'.join(new_lines)
+        return "\n".join(new_lines)
 
     def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
         """
         Extract file content from a string containing file blocks marked with [start of filename] and [end of filename].
-        
+
         Args:
             files_text: String containing file blocks
             strip_line_num: Whether to strip line numbers from the file content
-            
+
         Returns:
             Dictionary mapping file paths to file contents
         """
@@ -163,11 +163,15 @@ class AgentFileSelector(Agent):
         return files_dict
 
     def _format_output(
-        self, text: str, files_text: str, selected_file_paths: List[str], files_dict: dict
+        self,
+        text: str,
+        files_text: str,
+        selected_file_paths: List[str],
+        files_dict: dict,
     ) -> str:
         """Reconstructs the text within <code> tags to only include files specified in selected_files_paths.
         Uses the processed files_dict to ensure line numbers are properly handled."""
-        
+
         # only keep blocks whose paths are in selected_files_paths
         selected_blocks_text = []
         selected_files_set = set(selected_file_paths)
@@ -204,14 +208,19 @@ class AgentFileSelector(Agent):
         suffix = match.group(3)
 
         if reconstructed_code_content:
-            final_text = f"{prefix.rstrip()}\n{reconstructed_code_content}\n{suffix.lstrip()}"
-            
+            final_text = (
+                f"{prefix.rstrip()}\n{reconstructed_code_content}\n{suffix.lstrip()}"
+            )
+
             # Clean up potential double newlines around the inserted content
-            final_text = final_text.replace(f"{prefix.rstrip()}\n\n", f"{prefix.rstrip()}\n")
-            final_text = final_text.replace(f"\n\n{suffix.lstrip()}", f"\n{suffix.lstrip()}")
+            final_text = final_text.replace(
+                f"{prefix.rstrip()}\n\n", f"{prefix.rstrip()}\n"
+            )
+            final_text = final_text.replace(
+                f"\n\n{suffix.lstrip()}", f"\n{suffix.lstrip()}"
+            )
         else:
             # Case where no files are selected (empty <code> block)
             final_text = f"{prefix.rstrip()}\n{suffix.lstrip()}"
-
 
         return final_text
