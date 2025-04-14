@@ -1,7 +1,7 @@
 import ast
 from collections import deque
 from pathlib import Path
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import subprocess
 from typing import Dict, List, Optional, Set, Tuple
 
@@ -19,7 +19,7 @@ DESCRIBE_ISSUE = (
 
 # Output schema
 class StartingPoint(BaseModel):
-    starting_filename: str
+    starting_filename: str = Field(description="The filename in which the error occured")
 
 
 class AgentFileRetriever(Agent):
