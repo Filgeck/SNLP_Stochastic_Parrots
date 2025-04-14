@@ -1,5 +1,7 @@
 from abc import abstractmethod
 import re
+from typing import List, Tuple
+
 
 from clients import Retries, ModelClient
 
@@ -79,3 +81,39 @@ class Agent(Retries):
             return extracted
 
         return self._func_with_retries(helper, prompt, tag_name)
+
+
+    def build_tagged_string(
+        self, issue: str | None, code: List[Tuple[str, str]], line_numbers=False
+    ) -> str:
+        """
+        Builds a string with blocks for the issue and for code
+
+        args:
+        - issue: the Github issue
+        - code: a list of (filename, file contents) pairs
+        - line_numbers: whether to provide line numbers in the output string
+
+        returns:
+            A string!
+        """
+
+        if issue is None:
+            s = ""
+        else:
+            s = f"<issue>\n{issue}</issue>"
+
+        s += "\n<code>\n"
+
+        for name, contents in code:
+            s += f"[start of {name}]\n"
+
+            if line_numbers:
+                for i, line in enumerate(contents.split("\n")):
+                    s += f"{i + 1} {line}\n"
+            else:
+                s += contents + "\n"
+
+            s += f"[end of {name}]"
+
+        return f"{s}\n</code>"
