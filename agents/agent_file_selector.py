@@ -19,12 +19,16 @@ class AgentFileSelector(Agent):
         self.strip_line_num = strip_line_num
 
     def forward(
-        self,
-        text: str,
-        method: Literal["batch", "individual"],
-        custom_issue: str | None = None,
+        self, text: str, method: Literal["batch", "individual"], custom_issue: str | None = None,
     ) -> Tuple[List[str], str]:
-        """AgentFileSelector selects which files to pass on based on if they are relevant to the current issue/errors."""
+        """
+        selects which files to pass on based on if they are relevant to the current issue/errors.
+
+        args:
+        - text: the full issues/code text block
+        - method: whether to pass each file to the model in a block or sequentially
+        - custom_issue: a custom issue not in the text
+        """
 
         issue_text = custom_issue or self._extract_tag(text, "issue")
         files_text = self._extract_tag(text, "code")
