@@ -6,8 +6,11 @@ embeddings/*.parquet
 embeddings/**/*.parquet
 ~old_project/quarterly_transcripts/data/earning_calls/**/*.txt
 ~old_project/quarterly_transcripts/data/price_history/**/*.csv
+.mypy_cache
 
 embeddings/cache/
 batch_0_249999.parquet
 .envrc
 logs/
+.DS_Store
+src/swebench

@@ -142,7 +142,7 @@ class ModelClient(Retries):
                 temperature=0.7,
                 top_p=0.9,
                 top_k=40,
-                max_output_tokens=16384,
+                max_output_tokens=65536,
                 response_mime_type="application/json",
                 response_schema=structure,
             )
@@ -151,7 +151,7 @@ class ModelClient(Retries):
                 temperature=0.7,
                 top_p=0.9,
                 top_k=40,
-                max_output_tokens=16384,
+                max_output_tokens=65536,
             )
 
         safety_settings = {
