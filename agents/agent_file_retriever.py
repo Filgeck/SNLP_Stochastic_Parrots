@@ -307,3 +307,4 @@ class ImportGraph:
             if m_name == module_name or m_name.startswith(module_name + "."):
                 paths.append(file_path)
 
+        return paths
