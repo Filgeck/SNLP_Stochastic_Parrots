@@ -1,11 +1,7 @@
 from abc import abstractmethod
-from datasets import load_dataset
 import re
-from sentence_transformers import SentenceTransformer
-import subprocess
-from typing import List, Literal, Tuple
 
-from clients import Retries, ModelClient, RagClient
+from clients import Retries, ModelClient
 
 
 class Agent(Retries):
