@@ -28,8 +28,9 @@ class AgentProgrammer(Agent):
         )
 
         response = self.model_client.query(clean_prompt)
-
         changed_files = self._get_files(response, False)
+        if not response or not response.strip():
+            return None
 
         patch = self.create_patch_from_files(
             files_dict, changed_files, "agent_cache", cleanup=True
