@@ -12,7 +12,6 @@ __all__ = [
     "AgentBasic",
     "AgentFileSelector",
     "AgentFileRetriever",
-    "AgentExampleRetriever"
-    "AgentProgrammer",
-    "AgentMulti"
+    "AgentExampleRetrieverAgentProgrammer",
+    "AgentMulti",
 ]
