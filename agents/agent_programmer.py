@@ -43,7 +43,7 @@ class AgentProgrammer(Agent):
         changed_files = self._get_files(response, True)
 
         patch = self.create_patch_from_files(
-            files_dict, changed_files, "agent_cache", cleanup=False
+            files_dict, changed_files, "agent_cache", cleanup=True
         )
 
         return patch
