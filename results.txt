@@ -1,0 +1,144 @@
+## AgentBasic Benchmarks:
+
+# Llama 3.2 7B:
+
+Check (logs/run_evaluation/agent_basic_llama3.2/agent_basic_llama3.2/scikit-learn__scikit-learn-14894/run_instance.log) for more information.
+300 ran successfully, 0 failed: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 300/300 [1:33:53<00:00, 18.78s/it]
+All instances run.
+Cleaning cached images...
+Removed 0 images.
+Total instances: 300
+Instances submitted: 300
+Instances completed: 8
+Instances incomplete: 0
+Instances resolved: 0
+Instances unresolved: 8
+Instances with empty patches: 0
+Instances with errors: 292
+Unstopped containers: 0
+Unremoved images: 0
+Report written to agent_basic_llama3.2.agent_basic_llama3.2.json
+
+# DeepSeek R1 8B:
+
+<TODO>
+
+# Gemini 2.5 Pro:
+
+Check (logs/run_evaluation/agent_basic_gemini-2.5-pro-exp-03-25/agent_basic_gemini-2.5-pro-exp-03-25/sympy__sympy-24909/run_instance.log) for more information.
+300 ran successfully, 0 failed: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 300/300 [3:05:00<00:00, 37.00s/it]
+All instances run.
+Cleaning cached images...
+Removed 0 images.
+Total instances: 300
+Instances submitted: 300
+Instances completed: 101
+Instances incomplete: 0
+Instances resolved: 43
+Instances unresolved: 58
+Instances with empty patches: 0
+Instances with errors: 199
+Unstopped containers: 0
+Unremoved images: 0
+Report written to agent_basic_gemini-2.5-pro-exp-03-25.agent_basic_gemini-2.5-pro-exp-03-25.json
+
+## AgentProgrammer Benchmarks:
+
+# Llama 3.2 7B:
+
+<TODO>
+
+# DeepSeek R1 8B:
+
+<TODO>
+
+# Gemini 2.5 Pro:
+
+<TODO>
+
+## AgentMulti Benchmarks:
+
+# Llama 3.2 7B:
+
+<TODO>
+
+# DeepSeek R1 8B:
+
+<TODO>
+
+# Gemini 2.5 Pro:
+
+<TODO>
+
+## Temperature Benchmarks:
+
+# 0.0
+
+<TODO>
+
+# 0.2
+
+<TODO>
+
+# 0.4
+
+<TODO>
+
+# 0.6
+
+<TODO>
+
+# 0.8
+
+<TODO>
+
+# 1.0
+
+<TODO>
+
+# 1.2
+
+<TODO>
+
+# 1.4
+
+<TODO>
+
+# 1.6
+
+<TODO>
+
+# 1.8
+
+<TODO>
+
+# 2.0
+
+<TODO>
+
+## Parameter Count Benchmarks:
+
+# 1.5B
+
+<TODO>
+
+# 8B
+
+<TODO>
+
+# 14B
+
+<TODO>
+
+# 32B
+
+<TODO>
+
+# 70B
+
+<TODO>
+
+# 671B
+
+<TODO>
+
