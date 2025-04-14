@@ -35,15 +35,11 @@ class AgentMulti(Agent):
         files_list, only_selected_files = self.agent1.forward(prompt, "batch")
 
         # get issue between <issue> and </issue>
-        start = prompt.find("<issue>")
-        end = prompt.find("</issue>")
-        issue = prompt[start + len("<issue>") : end]
+        issue = prompt[prompt.find("<issue>") + len("<issue>") : prompt.find("</issue>")]
 
         rags = self.agent2.forward(issue, 10, 3)
 
         programmer_prompt = only_selected_files + "\n" + rags
-
-        print(programmer_prompt)
 
         # SET CLEANUP TO FALSE
         patch = self.agent3.forward(programmer_prompt)

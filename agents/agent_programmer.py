@@ -4,6 +4,9 @@ import subprocess
 from agents.base import Agent
 from clients import ModelClient
 
+import os
+import subprocess
+
 
 class AgentProgrammer(Agent):
     def __init__(self, model_client: ModelClient, max_retries: int = 3):
@@ -16,51 +19,36 @@ class AgentProgrammer(Agent):
     ) -> str | None:
         """AgentProgrammer regenerates (fully) files with bugs in them, then generates a patch via a diff between the old and new file"""
 
-        files_dict = self._get_files(prompt, False)
+        files_dict = self._get_files(prompt, True)
 
-        clean_prompt = prompt
-
-        clean_prompt += (
+        prompt += (
             "\n\nPlease fix the bugs in the files and return the full fixed files in this format:\n\n"
-            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n"
-            "[start of FILEPATH] abcdef\n[end of FILEPATH]\n"
-            " etc make sure to write out the full file, not just the changes. And do not write line numbers!\n\n"
+            "<files>\n"
+            "[start of ENTER_FILE_PATH] abcdef\n[end of ENTER_FILE_PATH]\n"
+            "[start of ENTER_FILE_PATH] abcdef\n[end of ENTER_FILE_PATH]\n"
+            "</files>\n\n"
+            " etc make sure to write out the full file, not just the changes "
+            "(only include files that you changed, don't include explanation or files that were not changed). And do not write line numbers!\n\n"
+            "Make your change consise and only include the files that were changed.\n\n"
+            "Put all the code for files you changed inside <files> and </files> tags.\n\n"
         )
 
-        response = self.model_client.query(clean_prompt)
+        try:
+            response = self._query_and_extract(prompt, "files")
+        except Exception as e:
+            print("Programmer agent failed to generate files from prompt")
+            return ""
 
-        changed_files = self._get_files(response, False)
+        changed_files = self._get_files(response, True)
+
+        print("Orig file names:", list(files_dict.keys()))
+        print("Changed file names:", list(changed_files.keys()))
 
         patch = self.create_patch_from_files(
-            files_dict, changed_files, "agent_cache", cleanup=True
+            files_dict, changed_files, "agent_cache", cleanup=False
         )
 
         return patch
-
-        # return self._func_with_retries(helper, prompt)
-
-    def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
-        """
-        Extract file content from a string containing file blocks marked with [start of filename] and [end of filename].
-
-        Args:
-            files_text: String containing file blocks
-
-        Returns:
-            Dictionary mapping file paths to file contents
-        """
-        # Regex to find all file blocks
-        # \[start of (.*?)\] -> Capture [start of example/test.py]
-        # (.*?) -> Capture the file content (non-greedy)
-        # \[end of \1\] -> Match [end of example/test.py]
-        pattern = r"\[start of (.*?)\](.*?)\[end of \1\]"
-        matches = re.findall(pattern, files_text, re.DOTALL)
-        files_dict = {}
-        for match in matches:
-            file_path = match[0].strip()
-            file_content = match[1].strip()
-            files_dict[file_path] = file_content
-        return files_dict
 
     def _generate_patch(self, file1: str, file2: str):
         """Generate a patch between two files using the diff command."""
@@ -98,8 +86,6 @@ class AgentProgrammer(Agent):
         Returns:
             Generated patch as a string
         """
-        import os
-        import subprocess
 
         modified_files = []
         temp_files = {}
@@ -162,7 +148,6 @@ class AgentProgrammer(Agent):
 
                 all_patches.append("\n".join(diff_output))
 
-            print(f"Patched {len(all_patches)} files")
             return "\n".join(all_patches)
 
         finally:

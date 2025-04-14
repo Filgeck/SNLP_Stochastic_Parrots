@@ -59,7 +59,7 @@ class AgentFileSelector(Agent):
 
         prompt = f"""Your task is to select the files that are relevant to 
         solving the issue, this will be passed on to another model which 
-        will use these as context to solve the issue:
+        will use these as context to solve the issue. You have to select all files which are relevant or can help in solving the issue:
         \n<issue>\n{issue_text}\n</issue>
         \n<files>\n{files_text}\n</files>
         \nFeel free to reason about which files to select. At the end provide 
@@ -95,7 +95,7 @@ class AgentFileSelector(Agent):
             prompt = f"""You will bed given files one by one. Your task is to 
             determine if the following file is relevant to solving the issue, 
             this will be passed on to another model which will use this as 
-            context to solve the issue:
+            context to solve the issue. You have to select all files which are relevant or can help in solving the issue:
             \n<issue>\n{issue_text}\n</issue>
             \nHere is {file_path}:
             \n<file>\n{file_content}\n</file>
@@ -117,41 +117,6 @@ class AgentFileSelector(Agent):
                 )
 
         return selected_file_paths
-
-    def remove_line_numbers(self, text: str) -> str:
-        lines = text.split("\n")
-        new_lines = []
-        for line in lines:
-            new_line = re.sub(r"^\d+\s?", "", line)
-            new_lines.append(new_line)
-        return "\n".join(new_lines)
-
-    def _get_files(self, files_text: str, strip_line_num: bool) -> dict:
-        """
-        Extract file content from a string containing file blocks marked with [start of filename] and [end of filename].
-
-        Args:
-            files_text: String containing file blocks
-            strip_line_num: Whether to strip line numbers from the file content
-
-        Returns:
-            Dictionary mapping file paths to file contents
-        """
-        # Regex to find all file blocks
-        # \[start of (.*?)\] -> Capture [start of example/test.py]
-        # (.*?) -> Capture the file content (non-greedy)
-        # \[end of \1\] -> Match [end of example/test.py]
-        pattern = r"\[start of (.*?)\](.*?)\[end of \1\]"
-        matches = re.findall(pattern, files_text, re.DOTALL)
-        files_dict = {}
-        for match in matches:
-            file_path = match[0].strip()
-            file_content = match[1].strip()
-            files_dict[file_path] = file_content
-        if strip_line_num:
-            for file_path, file_content in files_dict.items():
-                files_dict[file_path] = self.remove_line_numbers(file_content)
-        return files_dict
 
     def _format_output(
         self,
