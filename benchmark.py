@@ -186,6 +186,12 @@ if __name__ == "__main__":
     MODELS_TO_BENCHMARK = [
         # "anthropic/claude-3.7-sonnet",
         "deepseek/deepseek-r1-zero:free",
+        # "deepseek/deepseek-r1",
+        # "deepseek/deepseek-r1-distill-llama-8b",
+        # "deepseek/deepseek-r1-distill-qwen-1.5b",
+        # "deepseek/deepseek-r1-distill-qwen-32b",
+        # "deepseek/deepseek-r1-distill-qwen-14b",
+        # "deepseek/deepseek-r1-distill-llama-70b",
         # "x-ai/grok-3-beta",
         "deepseek-r1-8b",
         "llama3.2",
