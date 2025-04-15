@@ -246,35 +246,35 @@ def benchmark_deepseek_params() -> None:
     except KeyboardInterrupt:
         print("Benchmarking interrupted by user.")
 
-# if __name__ == "__main__":
-#     benchmark_deepseek_params()
-
 if __name__ == "__main__":
-    MODELS_TO_BENCHMARK = [
-        # "anthropic/claude-3.7-sonnet",
-        # "deepseek/deepseek-r1-zero:free",
-        # "x-ai/grok-3-beta",
-        # "deepseek-r1-8b",
-        # "llama3.2",
-        "gemini-2.5-pro-exp-03-25",
-    ]
+    benchmark_deepseek_params()
 
-    try:
-        for model_name in MODELS_TO_BENCHMARK:
-            model = ModelClient(model_name)
+# if __name__ == "__main__":
+#     MODELS_TO_BENCHMARK = [
+#         # "anthropic/claude-3.7-sonnet",
+#         # "deepseek/deepseek-r1-zero:free",
+#         # "x-ai/grok-3-beta",
+#         # "deepseek-r1-8b",
+#         # "llama3.2",
+#         "gemini-2.5-pro-exp-03-25",
+#     ]
 
-            AGENTS_TO_BENCHMARK = [
-                # AgentBasic(model, max_retries=10),
-                AgentProgrammer(model, max_retries=10),
-                AgentMulti(model, max_retries=10),
-            ]
+#     try:
+#         for model_name in MODELS_TO_BENCHMARK:
+#             model = ModelClient(model_name)
 
-            for agent in AGENTS_TO_BENCHMARK:
-                benchmark = AgentBenchmark(agent)
-                benchmark.generate_preds_precomputed_retrieval(
-                    SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-                )
-                benchmark.run_benchmark(max_workers=16)
+#             AGENTS_TO_BENCHMARK = [
+#                 # AgentBasic(model, max_retries=10),
+#                 AgentProgrammer(model, max_retries=10),
+#                 AgentMulti(model, max_retries=10),
+#             ]
 
-    except KeyboardInterrupt:
-        print("Benchmarking interrupted by user.")
+#             for agent in AGENTS_TO_BENCHMARK:
+#                 benchmark = AgentBenchmark(agent)
+#                 benchmark.generate_preds_precomputed_retrieval(
+#                     SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+#                 )
+#                 benchmark.run_benchmark(max_workers=16)
+
+#     except KeyboardInterrupt:
+#         print("Benchmarking interrupted by user.")
