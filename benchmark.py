@@ -120,6 +120,10 @@ class AgentBenchmark:
             str(self.report_dir_path.resolve()),
             "--run_id",
             self.run_id,
+            "--namespace",
+            "",
+            "--force_rebuild",
+            "True",
         ]
 
         print("\nExecuting swe-bench command:\n", " ".join(command))
@@ -241,7 +245,7 @@ def benchmark_deepseek_params() -> None:
                     traceback.print_exc()
                     print("Skipping agent:", agent.agent_name, model_name)
                     continue
-                benchmark.run_benchmark(max_workers=16)
+                benchmark.run_benchmark(max_workers=6)
 
     except KeyboardInterrupt:
         print("Benchmarking interrupted by user.")
