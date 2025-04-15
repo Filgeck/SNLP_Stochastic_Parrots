@@ -41,6 +41,9 @@ OPENROUTER_MODELS = {
     "x-ai/grok-3-beta",
 }
 
+GEMINI_MODELS = {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}
+OLLAMA_MODELS = {"llama3.2", "deepseek-r1:8b"}
+
 
 class Retries:
     def __init__(self, max_retries: int = 3):
@@ -51,11 +54,17 @@ class Retries:
     ) -> R:
         for num_retries in range(self.max_retries):
             try:
-                return func(*args, **kwargs)
+                rval = func(*args, **kwargs)
+                if num_retries > 0:
+                    print(
+                        f"Function {func} succeeded after {num_retries + 1} "
+                        f"attempts"
+                    )
+                return rval
             except Exception:
                 print(
-                    f"Failed attempt {num_retries + 1} of {self.max_retries}"
-                    "running {func}"
+                    f"Failed attempt {num_retries + 1} of {self.max_retries} "
+                    f"running {func}"
                 )
                 if num_retries < self.max_retries - 1:
                     print("Retrying due to error:")
@@ -79,11 +88,14 @@ class ModelClient(Retries):
                 base_url="https://openrouter.ai/api/v1",
                 api_key=OPENROUTER_API_KEY,
             )
+        else:
+            raise RuntimeError
 
     def query(
         self,
         prompt: str,
         structure: Optional[Type[BaseModel]] = None,
+        temp: float | None = None,
     ) -> str:
         """
         Query the model
@@ -98,18 +110,26 @@ class ModelClient(Retries):
 
             https://ai.google.dev/gemini-api/docs/structured-output?lang=python
         """
+        if temp is not None and self.model_name not in GEMINI_MODELS:
+            raise NotImplementedError(
+                "Temperature not supported for this model")
         if self.is_openrouter:
             return self._func_with_retries(
                 self._query_openrouter, prompt, structure=structure
             )
-        elif self.model_name in {"llama3.2", "deepseek-r1:8b"}:
+        elif self.model_name in OLLAMA_MODELS:
             return self._func_with_retries(
                 self._query_local_ollama, prompt, structure=structure
             )
-        elif self.model_name in {"gemini-2.5-pro-exp-03-25", "gemini-1.5-pro"}:
-            return self._func_with_retries(
-                self._query_gemini, prompt, structure=structure
-            )
+        elif self.model_name in GEMINI_MODELS:
+            if temp is None:
+                return self._func_with_retries(
+                    self._query_gemini, prompt, structure=structure, temp=0.7
+                )
+            else:
+                return self._func_with_retries(
+                    self._query_gemini, prompt, structure=structure, temp=temp
+                )
         else:
             raise ValueError(f"Model {self.model_name} not supported")
 
@@ -148,7 +168,10 @@ class ModelClient(Retries):
         return response_content
 
     def _query_gemini(
-        self, prompt: str, structure: Optional[Type[BaseModel]] = None
+        self,
+        prompt: str,
+        structure: Optional[Type[BaseModel]] = None,
+        temp: float = 0.7,
     ) -> str:
         """
         Queries the Gemini API model
@@ -159,7 +182,7 @@ class ModelClient(Retries):
 
         if structure is not None:
             generation_config = genai.GenerationConfig(
-                temperature=0.7,
+                temperature=temp,
                 top_p=0.9,
                 top_k=40,
                 max_output_tokens=65536,
@@ -168,7 +191,7 @@ class ModelClient(Retries):
             )
         else:
             generation_config = genai.GenerationConfig(
-                temperature=0.7,
+                temperature=temp,
                 top_p=0.9,
                 top_k=40,
                 max_output_tokens=65536,
@@ -199,11 +222,17 @@ class ModelClient(Retries):
         assert isinstance(self.client, OpenAI)
 
         # Query parameters
-        extra_body = {"provider": {"sort": "throughput"}}
+        extra_body = {
+            "provider": {"sort": "throughput"},
+            # "transforms": ["middle-out"],
+        }
+        # extra_body = None
         messages = [
             {
                 "role": "user",
-                "content": [{"type": "text", "text": prompt}],
+                "content": [
+                    {"type": "text", "text": prompt}
+                ],
             }
         ]
 
@@ -245,6 +274,16 @@ class ModelClient(Retries):
                 messages=messages,
                 n=1,  # number of choices to generate
             )
+
+        if completion.choices is None:
+            if hasattr(completion, "error"):
+                raise ValueError(
+                    f"Error: {completion.error["message"]} from model "
+                    f"{self.model_name}"
+                )
+            else:
+                raise ValueError(
+                    f"Error: No choices returned from model {self.model_name}")
 
         assert len(completion.choices) == 1
 

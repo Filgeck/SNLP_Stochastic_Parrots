@@ -11,12 +11,19 @@ class Agent(Retries):
         model_client: ModelClient,
         max_retries: int = 3,
         param_count: str | None = None,
+        temp: float | None = None,
+        agent_name: str | None = None,
     ) -> None:
         super().__init__(max_retries=max_retries)
         self.model_client = model_client
-        self.agent_name = "agent"
+        if agent_name is not None:
+            self.agent_name = agent_name
+        else:
+            self.agent_name = "agent"
         if param_count is not None:
             self.agent_name += f"_{param_count}"
+        if temp is not None:
+            self.agent_name += f"_{temp}"
 
     @abstractmethod
     def forward(self, *inputs):
@@ -88,8 +95,11 @@ class Agent(Retries):
             response = self.model_client.query(prompt_arg)
             extracted = self._extract_tag(response, tag_name_arg)
             if extracted is None:
+                # print(response)
+                # import sys
+                # sys.exit(1)
                 raise ValueError(
-                    f"Failed to extract '{tag_name_arg}' tag/block from"
+                    f"Failed to extract '{tag_name_arg}' tag/block from "
                     "response"
                 )
             return extracted

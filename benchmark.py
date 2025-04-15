@@ -70,7 +70,7 @@ class AgentBenchmark:
                     continue
 
                 prompt = retrieval_map[instance_id]
-                prompt += """\n\nFeel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
+                # prompt += """\n\nFeel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
                 output = self.agent.forward(prompt)
 
                 prediction = {
@@ -183,46 +183,79 @@ class AgentBenchmark:
             raise RuntimeError(f"Error reading {self.preds_file_path}:\n{e}")
         return processed_ids
 
+# def benchmark_temperature(
+#     model_name: str, max_temp: int = 2, step: float = 0.1
+# ) -> None:
+#     scale = int(1 / step)
+#     for i in range(0, max_temp * scale, scale):
+#         temp = i / scale
+#         model = ModelClient(model_name, max_retries=1)
+
+#         AGENTS_TO_BENCHMARK = [
+#             # AgentBasic(model, max_retries=1, param_count=param_count),
+#             AgentProgrammer(
+#                 model, max_retries=10
+#             ),
+#             # AgentMulti(model, max_retries=10, param_count=param_count),
+#         ]
+#         for agent in AGENTS_TO_BENCHMARK:
+#             print("Benchmarking agent:", agent.agent_name)
+#             benchmark = AgentBenchmark(agent, temp=temp)
+#             benchmark.generate_preds_precomputed_retrieval(
+#                 SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+#             )
+#             benchmark.run_benchmark(max_workers=16)
 
 def benchmark_deepseek_params() -> None:
     params_to_models = {
-        "1.5B": "deepseek/deepseek-r1-distill-qwen-1.5b",
-        "8B": "deepseek/deepseek-r1-distill-llama-8b",
+        # "1.5B": "deepseek/deepseek-r1-distill-qwen-1.5b", # Not enough - gets into loops of it talking to itself
+        # "8B": "deepseek/deepseek-r1-distill-llama-8b", # Only has 32k context
         "14B": "deepseek/deepseek-r1-distill-qwen-14b",
         "32B": "deepseek/deepseek-r1-distill-qwen-32b",
         "70B": "deepseek/deepseek-r1-distill-llama-70b",
-        "671B": "deepseek/deepseek-r1-blah-blah-671b",
+        "671B": "deepseek/deepseek-r1",
     }
     try:
         for param_count, model_name in params_to_models.items():
-            model = ModelClient(model_name)
+            print("Benchmarking model:", model_name)
+            print("Param count:", param_count)
+            model = ModelClient(model_name, max_retries=1)
 
             AGENTS_TO_BENCHMARK = [
-                AgentBasic(model, max_retries=10, param_count=param_count),
+                # AgentBasic(model, max_retries=1, param_count=param_count),
                 AgentProgrammer(
                     model, max_retries=10, param_count=param_count
                 ),
-                AgentMulti(model, max_retries=10, param_count=param_count),
+                # AgentMulti(model, max_retries=10, param_count=param_count),
             ]
 
+
             for agent in AGENTS_TO_BENCHMARK:
+                print("Benchmarking agent:", agent.agent_name)
                 benchmark = AgentBenchmark(agent)
-                benchmark.generate_preds_precomputed_retrieval(
-                    SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-                )
+                try:
+                    benchmark.generate_preds_precomputed_retrieval(
+                        SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+                    )
+                except Exception:
+                    traceback.print_exc()
+                    print("Skipping agent:", agent.agent_name, model_name)
+                    continue
                 benchmark.run_benchmark(max_workers=16)
 
     except KeyboardInterrupt:
         print("Benchmarking interrupted by user.")
 
+# if __name__ == "__main__":
+#     benchmark_deepseek_params()
 
 if __name__ == "__main__":
     MODELS_TO_BENCHMARK = [
         # "anthropic/claude-3.7-sonnet",
-        "deepseek/deepseek-r1-zero:free",
+        # "deepseek/deepseek-r1-zero:free",
         # "x-ai/grok-3-beta",
-        "deepseek-r1-8b",
-        "llama3.2",
+        # "deepseek-r1-8b",
+        # "llama3.2",
         "gemini-2.5-pro-exp-03-25",
     ]
 
@@ -231,7 +264,7 @@ if __name__ == "__main__":
             model = ModelClient(model_name)
 
             AGENTS_TO_BENCHMARK = [
-                AgentBasic(model, max_retries=10),
+                # AgentBasic(model, max_retries=10),
                 AgentProgrammer(model, max_retries=10),
                 AgentMulti(model, max_retries=10),
             ]

@@ -17,8 +17,8 @@ class AgentProgrammer(Agent):
             model_client=model_client,
             max_retries=max_retries,
             param_count=param_count,
+            agent_name="agent_programmer",
         )
-        self.agent_name = "agent_programmer"
 
     def forward(
         self,
@@ -28,23 +28,39 @@ class AgentProgrammer(Agent):
 
         files_dict = self._get_files(prompt, True)
 
+        cutoff = prompt.find("</code>") + len("</code>")
+        if cutoff == -1:
+            raise ValueError("No </code> tag found in the prompt.")
+
+        prompt = prompt[:cutoff]
+
         prompt += (
             "\n\nPlease fix the bugs in the files and return the full fixed files in this format:\n\n"
             "<files>\n"
-            "[start of ENTER_FILE_PATH] abcdef\n[end of ENTER_FILE_PATH]\n"
-            "[start of ENTER_FILE_PATH] abcdef\n[end of ENTER_FILE_PATH]\n"
+            "[start of /path/to/file1]\nFILE 1 CONTENTS\n[end of /path/to/file1]\n"
+            "[start of /path/to/file2]\nFILE 2 CONTENTS\n[end of /path/to/file2]\n"
             "</files>\n\n"
-            " etc make sure to write out the full file, not just the changes "
+            "Here is in example:\n"
+            "<files>\n"
+            "[start of /home/user/myproject/main.py]\n"
+            "from hello_world import print_hello_world\n"
+            "if __name__ == '__main__':\n"
+            "    print_hello_world()\n"
+            "[end of /home/user/myproject/main.py]\n"
+            "[start of /home/user/myproject/hello_world.py]\n"
+            "def print_hello_world():\n"
+            "    print('Hello, world!')\n"
+            "[end of /home/user/myproject/hello_world.py]\n"
+            "</files>\n"
+            "Make sure to write out the FULL file, not just the changes "
             "(only include files that you changed, don't include explanation or files that were not changed). And do not write line numbers!\n\n"
             "Make your change consise and only include the files that were changed.\n\n"
-            "Put all the code for files you changed inside <files> and </files> tags.\n\n"
+            "Put all the code for files you changed inside BOTH <files> and </files> tags.\n\n"
         )
 
-        try:
-            response = self._query_and_extract(prompt, "files")
-        except Exception as e:
-            print("Programmer agent failed to generate files from prompt")
-            return ""
+        # print(prompt)
+
+        response = self._query_and_extract(prompt, "files")
 
         changed_files = self._get_files(response, True)
 
