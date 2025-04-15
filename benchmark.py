@@ -1,13 +1,15 @@
-import json
-from pathlib import Path
-from typing import Callable, Optional
-from tqdm.auto import tqdm
-from datasets import load_dataset, DatasetDict
 from agents import Agent, AgentBasic, AgentProgrammer, AgentMulti
 from clients import ModelClient
-import traceback
+from datasets import load_dataset, DatasetDict
+import json
+import numpy as np
+from pathlib import Path
 import subprocess
 import sys
+import traceback
+from tqdm.auto import tqdm
+from typing import Callable, Iterator, Optional
+
 
 SWE_BENCH_BM25_40K_DATASET = "princeton-nlp/SWE-bench_bm25_40K"
 SWE_BENCH_LITE_DATASET = "princeton-nlp/SWE-bench_Lite"
@@ -189,14 +191,15 @@ class AgentBenchmark:
             raise RuntimeError(f"Error reading {self.preds_file_path}:\n{e}")
         return processed_ids
 
-def benchmark_temperature(model_name: str, max_temp: int = 2, step: float = 0.1) -> None:
+def benchmark_temperature(model_name: str, temperatures: Iterator[float]) -> None:
     """
     Benchmarks a range of temperatures
-    """
-    scale = int(1 / step)
 
-    for i in reversed(range(0, max_temp * scale, scale)):
-        temp = i / scale
+    args:
+    - model_name: the name of the model to benchmark
+    - temperatures: the temperature values to explore
+    """
+    for temp in temperatures:
         model = ModelClient(model_name, max_retries=1, temp=temp)
         print(f" - temp = {temp}\n - model = {model_name}")
 
@@ -260,7 +263,7 @@ def benchmark_deepseek_params() -> None:
 if __name__ == "__main__":
 #    benchmark_deepseek_params()
 
-    benchmark_temperature("gemini-2.5-pro-exp-03-25")
+    benchmark_temperature("gemini-2.5-pro-exp-03-25", iter(np.linspace(0.7, 2, num=20)))
 
 
 

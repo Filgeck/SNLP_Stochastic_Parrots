@@ -1,3 +1,4 @@
+import json
 import os
 from pydantic import BaseModel, Field
 import subprocess
@@ -7,9 +8,10 @@ from agents.base import Agent
 from clients import ModelClient
 
 
-class ProgrammerOutput(BaseModel):
-    files: Dict[str, str] = Field(description="A mapping between filenames and the *corrected* file contents")
-    change_explanations: List[str] = Field(description="An explanation of the changes made, for each file")
+class ProgrammerFileChangeOutput(BaseModel):
+    file_path: str = Field(description="The path of the modified file")
+    file_contents: str = Field(description="The contents of the modified file")
+    change_explanations: str = Field(description="An explanation of the changes made")
 
 
 class AgentProgrammer(Agent):
@@ -66,17 +68,26 @@ class AgentProgrammer(Agent):
 #            "Put all the code for files you changed inside BOTH <files> and </files> tags.\n\n"
         )
 
-        # print(prompt)
+        # Generate structured output
+        output_string = self.model_client.query(prompt, structure=list[ProgrammerFileChangeOutput])
 
-        response = self._query_and_extract(prompt, "files")
+        try:
+            json_output = json.loads(output_string)
+            changed_files = {}
 
-        changed_files = self._get_files(response, True)
+            for row in json_output:
+                print(f"row.keys() = {row.keys()}")
+                changed_files[row['file_path']] = row.get('file_contents',
+                                                          "<the model didn't supply the changes>")
 
-        patch = self.create_patch_from_files(
-            files_dict, changed_files, "agent_cache", cleanup=True
-        )
+            patch = self.create_patch_from_files(
+                files_dict, changed_files, "agent_cache", cleanup=True
+            )
 
-        return patch
+            return patch
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Generated output is not valid JSON:\n'{e}'") from e
+
 
     def _generate_patch(self, file1: str, file2: str):
         """Generate a patch between two files using the diff command."""
