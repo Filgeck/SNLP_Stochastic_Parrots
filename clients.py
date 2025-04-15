@@ -1,7 +1,7 @@
 import glob
 import os
 import traceback
-from typing import Callable, List, Optional, Type, no_type_check
+from typing import Any, Callable, List, Optional, Type, no_type_check
 
 import dotenv
 import google.generativeai as genai
@@ -94,7 +94,7 @@ class ModelClient(Retries):
     def query(
         self,
         prompt: str,
-        structure: Optional[Type[BaseModel]] = None
+        structure: Optional[Any] = None
     ) -> str:
         """
         Query the model
