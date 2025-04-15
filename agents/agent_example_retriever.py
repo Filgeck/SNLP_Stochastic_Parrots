@@ -1,3 +1,5 @@
+from typing import Optional
+
 from agents.base import Agent
 from clients import ModelClient, RagClient
 
@@ -9,11 +11,13 @@ class AgentExampleRetriever(Agent):
         rag_client: RagClient,
         max_retries: int = 3,
         param_count: str | None = None,
+        temp: Optional[float] = None
     ) -> None:
         super().__init__(
             model_client=model_client,
             max_retries=max_retries,
             param_count=param_count,
+            temp=temp
         )
         self.rag_client = rag_client
         self.model_client = model_client

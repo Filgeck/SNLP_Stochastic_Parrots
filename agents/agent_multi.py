@@ -11,12 +11,14 @@ class AgentMulti(Agent):
         model_client: ModelClient,
         max_retries: int = 3,
         param_count: str | None = None,
+        temp: float | None = None
     ) -> None:
         super().__init__(
             model_client=model_client,
             max_retries=max_retries,
             param_count=param_count,
             agent_name="Multi Agent",
+            temp=temp
         )
         self.model_client = model_client
 

@@ -1,9 +1,15 @@
 import os
+from pydantic import BaseModel, Field
 import subprocess
+from typing import Dict, List, Optional
 
 from agents.base import Agent
 from clients import ModelClient
 
+
+class ProgrammerOutput(BaseModel):
+    files: Dict[str, str] = Field(description="A mapping between filenames and the *corrected* file contents")
+    change_explanations: List[str] = Field(description="An explanation of the changes made, for each file")
 
 
 class AgentProgrammer(Agent):
@@ -12,12 +18,14 @@ class AgentProgrammer(Agent):
         model_client: ModelClient,
         max_retries: int = 3,
         param_count: str | None = None,
+        temp: Optional[float] = None
     ) -> None:
         super().__init__(
             model_client=model_client,
             max_retries=max_retries,
             param_count=param_count,
             agent_name="agent_programmer",
+            temp=temp
         )
 
     def forward(
@@ -55,7 +63,7 @@ class AgentProgrammer(Agent):
             "Make sure to write out the FULL file, not just the changes "
             "(only include files that you changed, don't include explanation or files that were not changed). And do not write line numbers!\n\n"
             "Make your change consise and only include the files that were changed.\n\n"
-            "Put all the code for files you changed inside BOTH <files> and </files> tags.\n\n"
+#            "Put all the code for files you changed inside BOTH <files> and </files> tags.\n\n"
         )
 
         # print(prompt)

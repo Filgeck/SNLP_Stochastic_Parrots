@@ -76,12 +76,14 @@ class Retries:
 
 
 class ModelClient(Retries):
-    def __init__(self, model_name: str, max_retries: int = 3):
+    def __init__(self, model_name: str, max_retries: int = 3, temp: Optional[float] = None):
         super().__init__(max_retries=max_retries)
         self.model_name = model_name
         self.client: OpenAI | None = None
         self._request_limit_per_minute: float | None = None
         self.is_openrouter = False
+        self.temp = temp
+
         if self.model_name in OPENROUTER_MODELS:
             self.is_openrouter = True
             self.client = OpenAI(
@@ -92,8 +94,7 @@ class ModelClient(Retries):
     def query(
         self,
         prompt: str,
-        structure: Optional[Type[BaseModel]] = None,
-        temp: float | None = None,
+        structure: Optional[Type[BaseModel]] = None
     ) -> str:
         """
         Query the model
@@ -108,7 +109,7 @@ class ModelClient(Retries):
 
             https://ai.google.dev/gemini-api/docs/structured-output?lang=python
         """
-        if temp is not None and self.model_name not in GEMINI_MODELS:
+        if self.temp is not None and self.model_name not in GEMINI_MODELS:
             raise NotImplementedError(
                 "Temperature not supported for this model")
         if self.is_openrouter:
@@ -120,14 +121,12 @@ class ModelClient(Retries):
                 self._query_local_ollama, prompt, structure=structure
             )
         elif self.model_name in GEMINI_MODELS:
-            if temp is None:
-                return self._func_with_retries(
-                    self._query_gemini, prompt, structure=structure, temp=0.7
-                )
-            else:
-                return self._func_with_retries(
-                    self._query_gemini, prompt, structure=structure, temp=temp
-                )
+            return self._func_with_retries(
+                self._query_gemini,
+                prompt,
+                structure=structure,
+                temp=0.7 if self.temp is None else self.temp
+            )
         else:
             raise ValueError(f"Model {self.model_name} not supported")
 

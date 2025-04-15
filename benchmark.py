@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Optional
 from tqdm.auto import tqdm
 from datasets import load_dataset, DatasetDict
 from agents import Agent, AgentBasic, AgentProgrammer, AgentMulti
@@ -28,6 +28,8 @@ class AgentBenchmark:
         self.preds_file_path = output_path / "all_pred.jsonl"
         self.report_dir_path = output_path / "logs"
         self.run_id = f"{agent.agent_name}_{agent.model_client.model_name}"
+
+        print(f"run_id = '{self.run_id}'")
 
     def generate_preds_custom_retrieval(
         self, benchmark_dataset: str, retrieval_func: Callable
@@ -187,28 +189,33 @@ class AgentBenchmark:
             raise RuntimeError(f"Error reading {self.preds_file_path}:\n{e}")
         return processed_ids
 
-# def benchmark_temperature(
-#     model_name: str, max_temp: int = 2, step: float = 0.1
-# ) -> None:
-#     scale = int(1 / step)
-#     for i in range(0, max_temp * scale, scale):
-#         temp = i / scale
-#         model = ModelClient(model_name, max_retries=1)
+def benchmark_temperature(model_name: str, max_temp: int = 2, step: float = 0.1) -> None:
+    """
+    Benchmarks a range of temperatures
+    """
+    scale = int(1 / step)
 
-#         AGENTS_TO_BENCHMARK = [
-#             # AgentBasic(model, max_retries=1, param_count=param_count),
-#             AgentProgrammer(
-#                 model, max_retries=10
-#             ),
-#             # AgentMulti(model, max_retries=10, param_count=param_count),
-#         ]
-#         for agent in AGENTS_TO_BENCHMARK:
-#             print("Benchmarking agent:", agent.agent_name)
-#             benchmark = AgentBenchmark(agent, temp=temp)
-#             benchmark.generate_preds_precomputed_retrieval(
-#                 SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-#             )
-#             benchmark.run_benchmark(max_workers=16)
+    for i in reversed(range(0, max_temp * scale, scale)):
+        temp = i / scale
+        model = ModelClient(model_name, max_retries=1, temp=temp)
+        print(f" - temp = {temp}\n - model = {model_name}")
+
+        AGENTS_TO_BENCHMARK = [
+            # AgentBasic(model, max_retries=1, param_count=param_count),
+            AgentProgrammer(
+                model, max_retries=5, temp=temp
+            ),
+            # AgentMulti(model, max_retries=10, param_count=param_count),
+        ]
+
+        for agent in AGENTS_TO_BENCHMARK:
+            print("Benchmarking agent:", agent.agent_name)
+            benchmark = AgentBenchmark(agent)
+            benchmark.generate_preds_precomputed_retrieval(
+                benchmark_dataset=SWE_BENCH_LITE_DATASET,
+                retrieval_dataset=SWE_BENCH_BM25_40K_DATASET
+            )
+            benchmark.run_benchmark(max_workers=8)
 
 def benchmark_deepseek_params() -> None:
     params_to_models = {
@@ -251,7 +258,11 @@ def benchmark_deepseek_params() -> None:
         print("Benchmarking interrupted by user.")
 
 if __name__ == "__main__":
-    benchmark_deepseek_params()
+#    benchmark_deepseek_params()
+
+    benchmark_temperature("gemini-2.5-pro-exp-03-25")
+
+
 
 # if __name__ == "__main__":
 #     MODELS_TO_BENCHMARK = [
