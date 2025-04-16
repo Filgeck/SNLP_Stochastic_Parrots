@@ -8,6 +8,7 @@ from clients import ModelClient
 import traceback
 import subprocess
 import sys
+import click
 
 SWE_BENCH_BM25_40K_DATASET = "princeton-nlp/SWE-bench_bm25_40K"
 SWE_BENCH_LITE_DATASET = "princeton-nlp/SWE-bench_Lite"
@@ -16,7 +17,7 @@ PREDICTIONS_DIR_PATH = Path("predictions")
 
 
 class AgentBenchmark:
-    def __init__(self, agent: Agent):
+    def __init__(self, agent: Agent, temp: float | None = None):
         model_name = agent.model_client.model_name.replace("/", "_")
         output_path = Path(
             f"{PREDICTIONS_DIR_PATH}/{agent.agent_name}/{model_name}".replace(
@@ -108,7 +109,6 @@ class AgentBenchmark:
 
         # check logs directory exists, if not create
         self.report_dir_path.mkdir(parents=True, exist_ok=True)
-
         command = [
             sys.executable,
             str(SWE_BENCH_RUN_EVAL_PATH.resolve()),
@@ -125,6 +125,7 @@ class AgentBenchmark:
             "--force_rebuild",
             "True",
         ]
+        
 
         print("\nExecuting swe-bench command:\n", " ".join(command))
 
@@ -187,30 +188,20 @@ class AgentBenchmark:
             raise RuntimeError(f"Error reading {self.preds_file_path}:\n{e}")
         return processed_ids
 
-# def benchmark_temperature(
-#     model_name: str, max_temp: int = 2, step: float = 0.1
-# ) -> None:
-#     scale = int(1 / step)
-#     for i in range(0, max_temp * scale, scale):
-#         temp = i / scale
-#         model = ModelClient(model_name, max_retries=1)
+@click.group(invoke_without_command=True)
+@click.pass_context
+def cli(ctx):
+    """Benchmark tool with various subcommands."""
+    ctx.ensure_object(dict)
+    if ctx.invoked_subcommand is None:
+        # If no subcommand is provided, default to models
+        ctx.invoke(models)
 
-#         AGENTS_TO_BENCHMARK = [
-#             # AgentBasic(model, max_retries=1, param_count=param_count),
-#             AgentProgrammer(
-#                 model, max_retries=10
-#             ),
-#             # AgentMulti(model, max_retries=10, param_count=param_count),
-#         ]
-#         for agent in AGENTS_TO_BENCHMARK:
-#             print("Benchmarking agent:", agent.agent_name)
-#             benchmark = AgentBenchmark(agent, temp=temp)
-#             benchmark.generate_preds_precomputed_retrieval(
-#                 SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-#             )
-#             benchmark.run_benchmark(max_workers=16)
-
-def benchmark_deepseek_params() -> None:
+@cli.command()
+@click.pass_context
+def param_count(ctx):
+    """Calculate parameter counts for models."""
+    click.echo("Running parameter count benchmark...")
     params_to_models = {
         # "1.5B": "deepseek/deepseek-r1-distill-qwen-1.5b", # Not enough - gets into loops of it talking to itself
         # "8B": "deepseek/deepseek-r1-distill-llama-8b", # Only has 32k context
@@ -250,35 +241,69 @@ def benchmark_deepseek_params() -> None:
     except KeyboardInterrupt:
         print("Benchmarking interrupted by user.")
 
-if __name__ == "__main__":
-    benchmark_deepseek_params()
+@cli.command()
+@click.pass_context
+def temp(ctx):
+    """Benchmark temperature settings."""
+    click.echo("Running temperature benchmark...")
+    model_name = "gemini-2.5-pro-exp-03-25"
+    max_temp = 2
+    step = 0.1
+    scale = int(1 / step)
+    for i in range(0, max_temp * scale, scale):
+        temp = i / scale
+        model = ModelClient(model_name, max_retries=1)
 
-# if __name__ == "__main__":
-#     MODELS_TO_BENCHMARK = [
-#         # "anthropic/claude-3.7-sonnet",
-#         # "deepseek/deepseek-r1-zero:free",
-#         # "x-ai/grok-3-beta",
-#         # "deepseek-r1-8b",
-#         # "llama3.2",
-#         "gemini-2.5-pro-exp-03-25",
-#     ]
+        AGENTS_TO_BENCHMARK = [
+            # AgentBasic(model, max_retries=1, param_count=param_count),
+            AgentProgrammer(
+                model, max_retries=10
+            ),
+            # AgentMulti(model, max_retries=10, param_count=param_count),
+        ]
+        for agent in AGENTS_TO_BENCHMARK:
+            print("Benchmarking agent:", agent.agent_name)
+            benchmark = AgentBenchmark(agent, temp=temp)
+            benchmark.generate_preds_precomputed_retrieval(
+                SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+            )
+            benchmark.run_benchmark(max_workers=16)
+
+@cli.command()
+@click.pass_context
+def models(ctx):
+    """Benchmark different models."""
+    click.echo("Running models benchmark...")
+    MODELS_TO_BENCHMARK = [
+        # "anthropic/claude-3.7-sonnet",
+        # "deepseek/deepseek-r1-zero:free",
+        # "x-ai/grok-3-beta",
+        # "deepseek-r1-8b",
+        # "llama3.2",
+        "gemini-2.5-pro-exp-03-25",
+    ]
 
 #     try:
 #         for model_name in MODELS_TO_BENCHMARK:
 #             model = ModelClient(model_name)
 
-#             AGENTS_TO_BENCHMARK = [
-#                 # AgentBasic(model, max_retries=10),
-#                 AgentProgrammer(model, max_retries=10),
-#                 AgentMulti(model, max_retries=10),
-#             ]
+            AGENTS_TO_BENCHMARK = [
+                # AgentBasic(model, max_retries=10),
+                # AgentProgrammer(model, max_retries=10),
+                AgentMulti(model, max_retries=10),
+            ]
 
-#             for agent in AGENTS_TO_BENCHMARK:
-#                 benchmark = AgentBenchmark(agent)
-#                 benchmark.generate_preds_precomputed_retrieval(
-#                     SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-#                 )
-#                 benchmark.run_benchmark(max_workers=16)
+            for agent in AGENTS_TO_BENCHMARK:
+                benchmark = AgentBenchmark(agent)
+                # benchmark.generate_preds_precomputed_retrieval(
+                #     SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+                # )
+                benchmark.run_benchmark(max_workers=16)
 
-#     except KeyboardInterrupt:
-#         print("Benchmarking interrupted by user.")
+
+    except KeyboardInterrupt:
+        print("Benchmarking interrupted by user.")
+        return 1
+
+if __name__ == "__main__":
+    cli()
