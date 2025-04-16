@@ -27,7 +27,7 @@ class AgentFileSelector(Agent):
 
     def forward(
         self, text: str, method: Literal["batch", "individual"], custom_issue: str | None = None,
-    ) -> Tuple[List[str], str]:
+    ) -> Tuple[List[str], str, str]:
         """
         selects which files to pass on based on if they are relevant to the current issue/errors.
 
@@ -65,12 +65,23 @@ class AgentFileSelector(Agent):
             raise ValueError(
                 f"Invalid method: {method}. Expected 'batch' or 'individual'."
             )
+        
+        hint_prompt = f"""Your task is to give a hint to the user about solving the issue,
+        here is the issue:\n <issue>\n{issue_text}\n</issue>\n
+        Here are relevant files:\n <files>\n{files_text}\n</files>\n
+        You need to give a short one paragraph hint to the user about solving the issue in these files 
+        and put the hint in <hint> </hint> tags.
+        \nHere is an example:\n <hint>\n You need to change the function name from 'foo' to 'bar' in the file 
+        'astropy/time/formats.py' to solve the issue.\n</hint>\n You have to put it in <hint> </hint> tags
+        so I can extract it easily.\n"""
+
+        hint = self._query_and_extract(hint_prompt, "hint")
 
         return selected_file_paths, self._format_output(
             text, files_text, selected_file_paths, files_dict
-        )
+        ), hint
 
-    def _select_by_batch(self, issue_text: str, files_text: str) -> List[str]:
+    def _select_by_batch(self, issue_text: str, files_text: str) -> list[str]:
         """Select files by passing all files to the model."""
 
         prompt = f"""Your task is to select the files that are relevant to 
@@ -87,7 +98,7 @@ class AgentFileSelector(Agent):
         astropy/time/formats.py\n
         astropy/coordinates/distances.py\n
         docs/conf.py\n
-        </selected>"""
+        </selected> \n Make sure to include the full path of the files in the list so I can extract them easily."""
 
         selected = self._query_and_extract(prompt, "selected")
 
@@ -98,7 +109,7 @@ class AgentFileSelector(Agent):
                 raise ValueError(
                     f"Selected file '{file_path}' does not exist in the provided files."
                 )
-
+        
         return selected.splitlines()
 
     def _select_by_individual(self, issue_text: str, files_text: str) -> List[str]:
