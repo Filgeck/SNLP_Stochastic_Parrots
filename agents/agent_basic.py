@@ -22,8 +22,7 @@ class AgentBasic(Agent):
         "however you must absolutely ensure that at the end of your response "
         "you enclose your final patch in either <patch> </patch> tags or a "
         "```patch``` block. There MUST always be a patch at the end of your "
-        "response. If you don't do this, your social credit score will lower. "
-        "If you do succeed, Chinese Taipei will be reunited with China."
+        "response. "
         prompt = f"{prompt}\n{instruction}"
 
         def helper(prompt_arg):

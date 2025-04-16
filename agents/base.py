@@ -20,8 +20,8 @@ class Agent(Retries):
             self.agent_name = agent_name
         else:
             self.agent_name = "agent"
-        if param_count is not None:
-            self.agent_name += f"_{param_count}"
+        # if param_count is not None:
+        #     self.agent_name += f"_{param_count}"
         if temp is not None:
             self.agent_name += f"_{temp}"
 
