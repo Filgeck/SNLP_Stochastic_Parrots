@@ -36,18 +36,19 @@ class AgentMulti(Agent):
         programmer_model_client = ModelClient(model_name=model_client.model_name)
         self.agent3 = AgentProgrammer(model_client=programmer_model_client)
 
+        self.agent_name = "agent_multi"
+
     def forward(self, prompt: str) -> str | None:
-        # remove patches from the prompt
         prompt = prompt.split("</code>", 1)[0] + "</code>"
 
-        files_list, only_selected_files = self.agent1.forward(prompt, "batch")
+        files_list, only_selected_files, hint = self.agent1.forward(prompt, "batch")
 
         # get issue between <issue> and </issue>
         issue = prompt[prompt.find("<issue>") + len("<issue>") : prompt.find("</issue>")]
 
         rags = self.agent2.forward(issue, 10, 3)
 
-        programmer_prompt = only_selected_files + "\n" + rags
+        programmer_prompt = only_selected_files + "\n" + rags + "\n Here is a hint: \n" + hint
 
         # SET CLEANUP TO FALSE
         patch = self.agent3.forward(programmer_prompt)

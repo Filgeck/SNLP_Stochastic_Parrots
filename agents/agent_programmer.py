@@ -1,9 +1,12 @@
 import os
-import subprocess
+import re
 
 from agents.base import Agent
 from clients import ModelClient
 
+import subprocess
+
+import difflib
 
 
 class AgentProgrammer(Agent):
@@ -55,7 +58,9 @@ class AgentProgrammer(Agent):
             "Make sure to write out the FULL file, not just the changes "
             "(only include files that you changed, don't include explanation or files that were not changed). And do not write line numbers!\n\n"
             "Make your change consise and only include the files that were changed.\n\n"
-            "Put all the code for files you changed inside BOTH <files> and </files> tags.\n\n"
+            "Put all the code for files you changed inside BOTH <files> and </files> tags and include the filepaths as described.\n\n"
+            "I repeat, make sure you use the <files> and </files> tags to enclose the files you changed.\n\n"
+            "Do not write in markdown code blocks, just use the <files> and </files> tags.\n\n"
         )
 
         # print(prompt)
@@ -69,29 +74,6 @@ class AgentProgrammer(Agent):
         )
 
         return patch
-
-    def _generate_patch(self, file1: str, file2: str):
-        """Generate a patch between two files using the diff command."""
-
-        # diff command to generate a patch
-        result = subprocess.run(
-            ["diff", "-u", file1, file2],
-            capture_output=True,
-            text=True,
-        )
-
-        # ensure diff applied to original code results in the new code:
-        diff_result = subprocess.run(
-            ["git", "apply", "--check", "-"],
-            input=result.stdout,
-            capture_output=True,
-            text=True,
-        )
-
-        if diff_result.returncode != 0:
-            raise RuntimeError(f"Diff check failed: {diff_result.stderr}")
-
-        return result.stdout
 
     def create_patch_from_files(
         self, files_dict: dict, changed_files: dict, cache_dir: str, cleanup=True
@@ -119,21 +101,13 @@ class AgentProgrammer(Agent):
                 original_content = files_dict.get(file_path, "")
                 fixed_content = changed_files.get(file_path, "")
 
-                # -------------------------------------------------------------
-                # KEY CHANGE: Treat an empty "fixed_content" as "no change."
-                # Also skip if the file is unchanged.
-                # -------------------------------------------------------------
-                if fixed_content.strip() == "" or fixed_content == original_content:
-                    # This means "no effective changes" => skip
+                # Skip if no change or identical
+                if not fixed_content.strip() or fixed_content == original_content:
                     continue
 
-                # Otherwise, we do have changes, so create temp files to diff
-                orig_file = os.path.join(
-                    cache_dir, f"orig_{os.path.basename(file_path)}"
-                )
-                fixed_file = os.path.join(
-                    cache_dir, f"fixed_{os.path.basename(file_path)}"
-                )
+                # Otherwise, we do have changes, so create temp files
+                orig_file = os.path.join(cache_dir, f"orig_{os.path.basename(file_path)}")
+                fixed_file = os.path.join(cache_dir, f"fixed_{os.path.basename(file_path)}")
 
                 with open(orig_file, "w", encoding="utf-8") as f:
                     f.write(original_content)
@@ -147,24 +121,24 @@ class AgentProgrammer(Agent):
             for file_path in modified_files:
                 orig_file, fixed_file = temp_files[file_path]
 
-                # Run diff and capture output
-                result = subprocess.run(
-                    ["diff", "-u", orig_file, fixed_file],
-                    capture_output=True,
-                    text=True,
+                # Read the file contents back (optional, since we already have them in memory)
+                with open(orig_file, "r", encoding="utf-8") as f:
+                    original_content = f.read()
+                with open(fixed_file, "r", encoding="utf-8") as f:
+                    fixed_content = f.read()
+
+                # Use difflib.unified_diff
+                diff_gen = difflib.unified_diff(
+                    original_content.splitlines(),
+                    fixed_content.splitlines(),
+                    fromfile=f"a/{file_path}",
+                    tofile=f"b/{file_path}",
                 )
+                diff_output = list(diff_gen)
 
-                # diff returns 1 if files differ, which we do expect
-                # but anything else is a real error
-                if result.returncode not in [0, 1]:
-                    raise RuntimeError(f"Diff failed: {result.stderr}")
-
-                diff_output = result.stdout.splitlines()
-
-                # Adjust the headers so they show the actual file paths
-                if len(diff_output) >= 2:
-                    diff_output[0] = f"--- {file_path}"
-                    diff_output[1] = f"+++ {file_path}"
+                # If there's no diff, skip
+                if not diff_output:
+                    continue
 
                 all_patches.append("\n".join(diff_output))
 
