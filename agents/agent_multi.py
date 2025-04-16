@@ -16,7 +16,7 @@ class AgentMulti(Agent):
             model_client=model_client,
             max_retries=max_retries,
             param_count=param_count,
-            agent_name="Multi Agent",
+            agent_name="agent_multi",
         )
         self.model_client = model_client
 
