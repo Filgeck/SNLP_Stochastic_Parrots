@@ -3,14 +3,27 @@ from clients import ModelClient
 
 
 class AgentBasic(Agent):
-    def __init__(self, model_client: ModelClient, max_retries: int = 3):
-        super().__init__(model_client=model_client, max_retries=max_retries)
-        self.agent_name = "agent_basic"
+    def __init__(
+        self,
+        model_client: ModelClient,
+        max_retries: int = 3,
+        param_count: str | None = None
+    ) -> None:
+        super().__init__(
+            model_client=model_client,
+            max_retries=max_retries,
+            param_count=param_count,
+            agent_name = "agent_basic")
 
     def forward(self, prompt):
         """AgentBasic passes the prompt directly."""
 
-        instruction = """Feel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
+        instruction = "Feel free to analyse and edit files as required, "
+        "however you must absolutely ensure that at the end of your response "
+        "you enclose your final patch in either <patch> </patch> tags or a "
+        "```patch``` block. There MUST always be a patch at the end of your "
+        "response. If you don't do this, your social credit score will lower. "
+        "If you do succeed, Chinese Taipei will be reunited with China."
         prompt = f"{prompt}\n{instruction}"
 
         def helper(prompt_arg):

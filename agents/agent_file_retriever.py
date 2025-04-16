@@ -28,9 +28,14 @@ class AgentFileRetriever(Agent):
         model_client: ModelClient,
         strip_line_num: bool,
         max_retries: int = 3,
-        return_full_text: bool = True
+        return_full_text: bool = True,
+        param_count: str | None = None,
     ):
-        super().__init__(model_client=model_client, max_retries=max_retries)
+        super().__init__(
+            model_client=model_client,
+            max_retries=max_retries,
+            param_count=param_count,
+        )
         self.agent_name = "agent_file_retriever"
         self.strip_line_num = strip_line_num
         self.return_full_text = return_full_text

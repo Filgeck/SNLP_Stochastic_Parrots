@@ -6,11 +6,21 @@ from clients import ModelClient, RagClient
 
 
 class AgentMulti(Agent):
-    def __init__(self, model_client: ModelClient, max_retries: int = 3):
-        super().__init__(model_client=model_client, max_retries=max_retries)
+    def __init__(
+        self,
+        model_client: ModelClient,
+        max_retries: int = 3,
+        param_count: str | None = None,
+    ) -> None:
+        super().__init__(
+            model_client=model_client,
+            max_retries=max_retries,
+            param_count=param_count,
+            agent_name="agent_multi",
+        )
         self.model_client = model_client
 
-        file_selector_model_client = ModelClient(model_name="gemini-2.5-pro-exp-03-25")
+        file_selector_model_client = ModelClient(model_name=model_client.model_name)
         self.agent1 = AgentFileSelector(
             model_client=file_selector_model_client,
             return_full_text=True,
@@ -18,12 +28,12 @@ class AgentMulti(Agent):
         )
 
         rag_client = RagClient()
-        rag_model_client = ModelClient(model_name="gemini-2.5-pro-exp-03-25")
+        rag_model_client = ModelClient(model_name=model_client.model_name)
         self.agent2 = AgentExampleRetriever(
             model_client=rag_model_client, rag_client=rag_client
         )
 
-        programmer_model_client = ModelClient(model_name="gemini-2.5-pro-exp-03-25")
+        programmer_model_client = ModelClient(model_name=model_client.model_name)
         self.agent3 = AgentProgrammer(model_client=programmer_model_client)
 
         self.agent_name = "agent_multi"

@@ -8,6 +8,7 @@ from clients import ModelClient
 import traceback
 import subprocess
 import sys
+import click
 
 SWE_BENCH_BM25_40K_DATASET = "princeton-nlp/SWE-bench_bm25_40K"
 SWE_BENCH_LITE_DATASET = "princeton-nlp/SWE-bench_Lite"
@@ -16,9 +17,10 @@ PREDICTIONS_DIR_PATH = Path("predictions")
 
 
 class AgentBenchmark:
-    def __init__(self, agent: Agent):
+    def __init__(self, agent: Agent, temp: float | None = None):
+        model_name = agent.model_client.model_name.replace("/", "_")
         output_path = Path(
-            f"{PREDICTIONS_DIR_PATH}/{agent.agent_name}/{agent.model_client.model_name}".replace(
+            f"{PREDICTIONS_DIR_PATH}/{agent.agent_name}/{model_name}".replace(
                 ":", "-"
             )
         )
@@ -69,7 +71,7 @@ class AgentBenchmark:
                     continue
 
                 prompt = retrieval_map[instance_id]
-                prompt += """\n\nFeel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
+                # prompt += """\n\nFeel free to analyse and edit files as required, however you must absolutely ensure that at the end of your response you enclose your final patch in either <patch> </patch> tags or a ```patch ``` block."""
                 output = self.agent.forward(prompt)
 
                 prediction = {
@@ -107,7 +109,6 @@ class AgentBenchmark:
 
         # check logs directory exists, if not create
         self.report_dir_path.mkdir(parents=True, exist_ok=True)
-
         command = [
             sys.executable,
             str(SWE_BENCH_RUN_EVAL_PATH.resolve()),
@@ -120,6 +121,7 @@ class AgentBenchmark:
             "--run_id",
             self.run_id,
         ]
+        
 
         print("\nExecuting swe-bench command:\n", " ".join(command))
 
@@ -173,7 +175,8 @@ class AgentBenchmark:
                 with open(self.preds_file_path, "r") as file:
                     existing_preds = [json.loads(line) for line in file]
                 processed_ids = {
-                    (p["instance_id"], p["model_name_or_path"]) for p in existing_preds
+                    (p["instance_id"], p["model_name_or_path"])
+                    for p in existing_preds
                 }
             else:
                 return set()
@@ -181,14 +184,98 @@ class AgentBenchmark:
             raise RuntimeError(f"Error reading {self.preds_file_path}:\n{e}")
         return processed_ids
 
+@click.group(invoke_without_command=True)
+@click.pass_context
+def cli(ctx):
+    """Benchmark tool with various subcommands."""
+    ctx.ensure_object(dict)
+    if ctx.invoked_subcommand is None:
+        # If no subcommand is provided, default to models
+        ctx.invoke(models)
 
-if __name__ == "__main__":
+@cli.command()
+@click.pass_context
+def param_count(ctx):
+    """Calculate parameter counts for models."""
+    click.echo("Running parameter count benchmark...")
+    params_to_models = {
+        # "1.5B": "deepseek/deepseek-r1-distill-qwen-1.5b", # Not enough - gets into loops of it talking to itself
+        # "8B": "deepseek/deepseek-r1-distill-llama-8b", # Only has 32k context
+        "14B": "deepseek/deepseek-r1-distill-qwen-14b",
+        "32B": "deepseek/deepseek-r1-distill-qwen-32b",
+        "70B": "deepseek/deepseek-r1-distill-llama-70b",
+        "671B": "deepseek/deepseek-r1",
+    }
+    try:
+        for param_count, model_name in params_to_models.items():
+            print("Benchmarking model:", model_name)
+            print("Param count:", param_count)
+            model = ModelClient(model_name, max_retries=1)
+
+            AGENTS_TO_BENCHMARK = [
+                # AgentBasic(model, max_retries=1, param_count=param_count),
+                AgentProgrammer(
+                    model, max_retries=10, param_count=param_count
+                ),
+                # AgentMulti(model, max_retries=10, param_count=param_count),
+            ]
+
+
+            for agent in AGENTS_TO_BENCHMARK:
+                print("Benchmarking agent:", agent.agent_name)
+                benchmark = AgentBenchmark(agent)
+                try:
+                    benchmark.generate_preds_precomputed_retrieval(
+                        SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+                    )
+                except Exception:
+                    traceback.print_exc()
+                    print("Skipping agent:", agent.agent_name, model_name)
+                    continue
+                benchmark.run_benchmark(max_workers=16)
+
+    except KeyboardInterrupt:
+        print("Benchmarking interrupted by user.")
+
+@cli.command()
+@click.pass_context
+def temp(ctx):
+    """Benchmark temperature settings."""
+    click.echo("Running temperature benchmark...")
+    model_name = "gemini-2.5-pro-exp-03-25"
+    max_temp = 2
+    step = 0.1
+    scale = int(1 / step)
+    for i in range(0, max_temp * scale, scale):
+        temp = i / scale
+        model = ModelClient(model_name, max_retries=1)
+
+        AGENTS_TO_BENCHMARK = [
+            # AgentBasic(model, max_retries=1, param_count=param_count),
+            AgentProgrammer(
+                model, max_retries=10
+            ),
+            # AgentMulti(model, max_retries=10, param_count=param_count),
+        ]
+        for agent in AGENTS_TO_BENCHMARK:
+            print("Benchmarking agent:", agent.agent_name)
+            benchmark = AgentBenchmark(agent, temp=temp)
+            benchmark.generate_preds_precomputed_retrieval(
+                SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+            )
+            benchmark.run_benchmark(max_workers=16)
+
+@cli.command()
+@click.pass_context
+def models(ctx):
+    """Benchmark different models."""
+    click.echo("Running models benchmark...")
     MODELS_TO_BENCHMARK = [
         # "anthropic/claude-3.7-sonnet",
-        "deepseek/deepseek-r1-zero:free",
+        # "deepseek/deepseek-r1-zero:free",
         # "x-ai/grok-3-beta",
-        "deepseek-r1-8b",
-        "llama3.2",
+        # "deepseek-r1-8b",
+        # "llama3.2",
         "gemini-2.5-pro-exp-03-25",
     ]
 
@@ -197,17 +284,22 @@ if __name__ == "__main__":
             model = ModelClient(model_name)
 
             AGENTS_TO_BENCHMARK = [
-                AgentBasic(model, max_retries=10),
-                AgentProgrammer(model, max_retries=10),
+                # AgentBasic(model, max_retries=10),
+                # AgentProgrammer(model, max_retries=10),
                 AgentMulti(model, max_retries=10),
             ]
 
             for agent in AGENTS_TO_BENCHMARK:
                 benchmark = AgentBenchmark(agent)
-                benchmark.generate_preds_precomputed_retrieval(
-                    SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
-                )
+                # benchmark.generate_preds_precomputed_retrieval(
+                #     SWE_BENCH_LITE_DATASET, SWE_BENCH_BM25_40K_DATASET
+                # )
                 benchmark.run_benchmark(max_workers=16)
+
 
     except KeyboardInterrupt:
         print("Benchmarking interrupted by user.")
+        return 1
+
+if __name__ == "__main__":
+    cli()
