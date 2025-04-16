@@ -212,13 +212,16 @@ def benchmark_temperature(model_name: str, temperatures: Iterator[float]) -> Non
         ]
 
         for agent in AGENTS_TO_BENCHMARK:
-            print("Benchmarking agent:", agent.agent_name)
-            benchmark = AgentBenchmark(agent)
-            benchmark.generate_preds_precomputed_retrieval(
-                benchmark_dataset=SWE_BENCH_LITE_DATASET,
-                retrieval_dataset=SWE_BENCH_BM25_40K_DATASET
-            )
-            benchmark.run_benchmark(max_workers=8)
+            try:
+                print("Benchmarking agent:", agent.agent_name)
+                benchmark = AgentBenchmark(agent)
+                benchmark.generate_preds_precomputed_retrieval(
+                    benchmark_dataset=SWE_BENCH_LITE_DATASET,
+                    retrieval_dataset=SWE_BENCH_BM25_40K_DATASET
+                )
+                benchmark.run_benchmark(max_workers=8)
+            except Exception as e:
+                print(f"Failed for temperature setting:\n{e}")
 
 def benchmark_deepseek_params() -> None:
     params_to_models = {
@@ -261,9 +264,9 @@ def benchmark_deepseek_params() -> None:
         print("Benchmarking interrupted by user.")
 
 if __name__ == "__main__":
-#    benchmark_deepseek_params()
+    model = "gemini-2.5-pro-preview-03-25"
 
-    benchmark_temperature("gemini-2.5-pro-exp-03-25", iter(np.linspace(0.7, 2, num=20)))
+    benchmark_temperature(model, iter(np.linspace(0.7, 2, num=20)))
 
 
 
