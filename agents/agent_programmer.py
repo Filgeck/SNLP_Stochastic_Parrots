@@ -69,7 +69,11 @@ class AgentProgrammer(Agent):
         )
 
         # Generate structured output
-        output_string = self.model_client.query(prompt, structure=list[ProgrammerFileChangeOutput])
+        output_string = self._func_with_retries(
+            self.model_client.query,
+            prompt,
+            structure=list[ProgrammerFileChangeOutput]
+        )
 
         try:
             json_output = json.loads(output_string)
